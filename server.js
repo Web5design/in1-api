@@ -35,6 +35,8 @@ app.get('/harvest', function(req,res){
 		
 			if (!error) {
 				var $h = $("<iframe>"+body+"</iframe>");
+                
+                console.log($h.html());
 				
 				// find opengraph
 				$.each($h.find('meta[property^="og:"]'),function(idx,item){
@@ -85,7 +87,9 @@ app.get('/harvest', function(req,res){
 				
 				if (descFound===0)
 				{
-                    console.log("meta desc......");                    
+                    console.log("meta desc......");              
+                    
+                    
                     
 					$.each($h.find('meta[name=description]'),function(idx,item){
                         console.log("meta desc..");         
@@ -203,7 +207,7 @@ app.get('/cache', function(req,res){
     });
 });
 
-app.get('/:id/:size?', function(req,res){
+app.get('/fff/:id/:size?', function(req,res){
     console.log("imageshack proxy");
     
     var id = req.params.id;
