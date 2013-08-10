@@ -29,15 +29,18 @@ app.get('/harvest', function(req,res){
 	
 	if (url) {
 	
-		var sURL = unescape(url);
+		var sURL = unescape(utils.fixUrl(url));
 		
 		request({url:sURL,followRedirect:true,maxRedirects:1}, function (error, response, body) {
 		
 			if (!error) {
-				var $h = $("<form>"+body+"</form>");
+				var $h = $("<iframe>"+body+"</iframe>");
 				
 				// find opengraph
 				$.each($h.find('meta[property^="og:"]'),function(idx,item){
+                    
+                    console.log("meta og......");                    
+                    
 					var $item = $(item);
 					var property = $item.attr("property");
 					
@@ -61,6 +64,9 @@ app.get('/harvest', function(req,res){
 				
 				if (titleFound===0)
 				{
+                    console.log("title......");                    
+                    
+                    
 					//var matches = body.match(/<title>\s*(.+?)<\/title>/);
 					var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
 					if (matches) {
@@ -79,13 +85,16 @@ app.get('/harvest', function(req,res){
 				
 				if (descFound===0)
 				{
+                    console.log("meta desc......");                    
+                    
 					$.each($h.find('meta[name="description"]'),function(idx,item){
+                        console.log("meta desc..");         
 						desc = $(item).attr("content");
 					});
 				}
 
 				$.each($h.find('meta[name="keywords"]'),function(idx,item){
-					tags.push($(item).attr("content"));
+				    tags.push($(item).attr("content"));
 				});
 				
 				// find images
@@ -106,6 +115,9 @@ app.get('/harvest', function(req,res){
 				
 				// find social usernames
 				$.each($h.find('a[href*="twitter.com/"]:not(a[href*="status"])'),function(idx,item){
+                    
+                    console.log("twitter found......");  
+                    
 					var twUrl = $(item).attr("href").replace('/#!','');
 					twUrl = URL.parse(twUrl,true,true);
 					if (twUrl.query && twUrl.query.via){
