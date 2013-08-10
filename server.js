@@ -22,7 +22,7 @@ app.get('/harvest', function(req,res){
 	image,
 	images=[],
 	tags=[],
-	tw,fb,rss,li,pin,yt,
+	tw,fb,rss,li,pin,yt,gp,
 	titleFound=0,
 	descFound=0,
 	imgFound=0;
@@ -35,6 +35,11 @@ app.get('/harvest', function(req,res){
 		
 			if (!error) {
 				var $h = $("<form>"+body+"</form>");
+                
+                var head = body.match(/<head>\s*(.+?)\s*<\/head>/);
+                if (head) {
+    					$h = $("<form>"+head[1]+"</form>");
+					}
                 
                 console.log("body----------------------------------"+$h.html());
 				
