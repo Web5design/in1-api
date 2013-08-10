@@ -36,7 +36,7 @@ app.get('/harvest', function(req,res){
 			if (!error) {
 				var $h = $("<iframe>"+body+"</iframe>");
                 
-                console.log($h.html());
+                console.log("body----------------------------------"+$h.html());
 				
 				// find opengraph
 				$.each($h.find('meta[property^="og:"]'),function(idx,item){
