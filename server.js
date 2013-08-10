@@ -87,13 +87,13 @@ app.get('/harvest', function(req,res){
 				{
                     console.log("meta desc......");                    
                     
-					$.each($h.find('meta[name="description"]'),function(idx,item){
+					$.each($h.find('meta[name=description]'),function(idx,item){
                         console.log("meta desc..");         
 						desc = $(item).attr("content");
 					});
 				}
 
-				$.each($h.find('meta[name="keywords"]'),function(idx,item){
+				$.each($h.find('meta[name=keywords]'),function(idx,item){
 				    tags.push($(item).attr("content"));
 				});
 				
@@ -188,7 +188,7 @@ app.get('/harvest', function(req,res){
 
 
 /* given a cached url, redirect to proxy image */
-app.get('/cache', function(req,res,next){
+app.get('/cache', function(req,res){
     console.log("cached");
     var url = url;
     
@@ -198,12 +198,12 @@ app.get('/cache', function(req,res,next){
             res.redirect("/"+uuid);
         }
         else {
-            next();
+            //next();
         }
     });
 });
 
-app.get('/:id/:size?', function(req,res,next){
+app.get('/:id/:size?', function(req,res){
     console.log("imageshack proxy");
     
     var id = req.params.id;
