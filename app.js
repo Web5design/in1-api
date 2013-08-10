@@ -6,6 +6,10 @@ exports.init = function(port) {
     
     app.locals({
         _layoutFile:'layout.ejs',
+        title:'In1 Data API',
+        desc:'A content and social media data api that aggregates from multiple resources based on tag.',
+        keywords:'content,feed,aggregator,api,stream,REST content api,social media api',
+        throttle:{}
     });
 
     app.configure(function(){
