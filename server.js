@@ -34,7 +34,7 @@ app.get('/harvest', function(req,res){
 		request({url:sURL,followRedirect:true,maxRedirects:1}, function (error, response, body) {
 		
 			if (!error) {
-				var $h = $("<iframe>"+body+"</iframe>");
+				var $h = $("<form>"+body+"</form>");
                 
                 console.log("body----------------------------------"+$h.html());
 				
