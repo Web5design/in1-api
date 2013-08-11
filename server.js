@@ -210,7 +210,7 @@ app.get("/",function(req, res){
         if (i<results.length) {
         
             // exists?
-            var whereClause = {"url":results[i].url};
+            var whereClause = {"origUrl":results[i].url};
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
                 if (b.results.length>0){
@@ -515,7 +515,8 @@ app.post("/fetch",function(req, res){
                     "body": {
                         "url": url,
                         "title": results[k].title,
-                        "desc": results[k].desc
+                        "desc": results[k].desc,
+                        "origUrl": results[k].requested
                     }
                 });
             }
