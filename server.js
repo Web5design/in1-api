@@ -205,6 +205,27 @@ app.get("/",function(req, res){
     //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
     var accounts = ["thenextweb","medium"];
     
+    function checkUni(i){
+                   
+        if (i<results.length) {
+        
+            // exists?
+            var whereClause = {"url":results[i].url};
+            request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+                
+                if (b.results.length>0){
+                    results.splice(i,1); // already exists                            
+                }
+                
+                checkUni(results[i+1]);        
+            });
+        }
+        else {
+            //done  
+        }
+        
+    };
+    
     function getTweets(i){
         var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
         if (i<accounts.length) {
@@ -230,27 +251,25 @@ app.get("/",function(req, res){
     			console.log("request---------------------------------"+JSON.stringify(reqObj));
                 //console.log("body---------------"+body.substring(0,200));
                 
-                var objs,rts,url,mentioned;
+                var objs,url,mentioned;
                 
-    			if (!e || typeof e == "undefined") {
+                if (!e || typeof e == "undefined") {
                     
                     objs = JSON.parse(body);
                     
                     for (var j=0;j<objs.length;j++) {
-                        rts = objs[j].retweet_count;
-                    
                         if (typeof objs[j].entities !="undefined" && objs[j].entities.urls.length>0){
                             url = objs[j].entities.urls[0].url;
+
+                            if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
+                                mentioned = objs[j].entities.user_mentions[0].screen_name;
+                            }
+                            results.push({account:accounts[i],url:url,text:objs[j].text,mentioned:mentioned,rts:objs[j].retweet_count});   
                         }
-                        if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
-                            mentioned = objs[j].entities.user_mentions[0].screen_name;
-                        }
-                        
-                        // push
-                        console.log("pusghing..."+rts);
-                        
-                        results.push({account:accounts[i],url:url,text:objs[j].text,mentioned:mentioned,rts:rts});   
                     }
+                    
+                    checkUni(results[0]);
+                    
                 }
                 else {
                     //res.json({error:e});
@@ -487,18 +506,20 @@ app.post("/fetch",function(req, res){
             */
             
             var postRequests = [];
+            var url;
             for(var k=0; k<results.length; ++k) {
+                url = results[k].resolved;
                 postRequests.push({
                     "method": "POST",
                     "path": "/1/classes/Post",
                     "body": {
-                        "url": results[k].resolved,
+                        "url": url,
                         "title": results[k].title,
                         "desc": results[k].desc
                     }
                 });
             }
-            
+        
             request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
                 body:{requests:postRequests}}, function (e,r,b){
                 console.log("Add new post to parse api...");
