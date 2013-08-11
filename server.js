@@ -208,17 +208,18 @@ app.get("/last",function(req, res){
 			, token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
 			, token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
 			}
-		  , url = 'https://api.twitter.com/1.1/statuses/home_timeline.json?'
+		  , url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?'
 		  , params = 
 			{ 
-				include_entities:true
+				include_entities:true,
+                screen_name:"thenextweb"
 			};
 			url += require('querystring').stringify(params)
 			request.get({url:encodeURI(url), oauth:oauth}, function (e, r, body) {
 			console.log(e);
 			console.log("body gtrom twitter-----------"+body);
 			if (!e || typeof e == "undefined") {
-				res.json({ok:'ok'});
+				res.json({ok:body});
 			}
 			else {
 				res.json({error:e});
