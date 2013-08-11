@@ -136,7 +136,7 @@ app.get('/harvest', function(req,res){
 				});
 				
 				// find social usernames
-				$.each($h.find('a[href*=twitter.com/]:not(a[href*=status])'),function(idx,item){
+				$.each($h.find('a[href*="twitter.com"]:not(a[href*="status"])'),function(idx,item){
                     
                     console.log("twitter found......");  
                     
