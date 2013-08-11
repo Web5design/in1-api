@@ -40,7 +40,7 @@ app.get('/harvest', function(req,res){
                 
 				var $h = $("<form>"+body+"</form>");
                 
-                var head = body.match(/<head>[\s\S]<\/head>/);
+                var head = body.match(/<head>[\S\s]<\/head>/g);
                 if (head) {
                         console.log("head............"+head[0]);
     					$h = $("<form>"+head[1]+"</form>");
