@@ -235,13 +235,15 @@ app.get("/last",function(req, res){
                 reqObj = {url:encodeURI(url)};                
             }
             
+            reqObj = {url:encodeURI(url), oauth:oauth};
+            
             request.get(reqObj, function (e, r, body) {
         		console.log(e);
     			//console.log("body from twitter-----------"+body);
                 
-                console.log("request---------------------------------"+i);
+                console.log("request---------------------------------"+reqObj);
                 
-                console.log("body---------------"+body);
+                console.log("body---------------"+body.substring(0,200));
                 
                 
                 var obj,rts,url,mentioned;
@@ -260,11 +262,13 @@ app.get("/last",function(req, res){
                     
                     // push
                     results.push({url:url,mentioned:mentioned,rts:rts,obj:obj});
-                    getTweets(i+1);
+                    
                 }
                 else {
                     //res.json({error:e});
                 }
+                
+                getTweets(i+1);
             });
         }
     }
