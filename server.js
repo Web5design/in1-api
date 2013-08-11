@@ -235,7 +235,7 @@ app.get("/last",function(req, res){
                 
                 console.log("request---------------------------------"+JSON.stringify(reqObj));
                 
-                console.log("body---------------"+body.substring(0,200));
+                //console.log("body---------------"+body.substring(0,200));
                 
                 
                 var obj,rts,url,mentioned;
@@ -255,7 +255,7 @@ app.get("/last",function(req, res){
                     // push
                     console.log("pusghing..."+rts);
                     
-                    results.push({url:url,mentioned:mentioned,rts:rts,obj:obj});
+                    results.push({foo:'foo',url:url,mentioned:mentioned,rts:rts,obj:obj});
                     
                 }
                 else {
