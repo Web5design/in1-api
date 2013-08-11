@@ -197,7 +197,7 @@ app.get('/harvest', function(req,res){
 app.post("/fetch",function(req, res){
     
     console.log("fetch..");
-        
+    var URL = require('url');
     var urls = req.body["urls"];
     var results = [];
     
