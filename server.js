@@ -222,7 +222,7 @@ app.get("/",function(req, res){
                     results = results.splice(i,1); // already exists                            
                 }
                 
-                checkUni(results[i+1]);        
+                checkUni(i+1);        
             });
         }
         else {
