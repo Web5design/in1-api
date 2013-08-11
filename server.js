@@ -52,7 +52,9 @@ app.get('/harvest', function(req,res){
                 var array_matches = pattern.exec(body);   
                 console.log("head----"+array_matches[1]);
                 
-                console.log("body----------------------------------"+$h.html());
+                var $h = $("<form>"+array_matches[1]+"</form>");
+                
+                //console.log("body----------------------------------"+$h.html());
 				
 				// find opengraph
 				$.each($h.find('meta[property^="og:"]'),function(idx,item){
