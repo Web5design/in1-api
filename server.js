@@ -201,6 +201,8 @@ app.post("/fetch",function(req, res){
     var urls = req.body["urls"];
     var results = [];
     
+    console.log(urls);
+    
     function getUrls(i){
         //var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
         if (i<urls.length) {
@@ -230,6 +232,8 @@ app.post("/fetch",function(req, res){
             		
             		request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
             		
+                        console.log("--------------------------------------"+sURL);
+                    
             			if (typeof body!="undefined") {
                             
                             var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
