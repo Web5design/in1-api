@@ -211,6 +211,9 @@ app.get("/",function(req, res){
         
             // exists?
             var whereClause = {"origUrl":results[i].url};
+            
+            console.log("WHERE-----------------------------------------------"+JSON.stringify(whereClause));                
+            
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
                 console.log("EXISTING-----------------------------------------------"+b.results[0]);
