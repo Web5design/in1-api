@@ -529,7 +529,6 @@ app.post("/fetch",function(req, res){
         }
         else {
             // done!
-            //res.render("index",{results:results});
             
             var postRequests = [];
             for(var k=0; k<results.length; ++k) {
@@ -541,6 +540,7 @@ app.post("/fetch",function(req, res){
                             "url": results[k].resolved,
                             "title": results[k].title,
                             "desc": results[k].desc,
+                            "images": results[k].images,
                             "origUrl": results[k].requested
                         }
                     });
@@ -549,11 +549,10 @@ app.post("/fetch",function(req, res){
         
             request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
                 body:{requests:postRequests}}, function (e,r,b){
-                console.log("Add new post to parse api...");
+                console.log("Adding batch to parse api...");
                 res.locals.msg={"success":"Perfect. Now you can login."};
                 res.json({ok:b});    
             });
-            
         }
     }
     
@@ -561,21 +560,20 @@ app.post("/fetch",function(req, res){
         //var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
         if (i<urls.length) {
     
-            		var sURL = unescape(utils.fixUrl(urls[i]));
-            		request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
-            		
-                        console.log("--------------------------------------"+sURL);
-                    
-            			if (typeof body!="undefined") {
+                    var sURL = unescape(utils.fixUrl(urls[i]));
+                    request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
+                        //console.log("--------------------------------------"+sURL);
+
+                        if (typeof body!="undefined") {
                            
-            				//oURL = URL.parse(sURL);
-            				var baseUrl = response.request.uri.href;
+                            //oURL = URL.parse(sURL);
+                            var baseUrl = response.request.uri.href;
                             
                             var metaObj = harvestMeta(body,baseUrl);
                             var images = harvestImages(body,baseUrl).images;
                             var title = metaObj.title;
                             var desc = metaObj.desc;
-            				
+                            
                             var resolvedUri = response.request.uri;
                             var resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;
                             results.push({requested:urls[i],title:title,desc:desc,images:images,resolved:resolved});  
@@ -583,24 +581,13 @@ app.post("/fetch",function(req, res){
                             getUrls(i+1);
                             
             				//res.json({title:title,desc:desc,resolved:response.request.uri.pathname,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
-            			}
-            			else {
-            				//res.json({error:'problem harvesting:'+url});
-            			}
-            		});	
-
+                        }
+                        else {
+                            //res.json({error:'problem harvesting:'+url});
+                        }
+                    });
         }
         else {
-            /*
-            request.post({url:'https://api.parse.com/1/classes/Post',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
-                body:req.body}, function (e,r,b){
-                console.log("Add new post to parse api...");
-
-                res.locals.msg={"success":"Perfect. Now you can login."};
-                
-            });
-            */
-            
             checkUni(0);
         }
     }

@@ -1,3 +1,30 @@
+<script>
+$(document).ready(function(){
+    $('#btnGet').click(function(e){
+        $.ajax({
+            url: "posts",
+            type: "get"
+            success: function (data) {
+                if (typeof data.error!="undefined") {
+                    alert(data.error);
+                    $('#btnFork').button("reset");
+                } else {
+                    var results = data.results;
+                    for(var i=0; i<results.length; ++i) {
+                        var cont = $("<div><b>"+results[i].title+"</b>"+results[i].desc+"</div>");
+                        if (results[i].images && results[i].images.length>0) {
+                            $("<br><img src='"+results[i].images[0]+"'>").appendTo(cont);
+                        }
+                        cont.appendTo("#posts");
+                    }
+                }
+            },
+            error: function (e) {console.log('error:'+e);$('#btnFork').button("reset");}
+        });
+    });
+});
+</script>
+
 This is a social and content API entrypoint.
 
 <form action="/fetch" method="POST">
@@ -6,3 +33,9 @@ This is a social and content API entrypoint.
     <%}%>
     <button type="submit">OK</button>
 </form>
+
+<hr>
+<button type="button" id="btnGet">Get Posts</button>
+<div id="posts">
+
+</div>
