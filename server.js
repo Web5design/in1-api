@@ -274,8 +274,6 @@ app.get("/",function(req, res){
                         }
                     }
                     
-                    checkUni(0);
-                    
                 }
                 else {
                     //res.json({error:e});
@@ -287,6 +285,7 @@ app.get("/",function(req, res){
         }
         else {
             //res.json({ok:results});
+            checkUni(0);
             res.render("index",{results:results});
         }
     }
