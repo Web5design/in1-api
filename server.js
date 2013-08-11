@@ -47,7 +47,7 @@ app.get('/harvest', function(req,res){
 					}
                     
                     
-                var pattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
+                var pattern = /<head[^>]*>((.|[\n\r\S\s])*)<\/head>/im
                 var array_matches = pattern.exec(body);   
                 
                 console.log("head----"+array_matches[1]);
