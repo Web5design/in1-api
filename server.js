@@ -40,17 +40,17 @@ app.get('/harvest', function(req,res){
                 
 				var $h = $("<form>"+body+"</form>");
                 
-                var head = body.match(/<head>((.|[\S\s])*)<\/head>/im);
+               // var head = body.match(/<head>((.|[\S\s])*)<\/head>/im);
+                /*
                 if (typeof head != "undefined") {
                     console.log("head............"+head);
     				//$h = $("<form>"+head[1]+"</form>");
 				}
+                  */  
                     
-                    
-                //var pattern = /<head[^>]*>((.|[\S\s])*)<\/head>/im
-                //var array_matches = pattern.exec(body);   
-                
-                //console.log("head----"+array_matches[1]);
+                var pattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
+                var array_matches = pattern.exec(body);   
+                console.log("head----"+array_matches[1]);
                 
                 console.log("body----------------------------------"+$h.html());
 				
