@@ -381,12 +381,13 @@ app.post("/fetch",function(req, res){
             
             				//TODO: google+
                             }
-            	
-            				$h = null;
                             
+                            $h = null;
                             
                             console.log("psuing:"+urls[i]);
                             results.push({requested:urls[i],title:title,desc:desc,resolved:response.request.uri.pathname});  
+                            
+                            getUrls(i+1);
                             
             				//res.json({title:title,desc:desc,resolved:response.request.uri.pathname,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
             			}
@@ -397,7 +398,7 @@ app.post("/fetch",function(req, res){
                 
                 /////
                 
-                getUrls(i+1);
+                
                 
             //});
         }
@@ -406,7 +407,7 @@ app.post("/fetch",function(req, res){
         }
     }
     
-    setTimeout(getUrls(0),5000);
+    setTimeout(getUrls(0),7000);
     
 });
 
