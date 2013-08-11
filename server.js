@@ -216,14 +216,14 @@ app.get("/",function(req, res){
             
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
-                console.log("EXISTING-----------------------------------------------"+b.results[0]);
+                console.log("EXISTING-----------------------------------------------"+b.results.length);
                 
                 if (typeof b.results!="undefined" && b.results.length>0){
                     results = results.splice(i,1); // already exists
                     //results[i].exists="1";
                 }
                 
-                checkUni(i+1);        
+                checkUni(i+1);
             });
         }
         else {
