@@ -410,7 +410,7 @@ app.post("/fetch",function(req, res){
             });
             */
             
-            var postRequests = {};
+            var postRequests = [];
             for(var k=0; k<results.length; ++k) {
                 postRequests.push({
                     "method": "POST",
