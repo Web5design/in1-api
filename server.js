@@ -182,7 +182,7 @@ app.get('/harvest', function(req,res){
                 }
 	
 				$h = null;
-				res.json({title:title,desc:desc,resolved:response.request.uri,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
+				res.json({title:title,desc:desc,resolved:response.request.uri.pathname,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
 			}
 			else {
 				res.json({error:'problem harvesting:'+url});
@@ -195,6 +195,38 @@ app.get('/harvest', function(req,res){
 	}
 });
 
+
+app.get("/last",function(req, res){
+   
+    //console.log("b:"+req.body.status);
+	//console.log("user:"+JSON.stringify(req.user));
+	//console.log("tw:"+JSON.stringify(req.session));
+	//if (req.user.loggedInWith.indexOf("twitter")!=-1) {
+		var oauth = 
+			{ consumer_key: conf.twit.consumerKey
+			, consumer_secret: conf.twit.consumerSecret
+			, token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
+			, token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
+			}
+		  , url = 'https://api.twitter.com/1.1/statuses/home_timeline.json?'
+		  , params = 
+			{ 
+				include_entities:true
+			};
+			url += require('querystring').stringify(params)
+			request.get({url:encodeURI(url), oauth:oauth}, function (e, r, body) {
+			console.log(e);
+			console.log("body gtrom twitter-----------"+body);
+			if (!e || typeof e == "undefined") {
+				res.json({ok:'ok'});
+			}
+			else {
+				res.json({error:e});
+			}
+		})
+	//}
+    
+});
 
 /* given a cached url, redirect to proxy image */
 app.get('/cache', function(req,res){
