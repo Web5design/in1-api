@@ -228,6 +228,8 @@ app.get("/",function(req, res){
         }
         else {
             //done  
+            
+            res.render("index",{results:results});
         }
         
     };
@@ -286,7 +288,6 @@ app.get("/",function(req, res){
         else {
             //res.json({ok:results});
             checkUni(0);
-            res.render("index",{results:results});
         }
     }
     
