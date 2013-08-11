@@ -533,7 +533,7 @@ app.post("/fetch",function(req, res){
             
             var postRequests = [];
             for(var k=0; k<results.length; ++k) {
-                if (results[i].exists==="0"){
+                if (results[k].exists==="0"){
                     postRequests.push({
                         "method": "POST",
                         "path": "/1/classes/Post",
