@@ -89,6 +89,11 @@ app.get('/harvest', function(req,res){
                     $.each($h.find('meta[name=keywords]'),function(idx,item){
                         tags.push($(item).attr("content"));
                     });
+                    
+                    $.each($h.find('link[type="application/rss+xml"]'),function(idx,item){
+                        var rssUrl = $(item).attr("href");
+					    rss = rssUrl;
+                    });
                 }
                 
 				// find images
@@ -106,7 +111,7 @@ app.get('/harvest', function(req,res){
                 
 				var imgs = $h.find('img[src*=png],img[src*=jpg]');
 				$.each(imgs,function(idx,item){
-					var src=$(item).attr("src");
+					var src=$(item).attr("src").replace("\t","");
 					console.log("image src:"+src);
 					//src = imgs[i].getAttribute("src");
 					if (src.indexOf('//')==-1) { // prepend baseurl for relative images						
