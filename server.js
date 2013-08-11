@@ -223,7 +223,7 @@ app.get("/last",function(req, res){
                 
                 var obj = JSON.parse(body);
                 
-				res.json({ok:body[0].url});
+				res.json({ok:body[0]});
 			}
 			else {
 				res.json({error:e});
