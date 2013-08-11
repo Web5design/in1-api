@@ -197,6 +197,7 @@ app.get('/harvest', function(req,res){
 				});
 
 				//TODO: google+
+                }
 	
 				$h = null;
 				res.json({title:title,desc:desc,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
