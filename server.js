@@ -240,7 +240,7 @@ app.get("/last",function(req, res){
                     
                     objs = JSON.parse(body);
                     
-                    for (var j=0;i<objs.length;j++) {
+                    for (var j=0;j<objs.length;j++) {
                         rts = objs[j].retweet_count;
                     
                         if (typeof objs[j].entities !="undefined" && objs[j].entities.urls.length>0){
