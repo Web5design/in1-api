@@ -31,7 +31,7 @@ app.get('/harvest', function(req,res){
 	
 		var sURL = unescape(utils.fixUrl(url));
 		
-		request({url:sURL,followRedirect:true,maxRedirects:1}, function (error, response, body) {
+		request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
 		
 			if (typeof body!="undefined") {
                 
@@ -122,7 +122,7 @@ app.get('/harvest', function(req,res){
 				});
 				
 				// find social usernames
-				$.each($h.find('a[href*="twitter.com"]:not(a[href*="status"])'),function(idx,item){
+				$.each($h.find('a[href*="twitter.com"]:not(a[href*="status"],a[href*="share"])'),function(idx,item){
                     
                     console.log("twitter found......");  
                     
@@ -182,7 +182,7 @@ app.get('/harvest', function(req,res){
                 }
 	
 				$h = null;
-				res.json({title:title,desc:desc,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
+				res.json({title:title,desc:desc,resolved:response.request.uri,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
 			}
 			else {
 				res.json({error:'problem harvesting:'+url});
