@@ -45,6 +45,12 @@ app.get('/harvest', function(req,res){
                         //console.log("head............"+head[0]);
     					//$h = $("<form>"+head[1]+"</form>");
 					}
+                    
+                    
+                var pattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
+                var array_matches = pattern.exec(body);   
+                
+                 console.log(array_matches[1]);
                 
                 console.log("body----------------------------------"+$h.html());
 				
