@@ -385,7 +385,7 @@ app.post("/fetch",function(req, res){
                             $h = null;
                             
                             console.log("psuing:"+urls[i]);
-                            results.push({requested:urls[i],title:title,desc:desc,resolved:response.request.uri.pathname});  
+                            results.push({requested:urls[i],title:title,desc:desc,images:images,resolved:response.request.uri});  
                             
                             getUrls(i+1);
                             
