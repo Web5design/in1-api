@@ -35,3 +35,4 @@
 {"ts":1376216760328,"patch":[[{"diffs":[[0,"(/<head>"],[-1,"(.+?)"],[1,"[\\s\\S]"],[0,"<\\/head>"]],"start1":1000,"start2":1000,"length1":21,"length2":22}]],"length":7635,"saved":false}
 {"ts":1376216876288,"patch":[[{"diffs":[[0,"d>[\\"],[-1,"s\\S"],[1,"S\\s"],[0,"]<\\/"]],"start1":1006,"start2":1006,"length1":11,"length2":11}]],"length":7635,"saved":false}
 {"ts":1376216884086,"patch":[[{"diffs":[[0,"\\/head>/"],[1,"g"],[0,");\r\n    "]],"start1":1015,"start2":1015,"length1":16,"length2":17}]],"length":7636,"saved":false}
+{"ts":1376217023114,"patch":[[{"diffs":[[0,"    if ("],[-1,"head"],[1,"typeof head != \"undefined\""],[0,") {\r\n   "]],"start1":1040,"start2":1040,"length1":20,"length2":42}]],"length":7658,"saved":false}
