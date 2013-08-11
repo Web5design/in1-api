@@ -241,7 +241,7 @@ app.get("/last",function(req, res){
         		console.log(e);
     			//console.log("body from twitter-----------"+body);
                 
-                console.log("request---------------------------------"+reqObj);
+                console.log("request---------------------------------"+JSON.stringify(reqObj));
                 
                 console.log("body---------------"+body.substring(0,200));
                 
