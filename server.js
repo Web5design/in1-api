@@ -226,7 +226,16 @@ app.get("/last",function(req, res){
 	        };	
             url += require('querystring').stringify(params);
         
-            request.get({url:encodeURI(url), oauth:oauth}, function (e, r, body) {
+            var reqObj;
+        
+            if (i==0) {
+                reqObj = {url:encodeURI(url), oauth:oauth};
+            }
+            else {
+                reqObj = {url:encodeURI(url)};                
+            }
+            
+            request.get(reqObj, function (e, r, body) {
         		console.log(e);
     			//console.log("body from twitter-----------"+body);
                 
