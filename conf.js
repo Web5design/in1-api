@@ -15,6 +15,10 @@ module.exports = {
         consumerKey: 'qilXMYWSkdm1PVAF5HK6JD0L3rk2cKXgRim1h6qZPEJH93zeaZ'
       , consumerSecret: 'n8pdX9KZgsIBFlwz722nY4V0I6DcKeJhPbsIhLI7Jm8pvlGf1w'
   }
+  , parse : {
+        appKey:'UF8d6AANHEJQF16gli8iFuxm4M8lkkX1fOQUwy76',
+        restKey:'nIIafPJCIxjKPoRqGiXc5YCrQ8D08F1qef8vcxrZ'
+    }
   , database: {
       // couchUrl: 'http://127.0.0.1:5984'
       //, couchHost: '127.0.0.1'

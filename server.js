@@ -229,7 +229,6 @@ app.post("/fetch",function(req, res){
                 //if (url) {
     
             		var sURL = unescape(utils.fixUrl(urls[i]));
-            		
             		request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
             		
                         console.log("--------------------------------------"+sURL);
@@ -271,16 +270,16 @@ app.post("/fetch",function(req, res){
                                 console.log("title......");
                                 
                                 var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
-            	                if (matches) {
-            	                    title = matches[1];
-            					}
+                                if (matches) {
+                                    title = matches[1];
+                                }
                                 
-            					image = $h.find('link[rel="image_src"],link[rel="shortcut icon"]').attr('href');
-            					if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
-            						image = baseUrl+image;
-            					}
-            					images.push(image);
-            					imgFound = 1;
+                                image = $h.find('link[rel="image_src"],link[rel="shortcut icon"]').attr('href');
+                                if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
+                                    image = baseUrl+image;
+                                }
+                                images.push(image);
+                                imgFound = 1;
             
             					$.each($h.find('meta[name=description]'),function(idx,item){
                                     console.log("meta desc..");         
@@ -309,18 +308,17 @@ app.post("/fetch",function(req, res){
                                 //console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
                             
                                 $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
-                            
-                				var imgs = $h.find('img[src*=png],img[src*=jpg]');
-                				$.each(imgs,function(idx,item){
-                					var src=$(item).attr("src").replace("\t","");
-                					console.log("image src:"+src);
-                					//src = imgs[i].getAttribute("src");
-                					if (src.indexOf('//')==-1) { // prepend baseurl for relative images						
-                						src=baseUrl+src;
-                						//console.log("image src put http:"+src);
-                					}
-                					images.push(src);
-                				});
+                                var imgs = $h.find('img[src*=png],img[src*=jpg]');
+                                $.each(imgs,function(idx,item){
+                    				var src=$(item).attr("src").replace("\t","");
+                    				console.log("image src:"+src);
+                    				//src = imgs[i].getAttribute("src");
+                    				if (src.indexOf('//')==-1) { // prepend baseurl for relative images						
+                    					src=baseUrl+src;
+                    					//console.log("image src put http:"+src);
+                    				}
+                                    images.push(src);
+                                });
                 				
                 				// find social usernames
                 				$.each($h.find('a[href*="twitter.com"]:not(a[href*="status"],a[href*="share"])'),function(idx,item){
@@ -342,41 +340,39 @@ app.post("/fetch",function(req, res){
                 					if (tw==="" || tw === null || typeof tw === "undefined") {
                 						tw = "in1_";
                 					}
-                					tw = "@"+tw.replace("/","");
+                                    tw = "@"+tw.replace("/","");
                 				});
                 				
                 				$.each($h.find('a[href*="facebook.com/"]:not(a[href*="developers"]):lt(1)'),function(idx,item){
-                					var fbPagesUrl = $(item).attr("href");
-                					fbPagesUrl = URL.parse(fbPagesUrl);
-                					fb = fbPagesUrl.pathname;
+                                    var fbPagesUrl = $(item).attr("href");
+                                    fbPagesUrl = URL.parse(fbPagesUrl);
+                                    fb = fbPagesUrl.pathname;
                 					//fb = fb.replace("/pages","");
-                					fb = fb.replace("/","");
-                				});
+                                    fb = fb.replace("/","");
+                                });
                 				
                 				$.each($h.find('a[href*="linkedin.com/"]:lt(1)'),function(idx,item){
-                					var liUrl = $(item).attr("href");
-                					liUrl = URL.parse(liUrl);
-                					li = liUrl.pathname;
-                				});
-                				
-                				$.each($h.find('a[href*="feeds.feedburner.com"]:lt(1),a:contains("rss")'),function(idx,item){
-                					var rssUrl = $(item).attr("href");
-                					//rssUrl = URL.parse(rssUrl);
-                					//rss = rssUrl.pathname;
-                					rss = rssUrl;
-                				});
-                				
+                                    var liUrl = $(item).attr("href");
+                                    liUrl = URL.parse(liUrl);
+                                    li = liUrl.pathname;
+                                });
+            
+                                $.each($h.find('a[href*="feeds.feedburner.com"]:lt(1),a:contains("rss")'),function(idx,item){
+                                    var rssUrl = $(item).attr("href");
+                                    rss = rssUrl;
+                                });
+            
                 				$.each($h.find('a[href*="pinterest.com/"]:not([href*="pin/create"])'),function(idx,item){
-                					var pinUrl = $(item).attr("href");
-                					pinUrl = URL.parse(pinUrl);
-                					pin = pinUrl.pathname;
-                				});
+                                    var pinUrl = $(item).attr("href");
+                                    pinUrl = URL.parse(pinUrl);
+                                    pin = pinUrl.pathname;
+                                });
                 				
                 				$.each($h.find('a[href*="youtube.com/user/"]'),function(idx,item){
-                					var ytUrl = $(item).attr("href");
-                					ytUrl = URL.parse(ytUrl);
-                					yt = ytUrl.pathname;
-                					yt = yt.replace("/user","");
+                                    var ytUrl = $(item).attr("href");
+                                    ytUrl = URL.parse(ytUrl);
+                                    yt = ytUrl.pathname;
+                                    yt = yt.replace("/user","");
                 				});
             
             				//TODO: google+
@@ -404,7 +400,38 @@ app.post("/fetch",function(req, res){
             //});
         }
         else {
-            res.json({ok:results});            
+            /*
+            request.post({url:'https://api.parse.com/1/classes/Post',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                body:req.body}, function (e,r,b){
+                console.log("Add new post to parse api...");
+
+                res.locals.msg={"success":"Perfect. Now you can login."};
+                
+            });
+            */
+            
+            var postRequests = {};
+            for(var k=0; k<results.length; ++k) {
+                postRequests.push({
+                    "method": "POST",
+                    "path": "/1/classes/Post",
+                    "body": {
+                        "url": results[k].resolved,
+                        "title": results[k].title,
+                        "desc": results[k].desc
+                    }
+                });
+            }
+            
+            request.post({url:'https://api.parse.com/1/classes/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                body:postRequests}, function (e,r,b){
+                console.log("Add new post to parse api...");
+                res.locals.msg={"success":"Perfect. Now you can login."};
+                res.json({ok:results});    
+            });
+            
+            
+                    
         }
     }
     
