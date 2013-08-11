@@ -33,14 +33,8 @@ app.get('/harvest', function(req,res){
 		
 		request({url:sURL,followRedirect:true,maxRedirects:1}, function (error, response, body) {
 		
-			if (!error) {
+			if (typeof body!="undefined") {
                 
-                //console.log(body.substring(0,400));
-    			
-                
-				//var $h = $("<form>"+body+"</form>");
-                
-                    
                 var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
                 var headMatches = headPattern.exec(body);
                 var $h;
@@ -72,44 +66,31 @@ app.get('/harvest', function(req,res){
                             descFound=1;
                         }
                     });	
-    				
-    				//if (titleFound===0)
-    				{
-                        console.log("title......");
-                        
-                        var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
-    			        if (matches) {
-    			            title = matches[1];
-    					}
-    				}
-    				
-    				//if (imgFound===0)
-                    {
-    					image = $h.find('link[rel="image_src"],link[rel="apple-touch-icon"],link[rel="shortcut icon"]').attr('href');
-    					if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
-    						image = baseUrl+image;
-    					}
-    					images.push(image);
-    					imgFound = 1;
-    				}
-    				
-    				//if (descFound===0)
-    				{
-                        console.log("meta desc......");              
-                        
-                          
-    					$.each($h.find('meta[name=description]'),function(idx,item){
-                            console.log("meta desc..");         
-    						desc = $(item).attr("content");
-    					});
-    				}
-    
-    				$.each($h.find('meta[name=keywords]'),function(idx,item){
-    				    tags.push($(item).attr("content"));
-    				});
+
+                    console.log("title......");
+                    
+                    var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
+	                if (matches) {
+	                    title = matches[1];
+					}
+                    
+					image = $h.find('link[rel="image_src"],link[rel="shortcut icon"]').attr('href');
+					if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
+						image = baseUrl+image;
+					}
+					images.push(image);
+					imgFound = 1;
+
+					$.each($h.find('meta[name=description]'),function(idx,item){
+                        console.log("meta desc..");         
+						desc = $(item).attr("content");
+					});
+                    
+                    $.each($h.find('meta[name=keywords]'),function(idx,item){
+                        tags.push($(item).attr("content"));
+                    });
                 }
                 
-				
 				// find images
 				//oURL = URL.parse(sURL);
 				var baseUrl = response.request.uri.href;
@@ -172,7 +153,7 @@ app.get('/harvest', function(req,res){
 					li = liUrl.pathname;
 				});
 				
-				$.each($h.find('a[href*="feeds.feedburner.com"]:lt(1)'),function(idx,item){
+				$.each($h.find('a[href*="feeds.feedburner.com"]:lt(1),a:contains("rss")'),function(idx,item){
 					var rssUrl = $(item).attr("href");
 					//rssUrl = URL.parse(rssUrl);
 					//rss = rssUrl.pathname;
