@@ -36,3 +36,5 @@
 {"ts":1376216876288,"patch":[[{"diffs":[[0,"d>[\\"],[-1,"s\\S"],[1,"S\\s"],[0,"]<\\/"]],"start1":1006,"start2":1006,"length1":11,"length2":11}]],"length":7635,"saved":false}
 {"ts":1376216884086,"patch":[[{"diffs":[[0,"\\/head>/"],[1,"g"],[0,");\r\n    "]],"start1":1015,"start2":1015,"length1":16,"length2":17}]],"length":7636,"saved":false}
 {"ts":1376217023114,"patch":[[{"diffs":[[0,"    if ("],[-1,"head"],[1,"typeof head != \"undefined\""],[0,") {\r\n   "]],"start1":1040,"start2":1040,"length1":20,"length2":42}]],"length":7658,"saved":false}
+{"ts":1376217142052,"patch":[[{"diffs":[[0,"        "],[-1,"//"],[0,"console."]],"start1":846,"start2":846,"length1":18,"length2":16},{"diffs":[[0,"ole.log(body"],[1,".substring(0,400)"],[0,");\r\n    \t\t\t\r"]],"start1":858,"start2":858,"length1":24,"length2":41}]],"length":7673,"saved":false}
+{"ts":1376217147228,"patch":[[{"diffs":[[0,"                "],[1,"//"],[0,"console.log(\"hea"]],"start1":1102,"start2":1102,"length1":32,"length2":34},{"diffs":[[0,";\r\n    \t\t\t\t\t"],[1,"//"],[0,"$h = $(\"<for"]],"start1":1159,"start2":1159,"length1":24,"length2":26}]],"length":7677,"saved":false}

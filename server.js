@@ -35,15 +35,15 @@ app.get('/harvest', function(req,res){
 		
 			if (!error) {
                 
-                //console.log(body);
+                console.log(body.substring(0,400));
     			
                 
 				var $h = $("<form>"+body+"</form>");
                 
                 var head = body.match(/<head>[\S\s]<\/head>/g);
                 if (typeof head != "undefined") {
-                        console.log("head............"+head[0]);
-    					$h = $("<form>"+head[1]+"</form>");
+                        //console.log("head............"+head[0]);
+    					//$h = $("<form>"+head[1]+"</form>");
 					}
                 
                 console.log("body----------------------------------"+$h.html());
