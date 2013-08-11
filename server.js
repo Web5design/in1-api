@@ -305,6 +305,8 @@ var harvestMeta = function(body,baseUrl){
     var headMatches = headPattern.exec(body);
     var $h;
     
+    console.log("harvest meta..");
+    
     if (headMatches.length>0) { // head
         
         var head = headMatches[1].replace(/\n/g," ");
@@ -379,6 +381,8 @@ var harvestImages = function(body,baseUrl){
     var images=[];
     var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im;
     var bodyMatches = bodyPattern.exec(body);
+    
+    console.log("harvest images..");
     
     var $h;
                             
