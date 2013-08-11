@@ -384,7 +384,9 @@ app.post("/fetch",function(req, res){
             	
             				$h = null;
                             
-                            results.push({reqested:urls[i],title:title,desc:desc,resolved:response.request.uri.pathname});  
+                            
+                            console.log("psuing:"+urls[i]);
+                            results.push({requested:urls[i],title:title,desc:desc,resolved:response.request.uri.pathname});  
                             
             				//res.json({title:title,desc:desc,resolved:response.request.uri.pathname,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
             			}
