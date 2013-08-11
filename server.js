@@ -206,18 +206,16 @@ app.get("/last",function(req, res){
     //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
     var accounts = ["thenextweb","medium"];
     
-	var oauth = 
-		{ consumer_key: conf.twit.consumerKey
-		, consumer_secret: conf.twit.consumerSecret
-		, token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
-		, token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
-	};
-    
     var i=0;
     function getTweets(i){
         var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
         if (i<accounts.length) {
-        
+            var oauth = 
+            	{ consumer_key: conf.twit.consumerKey
+        		, consumer_secret: conf.twit.consumerSecret
+        		, token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
+        		, token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
+        	};
             var params = 
 		    {    
 			    include_entities:true,
@@ -234,23 +232,20 @@ app.get("/last",function(req, res){
     			//console.log("body from twitter-----------"+body);
                 
                 console.log("request---------------------------------"+JSON.stringify(reqObj));
-                
                 console.log("body---------------"+body.substring(0,200));
-                
-                getTweets(i+1);
                 
                 var obj,rts,url,mentioned;
                 
     			if (!e || typeof e == "undefined") {
                     
                     obj = JSON.parse(body);
-                    rts = obj.retweet_count;
+                    rts = obj[0].retweet_count;
                     
-                    if (typeof obj.entities !="undefined" && obj.entities.urls.length>0){
-                        url = obj.entities.urls[0].url;
+                    if (typeof obj[0].entities !="undefined" && obj.entities.urls.length>0){
+                        url = obj[0].entities.urls[0].url;
                     }
-                    if (typeof obj.entities !="undefined" && obj.entities.user_mentions.length>0){
-                        mentioned = obj.entities.user_mentions[0].screen_name;
+                    if (typeof obj[0].entities !="undefined" && obj.entities.user_mentions.length>0){
+                        mentioned = obj[0].entities.user_mentions[0].screen_name;
                     }
                     
                     // push
@@ -263,6 +258,7 @@ app.get("/last",function(req, res){
                     //res.json({error:e});
                 }
                 
+                getTweets(i+1);
                 
             });
         }
