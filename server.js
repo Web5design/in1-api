@@ -109,11 +109,6 @@ app.get('/harvest', function(req,res){
     				});
                 }
                 
-                
-                
-                //console.log("body----------------------------------"+$h.html());
-				
-				
 				
 				// find images
 				//oURL = URL.parse(sURL);
@@ -124,6 +119,7 @@ app.get('/harvest', function(req,res){
                 
                 if (bodyMatches.length>0) { // body
                 
+                    console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
                 
                     $h = $("<form>"+bodyMatches[1]+"</form>");
                 
