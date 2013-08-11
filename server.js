@@ -195,6 +195,7 @@ app.get('/harvest', function(req,res){
 	}
 });
 
+var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
 
 app.get("/last",function(req, res){
    
@@ -222,7 +223,7 @@ app.get("/last",function(req, res){
                 
                 var obj = JSON.parse(body);
                 
-				res.json({ok:obj[0].url});
+				res.json({ok:body[0].url});
 			}
 			else {
 				res.json({error:e});
