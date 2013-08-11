@@ -194,6 +194,82 @@ app.get('/harvest', function(req,res){
 	}
 });
 
+app.get("/",function(req, res){
+   
+    //console.log("b:"+req.body.status);
+	//console.log("user:"+JSON.stringify(req.user));
+	//console.log("tw:"+JSON.stringify(req.session));
+	//if (req.user.loggedInWith.indexOf("twitter")!=-1) {
+    
+    var results = [];
+    //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
+    var accounts = ["thenextweb","medium"];
+    
+    function getTweets(i){
+        var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+        if (i<accounts.length) {
+            var oauth = 
+                { consumer_key: conf.twit.consumerKey
+                , consumer_secret: conf.twit.consumerSecret
+                , token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
+                , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
+            };
+            var params = 
+            {    
+                include_entities:true,
+                screen_name:accounts[i],
+                count:3
+            };	
+            reqUrl += require('querystring').stringify(params);
+        
+            var reqObj;
+            reqObj = {url:encodeURI(reqUrl), oauth:oauth};
+            
+            request.get(reqObj, function (e, r, body) {
+        		console.log(e);
+    			console.log("request---------------------------------"+JSON.stringify(reqObj));
+                //console.log("body---------------"+body.substring(0,200));
+                
+                var objs,rts,url,mentioned;
+                
+    			if (!e || typeof e == "undefined") {
+                    
+                    objs = JSON.parse(body);
+                    
+                    for (var j=0;j<objs.length;j++) {
+                        rts = objs[j].retweet_count;
+                    
+                        if (typeof objs[j].entities !="undefined" && objs[j].entities.urls.length>0){
+                            url = objs[j].entities.urls[0].url;
+                        }
+                        if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
+                            mentioned = objs[j].entities.user_mentions[0].screen_name;
+                        }
+                        
+                        // push
+                        console.log("pusghing..."+rts);
+                        
+                        results.push({account:accounts[i],url:url,text:objs[j].text,mentioned:mentioned,rts:rts});   
+                    }
+                }
+                else {
+                    //res.json({error:e});
+                }
+                
+                getTweets(i+1);
+                
+            });
+        }
+        else {
+            //res.json({ok:results});
+            res.render("index",{results:results});
+        }
+    }
+    
+    setTimeout(getTweets(0),5000);
+    
+});
+
 app.post("/fetch",function(req, res){
     
     console.log("fetch..");
@@ -221,7 +297,7 @@ app.post("/fetch",function(req, res){
                 imgFound=0;
             
             //request.get(reqObj, function (e, r, body) {
-        	//	console.log(e);
+            //	console.log(e);
     		//	console.log("request---------------------------------"+JSON.stringify(reqObj));
                 //console.log("body---------------"+body.substring(0,200));
                 /////
@@ -429,89 +505,24 @@ app.post("/fetch",function(req, res){
                 res.locals.msg={"success":"Perfect. Now you can login."};
                 res.json({ok:b});    
             });
-            
-            
-                    
         }
     }
     
-    setTimeout(getUrls(0),7000);
-    
+    setTimeout(getUrls(0),7000); 
 });
 
-app.get("/",function(req, res){
-   
-    //console.log("b:"+req.body.status);
-	//console.log("user:"+JSON.stringify(req.user));
-	//console.log("tw:"+JSON.stringify(req.session));
-	//if (req.user.loggedInWith.indexOf("twitter")!=-1) {
+app.get('/posts', function(req,res){
     
-    var results = [];
-    //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
-    var accounts = ["thenextweb","medium"];
-    
-    function getTweets(i){
-        var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
-        if (i<accounts.length) {
-            var oauth = 
-                { consumer_key: conf.twit.consumerKey
-                , consumer_secret: conf.twit.consumerSecret
-                , token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
-                , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
-            };
-            var params = 
-            {    
-                include_entities:true,
-                screen_name:accounts[i],
-                count:3
-            };	
-            reqUrl += require('querystring').stringify(params);
-        
-            var reqObj;
-            reqObj = {url:encodeURI(reqUrl), oauth:oauth};
-            
-            request.get(reqObj, function (e, r, body) {
-        		console.log(e);
-    			console.log("request---------------------------------"+JSON.stringify(reqObj));
-                //console.log("body---------------"+body.substring(0,200));
-                
-                var objs,rts,url,mentioned;
-                
-    			if (!e || typeof e == "undefined") {
-                    
-                    objs = JSON.parse(body);
-                    
-                    for (var j=0;j<objs.length;j++) {
-                        rts = objs[j].retweet_count;
-                    
-                        if (typeof objs[j].entities !="undefined" && objs[j].entities.urls.length>0){
-                            url = objs[j].entities.urls[0].url;
-                        }
-                        if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
-                            mentioned = objs[j].entities.user_mentions[0].screen_name;
-                        }
-                        
-                        // push
-                        console.log("pusghing..."+rts);
-                        
-                        results.push({account:accounts[i],url:url,text:objs[j].text,mentioned:mentioned,rts:rts});   
-                    }
-                }
-                else {
-                    //res.json({error:e});
-                }
-                
-                getTweets(i+1);
-                
-            });
+    //request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{where:JSON.stringify({url:url})},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+    request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        if (b.results) {
+            res.json({results:b.results});
         }
         else {
-            //res.json({ok:results});
-            res.render("index",{results:results});
+            //next();
+            res.json({error:"no results"});
         }
-    }
-    
-    setTimeout(getTweets(0),5000);
+    });
     
 });
 
@@ -520,7 +531,7 @@ app.get('/cache', function(req,res){
     console.log("cached");
     var url = url;
     
-     request.get({url:'https://api.parse.com/1/classes/Capture',json:true,qs:{where:JSON.stringify({url:url})},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+    request.get({url:'https://api.parse.com/1/classes/Capture',json:true,qs:{where:JSON.stringify({url:url})},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
         if (b.results[0]) {
             var uuid =  b.results[0].uuid;
             res.redirect("/"+uuid);
