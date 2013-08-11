@@ -1,1 +1,8 @@
 This is a social and content API entrypoint.
+
+<form action="/fetch" method="POST">
+    <%for (var i=0;i<results.length;i++) {%>
+    <input type="checkbox" id="urls" name="urls" value="<%=results[i].url%>">
+    <%}%>
+    <button type="submit">OK</button>
+</form>
