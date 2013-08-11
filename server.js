@@ -245,15 +245,15 @@ app.get("/last",function(req, res){
                     obj = JSON.parse(body);
                     rts = obj.retweet_count;
                     
-                    if (obj.entities && obj.entities.urls.length>0){
+                    if (typeof obj.entities !="undefined" && obj.entities.urls.length>0){
                         url = obj.entities.urls[0].url;
                     }
-                    if (obj.entities && obj.entities.user_mentions.length>0){
+                    if (typeof obj.entities !="undefined" && obj.entities.user_mentions.length>0){
                         mentioned = obj.entities.user_mentions[0].screen_name;
                     }
                     
                     // push
-                    console.log("pusghing"+url);
+                    console.log("pusghing..."+rts);
                     
                     results.push({url:url,mentioned:mentioned,rts:rts,obj:obj});
                     
