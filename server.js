@@ -214,6 +214,7 @@ app.get("/last",function(req, res){
 	}
 	, url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
     
+    var i=0;
     function getTweets(i){
         if (i<accounts.length) {
         
@@ -227,7 +228,10 @@ app.get("/last",function(req, res){
         
             request.get({url:encodeURI(url), oauth:oauth}, function (e, r, body) {
         		console.log(e);
-    			console.log("body from twitter-----------"+body);
+    			//console.log("body from twitter-----------"+body);
+                
+                console.log("request---------------------------------"+i);
+                
                 
                 var obj,rts,url,mentioned;
                 
