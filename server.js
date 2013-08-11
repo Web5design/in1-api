@@ -202,11 +202,11 @@ app.post("/fetch",function(req, res){
     var results = [];
     
     function getUrls(i){
-        var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+        //var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
         if (i<urls.length) {
             
-            var reqObj;
-            reqObj = {url:encodeURI(reqUrl)};
+            //var reqObj;
+            //reqObj = {url:encodeURI(reqUrl)};
             
              var title,
                 desc,
@@ -218,9 +218,9 @@ app.post("/fetch",function(req, res){
             	descFound=0,
             	imgFound=0;
             
-            request.get(reqObj, function (e, r, body) {
-        		console.log(e);
-    			console.log("request---------------------------------"+JSON.stringify(reqObj));
+            //request.get(reqObj, function (e, r, body) {
+        	//	console.log(e);
+    		//	console.log("request---------------------------------"+JSON.stringify(reqObj));
                 //console.log("body---------------"+body.substring(0,200));
                 /////
                 
@@ -393,7 +393,7 @@ app.post("/fetch",function(req, res){
                 
                 getUrls(i+1);
                 
-            });
+            //});
         }
         else {
             res.json({ok:results});            
