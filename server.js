@@ -121,9 +121,9 @@ app.get('/harvest', function(req,res){
                 
                     console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
                 
-                    $h = $(""+bodyMatches[1]+"");
+                    $h = $(bodyMatches[1]);
                 
-				var imgs = $h.find('img[src$="png"],img[src$="jpg"]');
+				var imgs = $h.find('img[src*=png],img[src*=jpg]');
 				$.each(imgs,function(idx,item){
 					var src=$(item).attr("src");
 					console.log("image src:"+src);
@@ -136,7 +136,7 @@ app.get('/harvest', function(req,res){
 				});
 				
 				// find social usernames
-				$.each($h.find('a[href*="twitter.com/"]:not(a[href*="status"])'),function(idx,item){
+				$.each($h.find('a[href*=twitter.com/]:not(a[href*=status])'),function(idx,item){
                     
                     console.log("twitter found......");  
                     
