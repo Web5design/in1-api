@@ -220,7 +220,7 @@ app.get("/",function(req, res){
                 
                 if (typeof b.results!="undefined"){
                     //results = results.splice(i,1); // already exists
-                    results[i].exists=true;
+                    results[i].exists="1";
                 }
                 
                 checkUni(i+1);        

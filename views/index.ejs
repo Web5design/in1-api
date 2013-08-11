@@ -2,7 +2,7 @@ This is a social and content API entrypoint.
 
 <form action="/fetch" method="POST">
     <%for (var i=0;i<results.length;i++) {%>
-    <input type="checkbox" id="urls" name="urls" <%if(typeof results[i].exists != "undefined" && results[i].exists==true){%>checked<%}%> value="<%=results[i].url%>"><%=results[i].url%> (<%=results[i].text%>)<br>
+    <input type="checkbox" id="urls" name="urls" <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>checked<%}%> value="<%=results[i].url%>"><%=results[i].url%> (<%=results[i].text%>)<br>
     <%}%>
     <button type="submit">OK</button>
 </form>
