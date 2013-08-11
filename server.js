@@ -241,10 +241,10 @@ app.get("/last",function(req, res){
                     obj = JSON.parse(body);
                     rts = obj[0].retweet_count;
                     
-                    if (typeof obj[0].entities !="undefined" && obj.entities.urls.length>0){
+                    if (typeof obj[0].entities !="undefined" && obj[0].entities.urls.length>0){
                         url = obj[0].entities.urls[0].url;
                     }
-                    if (typeof obj[0].entities !="undefined" && obj.entities.user_mentions.length>0){
+                    if (typeof obj[0].entities !="undefined" && obj[0].entities.user_mentions.length>0){
                         mentioned = obj[0].entities.user_mentions[0].screen_name;
                     }
                     
