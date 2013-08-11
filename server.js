@@ -234,25 +234,27 @@ app.get("/last",function(req, res){
                 console.log("request---------------------------------"+JSON.stringify(reqObj));
                 console.log("body---------------"+body.substring(0,200));
                 
-                var obj,rts,url,mentioned;
+                var objs,rts,url,mentioned;
                 
     			if (!e || typeof e == "undefined") {
                     
-                    obj = JSON.parse(body);
-                    rts = obj[0].retweet_count;
+                    objs = JSON.parse(body);
                     
-                    if (typeof obj[0].entities !="undefined" && obj[0].entities.urls.length>0){
-                        url = obj[0].entities.urls[0].url;
+                    for (var j=0;i<objs.length;j++) {
+                        rts = objs[j].retweet_count;
+                    
+                        if (typeof objs[j].entities !="undefined" && objs[j].entities.urls.length>0){
+                            url = objs[j].entities.urls[0].url;
+                        }
+                        if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
+                            mentioned = objs[j].entities.user_mentions[0].screen_name;
+                        }
+                        
+                        // push
+                        console.log("pusghing..."+rts);
+                        
+                        results.push({url:url,text:objs[j].text,mentioned:mentioned,rts:rts});   
                     }
-                    if (typeof obj[0].entities !="undefined" && obj[0].entities.user_mentions.length>0){
-                        mentioned = obj[0].entities.user_mentions[0].screen_name;
-                    }
-                    
-                    // push
-                    console.log("pusghing..."+rts);
-                    
-                    results.push({foo:'foo',url:url,mentioned:mentioned,rts:rts,obj:obj});
-                    
                 }
                 else {
                     //res.json({error:e});
