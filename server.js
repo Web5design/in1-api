@@ -215,7 +215,7 @@ app.get("/last",function(req, res){
     
     var i=0;
     function getTweets(i){
-        var url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+        var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
         if (i<accounts.length) {
         
             var params = 
@@ -224,18 +224,10 @@ app.get("/last",function(req, res){
                 screen_name:accounts[i],
                 count:5
 	        };	
-            url += require('querystring').stringify(params);
+            reqUrl += require('querystring').stringify(params);
         
             var reqObj;
-        
-            if (i==0) {
-                reqObj = {url:encodeURI(url), oauth:oauth};
-            }
-            else {
-                reqObj = {url:encodeURI(url)};                
-            }
-            
-            reqObj = {url:encodeURI(url), oauth:oauth};
+            reqObj = {url:encodeURI(reqUrl), oauth:oauth};
             
             request.get(reqObj, function (e, r, body) {
         		console.log(e);
@@ -261,6 +253,8 @@ app.get("/last",function(req, res){
                     }
                     
                     // push
+                    console.log("pusghing"+url);
+                    
                     results.push({url:url,mentioned:mentioned,rts:rts,obj:obj});
                     
                 }
