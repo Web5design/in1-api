@@ -34,10 +34,15 @@ app.get('/harvest', function(req,res){
 		request({url:sURL,followRedirect:true,maxRedirects:1}, function (error, response, body) {
 		
 			if (!error) {
+                
+                console.log(body);
+    			
+                
 				var $h = $("<form>"+body+"</form>");
                 
                 var head = body.match(/<head>\s*(.+?)\s*<\/head>/);
                 if (head) {
+                        console.log(head[0]);
     					$h = $("<form>"+head[1]+"</form>");
 					}
                 
