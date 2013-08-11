@@ -121,12 +121,12 @@ app.get('/harvest', function(req,res){
                 
                     console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
                 
-                    $h = $("<form>"+bodyMatches[1]+"</form>");
+                    $h = $(""+bodyMatches[1]+"");
                 
 				var imgs = $h.find('img[src$="png"],img[src$="jpg"]');
 				$.each(imgs,function(idx,item){
 					var src=$(item).attr("src");
-					//console.log("image src:"+src);
+					console.log("image src:"+src);
 					//src = imgs[i].getAttribute("src");
 					if (src.indexOf('//')==-1) { // prepend baseurl for relative images						
 						src=baseUrl+src;
