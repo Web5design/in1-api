@@ -301,7 +301,7 @@ var harvestMeta = function(body,baseUrl){
         descFound=0,
         imgFound=0;
     
-    var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
+    var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im;
     var headMatches = headPattern.exec(body);
     var $h;
     
@@ -377,7 +377,7 @@ var harvestImages = function(body,baseUrl){
     
     var URL = require('url');
     var images=[];
-    var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im
+    var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im;
     var bodyMatches = bodyPattern.exec(body);
     
     var $h;
@@ -410,7 +410,7 @@ var harvestSocial = function(body,baseUrl){
     
         var URL = require('url');
         var tw,fb,rss,li,pin,yt,gp;
-        var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im
+        var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im;
         var bodyMatches = bodyPattern.exec(body);
         
         var $h;
