@@ -3,7 +3,7 @@ $(document).ready(function(){
     $('#btnGet').click(function(e){
         $.ajax({
             url: "posts",
-            type: "get"
+            type: "get",
             success: function (data) {
                 if (typeof data.error!="undefined") {
                     alert(data.error);
