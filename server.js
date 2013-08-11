@@ -211,11 +211,11 @@ app.get("/last",function(req, res){
 		, consumer_secret: conf.twit.consumerSecret
 		, token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
 		, token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
-	}
-	, url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+	};
     
     var i=0;
     function getTweets(i){
+        var url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
         if (i<accounts.length) {
         
             var params = 
