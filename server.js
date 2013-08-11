@@ -195,41 +195,64 @@ app.get('/harvest', function(req,res){
 	}
 });
 
-var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
-
 app.get("/last",function(req, res){
    
     //console.log("b:"+req.body.status);
 	//console.log("user:"+JSON.stringify(req.user));
 	//console.log("tw:"+JSON.stringify(req.session));
 	//if (req.user.loggedInWith.indexOf("twitter")!=-1) {
-		var oauth = 
-			{ consumer_key: conf.twit.consumerKey
-			, consumer_secret: conf.twit.consumerSecret
-			, token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
-			, token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
-			}
-		  , url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?'
-		  , params = 
-			{ 
-				include_entities:true,
-                screen_name:"thenextweb"
-			};
-			url += require('querystring').stringify(params)
-			request.get({url:encodeURI(url), oauth:oauth}, function (e, r, body) {
-			console.log(e);
-			console.log("body gtrom twitter-----------"+body);
-			if (!e || typeof e == "undefined") {
+    
+    var results = [];
+    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
+    
+	var oauth = 
+		{ consumer_key: conf.twit.consumerKey
+		, consumer_secret: conf.twit.consumerSecret
+		, token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
+		, token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
+	}
+	, url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+	
+    function getTweets(i){
+        if (i<accounts.length) {
+        
+            var params = 
+		    {    
+			    include_entities:true,
+                screen_name:accounts[i],
+                count:5
+	        };	
+            url += require('querystring').stringify(params);
+        
+            request.get({url:encodeURI(url), oauth:oauth}, function (e, r, body) {
+        		console.log(e);
+    			console.log("body gtrom twitter-----------"+body);
                 
-                var obj = JSON.parse(body);
+                var obj,rts,url,mentioned;
                 
-				res.json({ok:obj[0]});
-			}
-			else {
-				res.json({error:e});
-			}
-		})
-	//}
+    			if (!e || typeof e == "undefined") {
+                    
+                    obj = JSON.parse(body);
+                    rts = obj.retweet_count;
+                    
+                    if (obj.entities.urls.length>0){
+                        url = obj.entities.urls[0].url;
+                    }
+                    if (obj.entities.user_mentions.length>0){
+                        mentioned = obj.entities.user_mentions[0].screen_name;
+                    }
+                    
+                    // push
+                    results.push({url:url,mentioned:mentioned,rts:rts,obj:obj});
+                    getTweets(i+1);
+                }
+                else {
+                    //res.json({error:e});
+                }
+            });
+        }
+        res.json({ok:results});
+    }
     
 });
 
