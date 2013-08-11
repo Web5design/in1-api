@@ -219,8 +219,9 @@ app.get("/",function(req, res){
                 console.log("EXISTING-----------------------------------------------"+b.results.length);
                 
                 if (typeof b.results!="undefined" && b.results.length>0){
-                    results = results.splice(i,1); // already exists
-                    //results[i].exists="1";
+                    //results = results.splice(i,1); // already exists
+                    results[i].exists="1";
+                    //i=i-1;
                 }
                 
                 checkUni(i+1);
