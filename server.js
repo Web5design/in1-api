@@ -211,29 +211,22 @@ app.get("/",function(req, res){
         
             // exists?
             var whereClause = {"origUrl":results[i].url};
-            
-            console.log("WHERE-----------------------------------------------"+JSON.stringify(whereClause));                
-            
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
-                console.log("EXISTING-----------------------------------------------"+b.results.length);
+                //console.log("EXISTING-----------------------------------------------"+b.results.length);
                 
                 if (typeof b.results!="undefined" && b.results.length>0){
-                    //results = results.splice(i,1); // already exists
                     results[i].exists="1";
-                    //i=i-1;
                 }
                 
                 checkUni(i+1);
             });
         }
         else {
-            //done  
-            
+            // done!
             res.render("index",{results:results});
         }
-        
-    };
+    }
     
     function getTweets(i){
         var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
@@ -269,7 +262,7 @@ app.get("/",function(req, res){
                     for (var j=0;j<objs.length;j++) {
                         if (typeof objs[j].entities !="undefined" && objs[j].entities.urls.length>0){
                             url = objs[j].entities.urls[0].url;
-
+                            
                             if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
                                 mentioned = objs[j].entities.user_mentions[0].screen_name;
                             }
@@ -296,6 +289,207 @@ app.get("/",function(req, res){
     
 });
 
+var harvestMeta = function(body,baseUrl){
+    
+    var title,
+        desc,
+        image,
+        images=[],
+        tags=[],
+        rss,
+        titleFound=0,
+        descFound=0,
+        imgFound=0;
+    
+    var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
+    var headMatches = headPattern.exec(body);
+    var $h;
+    
+    if (headMatches.length>0) { // head
+        
+        var head = headMatches[1].replace(/\n/g," ");
+        $h = $("<form>"+head+"</form>");
+        
+        // find opengraph
+        $.each($h.find('meta[property^="og:"]'),function(idx,item){
+            
+            console.log("meta og......");                    
+            
+            var $item = $(item);
+            var property = $item.attr("property");
+            
+            if (property=="og:image") {
+                image = $item.attr("content");
+                images.push(image);
+                imgFound = 1;
+            }    		
+            else if (property=="og:title") {
+                title = $item.attr("content");
+                titleFound=1;
+            }
+            else if (property=="og:description") {
+                desc = $item.attr("content");
+                descFound=1;
+            }
+        });	
+
+        console.log("title......");
+        
+        var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
+        if (matches) {
+            title = matches[1];
+        }
+        
+        image = $h.find('link[rel="image_src"],link[rel="shortcut icon"]').attr('href');
+        if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
+            image = baseUrl+image;
+        }
+        images.push(image);
+        imgFound = 1;
+
+		$.each($h.find('meta[name=description]'),function(idx,item){
+            console.log("meta desc..");         
+			desc = $(item).attr("content");
+		});
+        
+        $.each($h.find('meta[name=keywords]'),function(idx,item){
+            tags.push($(item).attr("content"));
+        });
+        
+        $.each($h.find('link[type="application/rss+xml"]'),function(idx,item){
+            var rssUrl = $(item).attr("href");
+		    rss = rssUrl;
+        });
+    }
+    
+    var retObj = {};
+    retObj.title = title;
+    retObj.desc = desc;
+    retObj.tags = tags;
+    retObj.image = image;
+    retObj.images = images;
+    retObj.rss = rss;
+    
+    return retObj;
+}
+
+var harvestImages = function(body,baseUrl){
+    
+    var URL = require('url');
+    var images=[];
+    var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im
+    var bodyMatches = bodyPattern.exec(body);
+    
+    var $h;
+                            
+        if (bodyMatches.length>0) { // body
+        
+            //console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
+        
+            $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
+            var imgs = $h.find('img[src*=png],img[src*=jpg]');
+            $.each(imgs,function(idx,item){
+                var src=$(item).attr("src").replace("\t","");
+				console.log("image src:"+src);
+				//src = imgs[i].getAttribute("src");
+				if (src.indexOf('//')==-1) { // prepend baseurl for relative images						
+					src=baseUrl+src;
+					//console.log("image src put http:"+src);
+				}
+                images.push(src);
+            });
+        }
+        
+        var retObj = {};
+        retObj.images = images;
+
+        return retObj;
+}
+
+var harvestSocial = function(body,baseUrl){
+    
+        var URL = require('url');
+        var tw,fb,rss,li,pin,yt,gp;
+        var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im
+        var bodyMatches = bodyPattern.exec(body);
+        
+        var $h;
+                            
+        if (bodyMatches.length>0) { // body
+        
+            //console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
+        
+            $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
+            
+            // find social usernames
+			$.each($h.find('a[href*="twitter.com"]:not(a[href*="status"],a[href*="share"])'),function(idx,item){
+                
+                console.log("twitter found......");  
+                
+				var twUrl = $(item).attr("href").replace('/#!','');
+				twUrl = URL.parse(twUrl,true,true);
+				if (twUrl.query && twUrl.query.via){
+					tw = twUrl.query.via;
+				}
+				else if (twUrl.query && twUrl.query.screen_name){
+					tw = twUrl.query.screen_name;
+				}
+				else {
+					tw = twUrl.pathname;
+				}
+				//console.log("tw------"+twUrl.query.via);
+				if (tw==="" || tw === null || typeof tw === "undefined") {
+					tw = "in1_";
+				}
+                tw = "@"+tw.replace("/","");
+			});
+			
+			$.each($h.find('a[href*="facebook.com/"]:not(a[href*="developers"]):lt(1)'),function(idx,item){
+                var fbPagesUrl = $(item).attr("href");
+                fbPagesUrl = URL.parse(fbPagesUrl);
+                fb = fbPagesUrl.pathname;
+				//fb = fb.replace("/pages","");
+                fb = fb.replace("/","");
+            });
+			
+			$.each($h.find('a[href*="linkedin.com/"]:lt(1)'),function(idx,item){
+                var liUrl = $(item).attr("href");
+                liUrl = URL.parse(liUrl);
+                li = liUrl.pathname;
+            });
+
+            $.each($h.find('a[href*="feeds.feedburner.com"]:lt(1),a:contains("rss")'),function(idx,item){
+                var rssUrl = $(item).attr("href");
+                rss = rssUrl;
+            });
+
+			$.each($h.find('a[href*="pinterest.com/"]:not([href*="pin/create"])'),function(idx,item){
+                var pinUrl = $(item).attr("href");
+                pinUrl = URL.parse(pinUrl);
+                pin = pinUrl.pathname;
+            });
+			
+			$.each($h.find('a[href*="youtube.com/user/"]'),function(idx,item){
+                var ytUrl = $(item).attr("href");
+                ytUrl = URL.parse(ytUrl);
+                yt = ytUrl.pathname;
+                yt = yt.replace("/user","");
+			}); 
+
+        }
+        
+        var retObj = {};
+        retObj.yt = yt;
+        retObj.li = li;
+        retObj.fb = fb;
+        retObj.tw = tw;
+        retObj.pin = pin;
+        retObj.rss = rss;
+        
+        return retObj;
+        
+}
+
 app.post("/fetch",function(req, res){
     
     console.log("fetch..");
@@ -312,16 +506,6 @@ app.post("/fetch",function(req, res){
             //var reqObj;
             //reqObj = {url:encodeURI(reqUrl)};
             
-            var title,
-                desc,
-                image,
-                images=[],
-                tags=[],
-                tw,fb,rss,li,pin,yt,gp,
-                titleFound=0,
-                descFound=0,
-                imgFound=0;
-            
             //request.get(reqObj, function (e, r, body) {
             //	console.log(e);
     		//	console.log("request---------------------------------"+JSON.stringify(reqObj));
@@ -336,152 +520,15 @@ app.post("/fetch",function(req, res){
                         console.log("--------------------------------------"+sURL);
                     
             			if (typeof body!="undefined") {
-                            
-                            var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
-                            var headMatches = headPattern.exec(body);
-                            var $h;
-                            
-                            if (headMatches.length>0) { // head
-                                
-                                var head = headMatches[1].replace(/\n/g," ");
-                                $h = $("<form>"+head+"</form>");
-                                
-                                // find opengraph
-                                $.each($h.find('meta[property^="og:"]'),function(idx,item){
-                                    
-                                    console.log("meta og......");                    
-                                    
-                                    var $item = $(item);
-                                    var property = $item.attr("property");
-                                    
-                                    if (property=="og:image") {
-                                        image = $item.attr("content");
-                                        images.push(image);
-                                        imgFound = 1;
-                                    }			
-                                    else if (property=="og:title") {
-                                        title = $item.attr("content");
-                                        titleFound=1;
-                                    }
-                                    else if (property=="og:description") {
-                                        desc = $item.attr("content");
-                                        descFound=1;
-                                    }
-                                });	
-            
-                                console.log("title......");
-                                
-                                var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
-                                if (matches) {
-                                    title = matches[1];
-                                }
-                                
-                                image = $h.find('link[rel="image_src"],link[rel="shortcut icon"]').attr('href');
-                                if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
-                                    image = baseUrl+image;
-                                }
-                                images.push(image);
-                                imgFound = 1;
-            
-            					$.each($h.find('meta[name=description]'),function(idx,item){
-                                    console.log("meta desc..");         
-            						desc = $(item).attr("content");
-            					});
-                                
-                                $.each($h.find('meta[name=keywords]'),function(idx,item){
-                                    tags.push($(item).attr("content"));
-                                });
-                                
-                                $.each($h.find('link[type="application/rss+xml"]'),function(idx,item){
-                                    var rssUrl = $(item).attr("href");
-            					    rss = rssUrl;
-                                });
-                            }
-                            
-            				// find images
+                           
             				//oURL = URL.parse(sURL);
             				var baseUrl = response.request.uri.href;
+                            
+                            var metaObj = harvestMeta(body,baseUrl);
+                            var images = harvestImages(body,baseUrl).images;
+                            var title = metaObj.title;
+                            var desc = metaObj.desc;
             				
-                            var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im
-                            var bodyMatches = bodyPattern.exec(body);
-                            
-                            if (bodyMatches.length>0) { // body
-                            
-                                //console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
-                            
-                                $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
-                                var imgs = $h.find('img[src*=png],img[src*=jpg]');
-                                $.each(imgs,function(idx,item){
-                    				var src=$(item).attr("src").replace("\t","");
-                    				console.log("image src:"+src);
-                    				//src = imgs[i].getAttribute("src");
-                    				if (src.indexOf('//')==-1) { // prepend baseurl for relative images						
-                    					src=baseUrl+src;
-                    					//console.log("image src put http:"+src);
-                    				}
-                                    images.push(src);
-                                });
-                				
-                				// find social usernames
-                				$.each($h.find('a[href*="twitter.com"]:not(a[href*="status"],a[href*="share"])'),function(idx,item){
-                                    
-                                    console.log("twitter found......");  
-                                    
-                					var twUrl = $(item).attr("href").replace('/#!','');
-                					twUrl = URL.parse(twUrl,true,true);
-                					if (twUrl.query && twUrl.query.via){
-                						tw = twUrl.query.via;
-                					}
-                					else if (twUrl.query && twUrl.query.screen_name){
-                						tw = twUrl.query.screen_name;
-                					}
-                					else {
-                						tw = twUrl.pathname;
-                					}
-                					//console.log("tw------"+twUrl.query.via);
-                					if (tw==="" || tw === null || typeof tw === "undefined") {
-                						tw = "in1_";
-                					}
-                                    tw = "@"+tw.replace("/","");
-                				});
-                				
-                				$.each($h.find('a[href*="facebook.com/"]:not(a[href*="developers"]):lt(1)'),function(idx,item){
-                                    var fbPagesUrl = $(item).attr("href");
-                                    fbPagesUrl = URL.parse(fbPagesUrl);
-                                    fb = fbPagesUrl.pathname;
-                					//fb = fb.replace("/pages","");
-                                    fb = fb.replace("/","");
-                                });
-                				
-                				$.each($h.find('a[href*="linkedin.com/"]:lt(1)'),function(idx,item){
-                                    var liUrl = $(item).attr("href");
-                                    liUrl = URL.parse(liUrl);
-                                    li = liUrl.pathname;
-                                });
-            
-                                $.each($h.find('a[href*="feeds.feedburner.com"]:lt(1),a:contains("rss")'),function(idx,item){
-                                    var rssUrl = $(item).attr("href");
-                                    rss = rssUrl;
-                                });
-            
-                				$.each($h.find('a[href*="pinterest.com/"]:not([href*="pin/create"])'),function(idx,item){
-                                    var pinUrl = $(item).attr("href");
-                                    pinUrl = URL.parse(pinUrl);
-                                    pin = pinUrl.pathname;
-                                });
-                				
-                				$.each($h.find('a[href*="youtube.com/user/"]'),function(idx,item){
-                                    var ytUrl = $(item).attr("href");
-                                    ytUrl = URL.parse(ytUrl);
-                                    yt = ytUrl.pathname;
-                                    yt = yt.replace("/user","");
-                				});
-            
-            				//TODO: google+
-                            }
-                            
-                            $h = null;
-                            
                             var resolvedUri = response.request.uri;
                             var resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;
                             results.push({requested:urls[i],title:title,desc:desc,images:images,resolved:resolved});  
@@ -496,9 +543,7 @@ app.post("/fetch",function(req, res){
             		});	
                 
                 /////
-                
-                
-                
+
             //});
         }
         else {
