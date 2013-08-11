@@ -219,7 +219,10 @@ app.get("/last",function(req, res){
 			console.log(e);
 			console.log("body gtrom twitter-----------"+body);
 			if (!e || typeof e == "undefined") {
-				res.json({ok:body});
+                
+                var obj = JSON.parse(body);
+                
+				res.json({ok:obj[0].url});
 			}
 			else {
 				res.json({error:e});
