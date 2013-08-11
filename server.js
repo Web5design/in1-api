@@ -273,7 +273,7 @@ app.get("/",function(req, res){
                         }
                     }
                     
-                    checkUni(results[0]);
+                    checkUni(0);
                     
                 }
                 else {
