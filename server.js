@@ -503,20 +503,58 @@ app.post("/fetch",function(req, res){
     
     console.log(urls);
     
+    if( typeof urls === 'string' ) {
+        urls = [urls];
+    }
+    
+    function checkUni(i){
+                   
+        if (i<results.length) {
+        
+            // exists?
+            var whereClause = {"origUrl":results[i].url};
+            request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+                
+                //console.log("EXISTING-----------------------------------------------"+b.results.length);
+                
+                if (typeof b.results!="undefined" && b.results.length>0){
+                    results[i].exists="1";
+                }
+                
+                checkUni(i+1);
+            });
+        }
+        else {
+            // done!
+            //res.render("index",{results:results});
+            
+            var postRequests = [];
+            for(var k=0; k<results.length; ++k) {
+                postRequests.push({
+                    "method": "POST",
+                    "path": "/1/classes/Post",
+                    "body": {
+                        "url": results[k].resolved,
+                        "title": results[k].title,
+                        "desc": results[k].desc,
+                        "origUrl": results[k].requested
+                    }
+                });
+            }
+        
+            request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                body:{requests:postRequests}}, function (e,r,b){
+                console.log("Add new post to parse api...");
+                res.locals.msg={"success":"Perfect. Now you can login."};
+                res.json({ok:b});    
+            });
+            
+        }
+    }
+    
     function getUrls(i){
         //var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
         if (i<urls.length) {
-            
-            //var reqObj;
-            //reqObj = {url:encodeURI(reqUrl)};
-            
-            //request.get(reqObj, function (e, r, body) {
-            //	console.log(e);
-    		//	console.log("request---------------------------------"+JSON.stringify(reqObj));
-                //console.log("body---------------"+body.substring(0,200));
-                /////
-                
-                //if (url) {
     
             		var sURL = unescape(utils.fixUrl(urls[i]));
             		request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
@@ -545,10 +583,7 @@ app.post("/fetch",function(req, res){
             				//res.json({error:'problem harvesting:'+url});
             			}
             		});	
-                
-                /////
 
-            //});
         }
         else {
             /*
@@ -561,28 +596,7 @@ app.post("/fetch",function(req, res){
             });
             */
             
-            var postRequests = [];
-            var url;
-            for(var k=0; k<results.length; ++k) {
-                url = results[k].resolved;
-                postRequests.push({
-                    "method": "POST",
-                    "path": "/1/classes/Post",
-                    "body": {
-                        "url": url,
-                        "title": results[k].title,
-                        "desc": results[k].desc,
-                        "origUrl": results[k].requested
-                    }
-                });
-            }
-        
-            request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
-                body:{requests:postRequests}}, function (e,r,b){
-                console.log("Add new post to parse api...");
-                res.locals.msg={"success":"Perfect. Now you can login."};
-                res.json({ok:b});    
-            });
+            checkUni(0);
         }
     }
     
