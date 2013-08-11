@@ -203,7 +203,8 @@ app.get("/last",function(req, res){
 	//if (req.user.loggedInWith.indexOf("twitter")!=-1) {
     
     var results = [];
-    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
+    //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
+    var accounts = ["thenextweb","medium"];
     
 	var oauth = 
 		{ consumer_key: conf.twit.consumerKey
@@ -213,6 +214,8 @@ app.get("/last",function(req, res){
 	}
 	, url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
 	
+    setTimeout(getTweets(0),5000);
+    
     function getTweets(i){
         if (i<accounts.length) {
         
@@ -226,7 +229,7 @@ app.get("/last",function(req, res){
         
             request.get({url:encodeURI(url), oauth:oauth}, function (e, r, body) {
         		console.log(e);
-    			console.log("body gtrom twitter-----------"+body);
+    			console.log("body from twitter-----------"+body);
                 
                 var obj,rts,url,mentioned;
                 

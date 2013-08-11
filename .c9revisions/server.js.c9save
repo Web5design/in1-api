@@ -111,3 +111,6 @@
 {"ts":1376225084134,"patch":[[{"diffs":[[0,"url:url,"],[1,"mentioned:mentioned,"],[0,"rts:rts,"]],"start1":8517,"start2":8517,"length1":16,"length2":36}]],"length":10466,"saved":false}
 {"ts":1376225121654,"patch":[[{"diffs":[[0,":account"],[1,"s"],[0,"[i],\r\n  "]],"start1":7577,"start2":7577,"length1":16,"length2":17}]],"length":10467,"saved":false}
 {"ts":1376225155260,"patch":[[{"diffs":[[0,"\n        }\r\n"],[1,"        res.json({ok:results});\r\n"],[0,"    }\r\n    \r"]],"start1":8725,"start2":8725,"length1":24,"length2":57}]],"length":10500,"saved":false}
+{"ts":1376225317433,"patch":[[{"diffs":[[0," = [];\r\n    "],[1,"//"],[0,"var accounts"]],"start1":7000,"start2":7000,"length1":24,"length2":26},{"diffs":[[0,"visions\"];\r\n"],[1,"    var accounts = [\"thenextweb\",\"medium\"];\r\n"],[0,"    \r\n\tvar o"]],"start1":7082,"start2":7082,"length1":24,"length2":69}]],"length":10547,"saved":false}
+{"ts":1376225348032,"patch":[[{"diffs":[[0,"g(\"body "],[-1,"gt"],[1,"f"],[0,"rom twit"]],"start1":7878,"start2":7878,"length1":18,"length2":17}]],"length":10546,"saved":false}
+{"ts":1376225637224,"patch":[[{"diffs":[[0,"?';\r\n\t\r\n"],[1,"    setTimeout(getTweets(0),5000);\r\n    \r\n"],[0,"    func"]],"start1":7446,"start2":7446,"length1":16,"length2":58}]],"length":10588,"saved":false}
