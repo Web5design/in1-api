@@ -121,7 +121,7 @@ app.get('/harvest', function(req,res){
                 
                     console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
                 
-                    $h = $(bodyMatches[1]);
+                    $h = $("<form>"+bodyMatches[1]+"</form>");
                 
 				var imgs = $h.find('img[src*=png],img[src*=jpg]');
 				$.each(imgs,function(idx,item){
