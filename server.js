@@ -512,13 +512,16 @@ app.post("/fetch",function(req, res){
         if (i<results.length) {
         
             // exists?
-            var whereClause = {"origUrl":results[i].url};
+            var whereClause = {"origUrl":results[i].requested};
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
                 //console.log("EXISTING-----------------------------------------------"+b.results.length);
                 
                 if (typeof b.results!="undefined" && b.results.length>0){
                     results[i].exists="1";
+                }
+                else {
+                    results[i].exists="0";
                 }
                 
                 checkUni(i+1);
@@ -530,16 +533,18 @@ app.post("/fetch",function(req, res){
             
             var postRequests = [];
             for(var k=0; k<results.length; ++k) {
-                postRequests.push({
-                    "method": "POST",
-                    "path": "/1/classes/Post",
-                    "body": {
-                        "url": results[k].resolved,
-                        "title": results[k].title,
-                        "desc": results[k].desc,
-                        "origUrl": results[k].requested
-                    }
-                });
+                if (results[i].exists==="0"){
+                    postRequests.push({
+                        "method": "POST",
+                        "path": "/1/classes/Post",
+                        "body": {
+                            "url": results[k].resolved,
+                            "title": results[k].title,
+                            "desc": results[k].desc,
+                            "origUrl": results[k].requested
+                        }
+                    });
+                }
             }
         
             request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
