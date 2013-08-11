@@ -208,15 +208,15 @@ app.post("/fetch",function(req, res){
             //var reqObj;
             //reqObj = {url:encodeURI(reqUrl)};
             
-             var title,
+            var title,
                 desc,
-            	image,
-            	images=[],
-            	tags=[],
-            	tw,fb,rss,li,pin,yt,gp,
-            	titleFound=0,
-            	descFound=0,
-            	imgFound=0;
+                image,
+                images=[],
+                tags=[],
+                tw,fb,rss,li,pin,yt,gp,
+                titleFound=0,
+                descFound=0,
+                imgFound=0;
             
             //request.get(reqObj, function (e, r, body) {
         	//	console.log(e);
