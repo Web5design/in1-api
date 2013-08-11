@@ -38,91 +38,95 @@ app.get('/harvest', function(req,res){
                 //console.log(body.substring(0,400));
     			
                 
-				var $h = $("<form>"+body+"</form>");
+				//var $h = $("<form>"+body+"</form>");
                 
-               // var head = body.match(/<head>((.|[\S\s])*)<\/head>/im);
-                /*
-                if (typeof head != "undefined") {
-                    console.log("head............"+head);
-    				//$h = $("<form>"+head[1]+"</form>");
-				}
-                  */  
                     
-                var pattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
-                var array_matches = pattern.exec(body);   
-                console.log("head----"+array_matches[1]);
+                var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
+                var headMatches = headPattern.exec(body);
+                var $h;
                 
-                var $h = $("<form>"+array_matches[1]+"</form>");
+                if (headMatches.length>0) { // head
+                    
+                    var head = headMatches[1].replace(/\n/g," ");
+                    $h = $("<form>"+head+"</form>");
+                    
+                    // find opengraph
+                    $.each($h.find('meta[property^="og:"]'),function(idx,item){
+                        
+                        console.log("meta og......");                    
+                        
+                        var $item = $(item);
+                        var property = $item.attr("property");
+                        
+                        if (property=="og:image") {
+                            image = $item.attr("content");
+                            images.push(image);
+                            imgFound = 1;
+                        }			
+                        else if (property=="og:title") {
+                            title = $item.attr("content");
+                            titleFound=1;
+                        }
+                        else if (property=="og:description") {
+                            desc = $item.attr("content");
+                            descFound=1;
+                        }
+                    });	
+    				
+    				//if (titleFound===0)
+    				{
+                        console.log("title......");
+                        
+                        var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
+    			        if (matches) {
+    			            title = matches[1];
+    					}
+    				}
+    				
+    				//if (imgFound===0)
+                    {
+    					image = $h.find('link[rel="image_src"],link[rel="apple-touch-icon"],link[rel="shortcut icon"]').attr('href');
+    					if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
+    						image = baseUrl+image;
+    					}
+    					images.push(image);
+    					imgFound = 1;
+    				}
+    				
+    				//if (descFound===0)
+    				{
+                        console.log("meta desc......");              
+                        
+                          
+    					$.each($h.find('meta[name=description]'),function(idx,item){
+                            console.log("meta desc..");         
+    						desc = $(item).attr("content");
+    					});
+    				}
+    
+    				$.each($h.find('meta[name=keywords]'),function(idx,item){
+    				    tags.push($(item).attr("content"));
+    				});
+                }
+                
+                
                 
                 //console.log("body----------------------------------"+$h.html());
 				
-				// find opengraph
-				$.each($h.find('meta[property^="og:"]'),function(idx,item){
-                    
-                    console.log("meta og......");                    
-                    
-					var $item = $(item);
-					var property = $item.attr("property");
-					
-					if (property=="og:image") {
-						image = $item.attr("content");
-						//if (imgSrc.indexOf('//')==-1) { // prepend baseurl for relative images						
-						//	imgSrc=baseUrl+imgSrc;
-						//}
-						images.push(image);
-						imgFound = 1;
-					}			
-					else if (property=="og:title") {
-						title = $item.attr("content");
-						titleFound=1;
-					}
-					else if (property=="og:description") {
-						desc = $item.attr("content");
-						descFound=1;
-					}
-				});	
 				
-				if (titleFound===0)
-				{
-                    console.log("title......");                    
-                    
-                    
-					//var matches = body.match(/<title>\s*(.+?)<\/title>/);
-					var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
-					if (matches) {
-						title = matches[1];
-					}
-				}
-				
-				if (imgFound===0) {
-					image = $h.find('link[rel="image_src"],link[rel="apple-touch-icon"],link[rel="shortcut icon"]').attr('href');
-					if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
-						image = baseUrl+image;
-					}
-					images.push(image);
-					imgFound = 1;
-				}
-				
-				if (descFound===0)
-				{
-                    console.log("meta desc......");              
-                    
-                    
-                    
-					$.each($h.find('meta[name=description]'),function(idx,item){
-                        console.log("meta desc..");         
-						desc = $(item).attr("content");
-					});
-				}
-
-				$.each($h.find('meta[name=keywords]'),function(idx,item){
-				    tags.push($(item).attr("content"));
-				});
 				
 				// find images
 				//oURL = URL.parse(sURL);
 				var baseUrl = response.request.uri.href;
 				
+                var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im
+                var bodyMatches = bodyPattern.exec(body);
+                
+                if (bodyMatches.length>0) { // body
+                
+                
+                    $h = $("<form>"+bodyMatches[1]+"</form>");
+                
 				var imgs = $h.find('img[src$="png"],img[src$="jpg"]');
 				$.each(imgs,function(idx,item){
 					var src=$(item).attr("src");
