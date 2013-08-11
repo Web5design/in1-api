@@ -35,7 +35,7 @@ app.get('/harvest', function(req,res){
 		
 			if (!error) {
                 
-                console.log(body.substring(0,400));
+                //console.log(body.substring(0,400));
     			
                 
 				var $h = $("<form>"+body+"</form>");
@@ -50,7 +50,7 @@ app.get('/harvest', function(req,res){
                 var pattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
                 var array_matches = pattern.exec(body);   
                 
-                 console.log(array_matches[1]);
+                console.log("head----"+array_matches[1]);
                 
                 console.log("body----------------------------------"+$h.html());
 				
