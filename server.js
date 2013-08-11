@@ -218,8 +218,9 @@ app.get("/",function(req, res){
                 
                 console.log("EXISTING-----------------------------------------------"+b.results[0]);
                 
-                if (b.results.length>0){
-                    results = results.splice(i,1); // already exists                            
+                if (typeof b.results!="undefined"){
+                    //results = results.splice(i,1); // already exists
+                    results[i].exists=true;
                 }
                 
                 checkUni(i+1);        
