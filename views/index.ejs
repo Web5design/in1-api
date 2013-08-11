@@ -11,9 +11,9 @@ $(document).ready(function(){
                 } else {
                     var results = data.results;
                     for(var i=0; i<results.length; ++i) {
-                        var cont = $("<div><b>"+results[i].title+"</b>"+results[i].desc+"</div>");
+                        var cont = $("<div class='col-6'><b>"+results[i].title+"</b>"+results[i].desc+"</div>");
                         if (results[i].images && results[i].images.length>0) {
-                            $("<br><img src='"+results[i].images[0]+"'>").appendTo(cont);
+                            $("<img src='"+results[i].images[0]+"' class="pull-right img-circle" width="150">").appendTo(cont);
                         }
                         cont.appendTo("#posts");
                     }
@@ -24,18 +24,21 @@ $(document).ready(function(){
     });
 });
 </script>
-
-This is a social and content API entrypoint.
-
-<form action="/fetch" method="POST">
-    <%for (var i=0;i<results.length;i++) {%>
-    <input type="checkbox" id="urls" name="urls" <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>checked<%}%> value="<%=results[i].url%>"><%=results[i].url%> (<%=results[i].text%>)<br>
-    <%}%>
-    <button type="submit">OK</button>
-</form>
-
-<hr>
-<button type="button" id="btnGet">Get Posts</button>
-<div id="posts">
-
+<div class="container">
+    This is a social and content API entrypoint.
+    
+    <form action="/fetch" method="POST">
+        <%for (var i=0;i<results.length;i++) {%>
+        <input type="checkbox" id="urls" name="urls" <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>checked<%}%> value="<%=results[i].url%>"><%=results[i].url%> (<%=results[i].text%>)<br>
+        <%}%>
+        <button type="submit">OK</button>
+    </form>
+    
+    <hr>
+    <button type="button" id="btnGet">Get Posts</button>
+    <div class="row">
+        <div id="posts" class="col-12">
+        
+        </div>
+    </div>
 </div>
