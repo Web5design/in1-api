@@ -235,8 +235,9 @@ app.get("/last",function(req, res){
                 
                 console.log("request---------------------------------"+JSON.stringify(reqObj));
                 
-                //console.log("body---------------"+body.substring(0,200));
+                console.log("body---------------"+body.substring(0,200));
                 
+                getTweets(i+1);
                 
                 var obj,rts,url,mentioned;
                 
@@ -262,7 +263,7 @@ app.get("/last",function(req, res){
                     //res.json({error:e});
                 }
                 
-                getTweets(i+1);
+                
             });
         }
     }
