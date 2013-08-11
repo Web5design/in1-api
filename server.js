@@ -213,8 +213,6 @@ app.get("/last",function(req, res){
 		, token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
 	}
 	, url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
-	
-    setTimeout(getTweets(0),5000);
     
     function getTweets(i){
         if (i<accounts.length) {
@@ -254,8 +252,10 @@ app.get("/last",function(req, res){
                 }
             });
         }
-        res.json({ok:results});
     }
+    
+    setTimeout(getTweets(0),5000);
+    res.json({ok:results});
     
 });
 
