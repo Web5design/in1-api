@@ -262,10 +262,12 @@ app.get("/last",function(req, res){
                 
             });
         }
+        else {
+            res.json({ok:results});            
+        }
     }
     
     setTimeout(getTweets(0),5000);
-    res.json({ok:results});
     
 });
 
