@@ -79,10 +79,9 @@ $(document).ready(function(){
             </tr>
             <%}%>
         </table>
-        <input type=hidden name="lastId" value="<%=results[results.length-1].id%>">
-        <button type="submit" class="btn btn-default">OK</button>
+        <input type=hidden name="lastId" id="lastId" value="<%=results[results.length-1].id%>">
+        <button type="submit" class="btn btn-default">Save</button>  <button type="button" id="btnFeed" class="btn btn-default">Refresh Feed</button>
     </form>
-    <button type="button" id="btnFeed">Get Feed</button>
     
     
     <hr>
