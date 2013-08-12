@@ -40,7 +40,7 @@ app.get("/feed",function(req, res){
     
     var q = req.query["q"];
     var f = req.query["format"]
-    var lastId = req.query["lastId"];
+    var lastId = req.query["lastId"]||0;
     
     function checkUni(i){
                    
