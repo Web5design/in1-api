@@ -100,7 +100,7 @@ app.get("/feed",function(req, res){
                 trim_user:1
             };	
             
-            console.log("since id........"+lastId);
+            console.log("since id...---------------------------------------------------....."+lastId);
             
             if (lastId>0) {
                 params.since_id=lastId; // only get latest
