@@ -11,60 +11,6 @@ app.get('/hello', function(req,res){
    res.render("index");
 });
 
-// get basic media and social media data from a url
-app.get('/harvest', function(req,res){ 
-
-    var URL = require('url');
-    
-    var url = req.query.url,
-    title,
-	desc,
-	image,
-	images=[],
-	tags=[],
-    tw,fb,rss,li,pin,yt,gp,
-    resolved;
-	
-	if (url) {
-	
-		var sURL = unescape(utils.fixUrl(url));
-		
-		request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
-		
-			if (typeof body!="undefined") {
-                
-                var resolvedUri = response.request.uri;
-                var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
-                
-                var metaObj = harvestMeta(body,baseUrl);
-                title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
-                desc = metaObj.desc;
-                rss = metaObj.rss;
-                image = metaObj.image;
-                
-                images = harvestImages(body,baseUrl).images;
-                
-                var socialObj = harvestSocial(body,baseUrl);
-                fb = socialObj.fb;
-                tw = socialObj.tw;
-                li = socialObj.li;
-                yt = socialObj.yt;
-                pin = socialObj.pin;
-                
-                resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;         
-                
-                res.json({title:title,desc:desc,resolved:resolved,images:images,image:image,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
-			}
-			else {
-				res.json({error:'problem harvesting:'+url});
-			}
-		});	
-	}
-	else {
-		res.json({error:'url is required'});
-	}
-});
-
 app.get("/",function(req, res){
    
     //console.log("b:"+req.body.status);
@@ -73,8 +19,24 @@ app.get("/",function(req, res){
 	//if (req.user.loggedInWith.indexOf("twitter")!=-1) {
     
     var results = [];
-    //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
-    var accounts = ["thenextweb","medium"];
+    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
+    
+    request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        if (b.results) {
+            res.render("index",{results:results,posts:b.results});
+        }
+        else {
+            //next();
+            res.render("index",{results:results});
+        }
+    });
+    
+});
+
+app.get("/feed",function(req, res){
+   
+    var results = [];
+    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
     
     function checkUni(i){
                    
@@ -171,6 +133,264 @@ app.get("/",function(req, res){
     
 });
 
+// get metadata, images and social accounts from a url
+app.get('/harvest', function(req,res){ 
+
+    var URL = require('url');
+    
+    var url = req.query.url,
+    title,
+    desc,
+	image,
+	images=[],
+	tags=[],
+    tw,fb,rss,li,pin,yt,gp,
+    resolved;
+	
+	if (url) {
+	
+		var sURL = unescape(utils.fixUrl(url));
+		
+		request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
+		
+			if (typeof body!="undefined") {
+                
+                var resolvedUri = response.request.uri;
+                var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
+                
+                var metaObj = harvestMeta(body,baseUrl);
+                title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
+                desc = metaObj.desc;
+                rss = metaObj.rss;
+                image = metaObj.image;
+                
+                images = harvestImages(body,baseUrl).images;
+                
+                var socialObj = harvestSocial(body,baseUrl);
+                fb = socialObj.fb;
+                tw = socialObj.tw;
+                li = socialObj.li;
+                yt = socialObj.yt;
+                pin = socialObj.pin;
+                
+                resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;         
+                
+                res.json({title:title,desc:desc,resolved:resolved,images:images,image:image,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
+			}
+			else {
+				res.json({error:'problem harvesting:'+url});
+			}
+		});	
+	}
+	else {
+		res.json({error:'url is required'});
+	}
+});
+
+// get images from a url
+app.get('/harvestImages', function(req,res){ 
+
+    var URL = require('url');
+    
+    var url = req.query.url,
+    title,
+	image,
+	images=[],
+    resolved;
+	
+	if (url) {
+	
+		var sURL = unescape(utils.fixUrl(url));
+		
+		request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
+		
+			if (typeof body!="undefined") {
+                
+                var resolvedUri = response.request.uri;
+                var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
+                
+                var metaObj = harvestMeta(body,baseUrl);
+                title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
+                image = metaObj.image;
+                
+                images = harvestImages(body,baseUrl).images;
+                
+                resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;         
+                
+                res.json({title:title,resolved:resolved,images:images,image:image});
+			}
+			else {
+				res.json({error:'problem harvesting images:'+url});
+			}
+		});	
+	}
+	else {
+		res.json({error:'url is required'});
+	}
+});
+
+app.post("/fetch",function(req, res){
+    
+    console.log("fetch..");
+    var URL = require('url');
+    var urls = req.body["urls"];
+    var results = [];
+    
+    console.log(urls);
+    
+    if( typeof urls === 'string' ) {
+        urls = [urls];
+    }
+    
+    function checkUni(i){
+                   
+        if (i<results.length) {
+        
+            // exists?
+            var whereClause = {"origUrl":results[i].requested};
+            request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+                
+                //console.log("EXISTING-----------------------------------------------"+b.results.length);
+                
+                if (typeof b.results!="undefined" && b.results.length>0){
+                    results[i].exists="1";
+                }
+                else {
+                    results[i].exists="0";
+                }
+                
+                checkUni(i+1);
+            });
+        }
+        else {
+            // done!
+            
+            var postRequests = [];
+            for(var k=0; k<results.length; ++k) {
+                if (results[k].exists==="0"){
+                    postRequests.push({
+                        "method": "POST",
+                        "path": "/1/classes/Post",
+                        "body": {
+                            "url": results[k].resolved,
+                            "title": results[k].title,
+                            "desc": results[k].desc,
+                            "images": results[k].images,
+                            "origUrl": results[k].requested
+                        }
+                    });
+                }
+            }
+        
+            request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                body:{requests:postRequests}}, function (e,r,b){
+                console.log("Adding batch to parse api...");
+                res.locals.msg={"success":"Perfect. Now you can login."};
+                res.json({ok:b});    
+            });
+        }
+    }
+    
+    function getUrls(i){
+        //var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+        if (i<urls.length) {
+    
+                    var sURL = unescape(utils.fixUrl(urls[i]));
+                    request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
+                        //console.log("--------------------------------------"+sURL);
+
+                        if (typeof body!="undefined") {
+                           
+                            var resolvedUri = response.request.uri;
+                            var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
+                            var metaObj = harvestMeta(body,baseUrl);
+                            var images = harvestImages(body,baseUrl).images;
+                            var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
+                            var desc = metaObj.desc;
+                            
+                            var resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;
+                            results.push({requested:urls[i],title:title,desc:desc,images:images,resolved:resolved});  
+                            
+                            getUrls(i+1);
+                            
+                            //res.json({title:title,desc:desc,resolved:response.request.uri.pathname,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
+                        }
+                        else {
+                            //res.json({error:'problem harvesting:'+url});
+                        }
+                    });
+        }
+        else {
+            checkUni(0);
+        }
+    }
+    
+    setTimeout(getUrls(0),7000); 
+});
+
+app.get('/posts', function(req,res){
+    
+    //request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{where:JSON.stringify({url:url})},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+    request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        if (b.results) {
+            res.json({results:b.results});
+        }
+        else {
+            //next();
+            res.json({error:"no results"});
+        }
+    });
+    
+});
+
+/* given a cached url, redirect to proxy image */
+app.get('/cache', function(req,res){
+    console.log("cached");
+    var url = url;
+    
+    request.get({url:'https://api.parse.com/1/classes/Capture',json:true,qs:{where:JSON.stringify({url:url})},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        if (b.results[0]) {
+            var uuid =  b.results[0].uuid;
+            res.redirect("/"+uuid);
+        }
+        else {
+            //next();
+        }
+    });
+});
+
+app.get('/preview', function(req, res){
+    res.render('preview');
+});
+
+app.get('/api', function(req, res){
+    res.render('api');
+});
+
+app.get('/proxy', function(req, res){
+    if (req.param("purl")) {
+        request(unescape(req.param("purl")), function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				res.send(body);
+			}
+			else {
+				res.json({error:"Bad URL request."});
+			}
+		});
+	}
+    else {
+        res.json({error:"URL is required."});
+    }
+});
+
+/* The 404 Route (ALWAYS Keep this as the last route) */
+app.get('/*', function(req, res){
+    res.render('404.ejs');
+});
+
+
+///
+
 var harvestMeta = function(body,baseUrl){
     
     var title,
@@ -206,7 +426,7 @@ var harvestMeta = function(body,baseUrl){
                 image = $item.attr("content");
                 images.push(image);
                 imgFound=1;
-            }    		
+            }        	
             else if (property=="og:title") {
                 title = $item.attr("content");
                 titleFound=1;
@@ -374,163 +594,4 @@ var harvestSocial = function(body,baseUrl){
         return retObj;
         
 }
-
-app.post("/fetch",function(req, res){
-    
-    console.log("fetch..");
-    var URL = require('url');
-    var urls = req.body["urls"];
-    var results = [];
-    
-    console.log(urls);
-    
-    if( typeof urls === 'string' ) {
-        urls = [urls];
-    }
-    
-    function checkUni(i){
-                   
-        if (i<results.length) {
-        
-            // exists?
-            var whereClause = {"origUrl":results[i].requested};
-            request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
-                
-                //console.log("EXISTING-----------------------------------------------"+b.results.length);
-                
-                if (typeof b.results!="undefined" && b.results.length>0){
-                    results[i].exists="1";
-                }
-                else {
-                    results[i].exists="0";
-                }
-                
-                checkUni(i+1);
-            });
-        }
-        else {
-            // done!
-            
-            var postRequests = [];
-            for(var k=0; k<results.length; ++k) {
-                if (results[k].exists==="0"){
-                    postRequests.push({
-                        "method": "POST",
-                        "path": "/1/classes/Post",
-                        "body": {
-                            "url": results[k].resolved,
-                            "title": results[k].title,
-                            "desc": results[k].desc,
-                            "images": results[k].images,
-                            "origUrl": results[k].requested
-                        }
-                    });
-                }
-            }
-        
-            request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
-                body:{requests:postRequests}}, function (e,r,b){
-                console.log("Adding batch to parse api...");
-                res.locals.msg={"success":"Perfect. Now you can login."};
-                res.json({ok:b});    
-            });
-        }
-    }
-    
-    function getUrls(i){
-        //var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
-        if (i<urls.length) {
-    
-                    var sURL = unescape(utils.fixUrl(urls[i]));
-                    request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
-                        //console.log("--------------------------------------"+sURL);
-
-                        if (typeof body!="undefined") {
-                           
-                            var resolvedUri = response.request.uri;
-                            var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
-                            var metaObj = harvestMeta(body,baseUrl);
-                            var images = harvestImages(body,baseUrl).images;
-                            var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
-                            var desc = metaObj.desc;
-                            
-                            var resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;
-                            results.push({requested:urls[i],title:title,desc:desc,images:images,resolved:resolved});  
-                            
-                            getUrls(i+1);
-                            
-                            //res.json({title:title,desc:desc,resolved:response.request.uri.pathname,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
-                        }
-                        else {
-                            //res.json({error:'problem harvesting:'+url});
-                        }
-                    });
-        }
-        else {
-            checkUni(0);
-        }
-    }
-    
-    setTimeout(getUrls(0),7000); 
-});
-
-app.get('/posts', function(req,res){
-    
-    //request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{where:JSON.stringify({url:url})},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
-    request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
-        if (b.results) {
-            res.json({results:b.results});
-        }
-        else {
-            //next();
-            res.json({error:"no results"});
-        }
-    });
-    
-});
-
-/* given a cached url, redirect to proxy image */
-app.get('/cache', function(req,res){
-    console.log("cached");
-    var url = url;
-    
-    request.get({url:'https://api.parse.com/1/classes/Capture',json:true,qs:{where:JSON.stringify({url:url})},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
-        if (b.results[0]) {
-            var uuid =  b.results[0].uuid;
-            res.redirect("/"+uuid);
-        }
-        else {
-            //next();
-        }
-    });
-});
-
-app.get('/preview', function(req, res){
-    res.render('preview');
-});
-
-app.get('/api', function(req, res){
-    res.render('api');
-});
-
-app.get('/proxy', function(req, res){
-    if (req.param("purl")) {
-        request(unescape(req.param("purl")), function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				res.send(body);
-			}
-			else {
-				res.json({error:"Bad URL request."});
-			}
-		});
-	}
-    else {
-        res.json({error:"URL is required."});
-    }
-});
-
-/* The 404 Route (ALWAYS Keep this as the last route) */
-app.get('/*', function(req, res){
-    res.render('404.ejs');
-});
 
