@@ -38,6 +38,10 @@ app.get("/feed",function(req, res){
     var results = [];
     var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
     
+    var q = req.query["q"];
+    var f = req.query["format"]
+    var lastId = req.query["lastId"];
+    
     function checkUni(i){
                    
         if (i<results.length) {
@@ -60,12 +64,18 @@ app.get("/feed",function(req, res){
             
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 if (b.results) {
-                    //res.render("index",{results:results,posts:b.results});
-                    res.send({results:results,posts:b.results});
+                    if (f=="json") { 
+                        res.send({results:results,posts:b.results});
+                    } else {
+                        res.render("index",{results:results,posts:b.results});
+                    }
                 }
                 else {
-                    //next();
-                    res.send({results:results});
+                    if (f=="json") {
+                        res.send({results:results,posts:[]});
+                    } else {
+                        res.render("index",{results:results,posts:[]});
+                    }
                 }
             });
             
@@ -85,7 +95,8 @@ app.get("/feed",function(req, res){
             {    
                 include_entities:true,
                 screen_name:accounts[i],
-                count:5
+                count:5,
+                since_id:lastId
             };	
             reqUrl += require('querystring').stringify(params);
         
@@ -110,7 +121,7 @@ app.get("/feed",function(req, res){
                             if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
                                 mentioned = objs[j].entities.user_mentions[0].screen_name;
                             }
-                            results.push({account:accounts[i],url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count});   
+                            results.push({account:accounts[i],url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count,id:objs[j].id});   
                             
                         }
                     }

@@ -27,8 +27,9 @@ $(document).ready(function(){
     });
     
     $('#btnFeed').click(function(e){
+        var lastId = $('#lastId').val();
         $.ajax({
-            url: "/feed",
+            url: "/feed?lastId="+lastId,
             type: "get",
             success: function (data) {
                 if (typeof data.error!="undefined") {
@@ -64,7 +65,7 @@ $(document).ready(function(){
             </tr>
             <%}%>
             <tr>
-                <td colspan="99"><button type="submit">OK</button></td>
+                <td colspan="99"><input type=hidden name="lastId" value="<%=results[results.length-1].id%>"><button type="submit">OK</button></td>
             </td>
         </table>
     </form>
