@@ -571,7 +571,7 @@ app.post("/fetch",function(req, res){
                             
                             var metaObj = harvestMeta(body,baseUrl);
                             var images = harvestImages(body,baseUrl).images;
-                            var title = metaObj.title;
+                            var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
                             var desc = metaObj.desc;
                             
                             var resolvedUri = response.request.uri;
