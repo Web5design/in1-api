@@ -37,7 +37,7 @@ $(document).ready(function(){
                 } else {
                     var results = data.results;
                     console.log(results);
-                    if (results) {
+                    if (results.length>0) {
                         for (var i=0;i<results.length;i++) {
                             var tr = $("<tr></tr>");
                             $('<td>'+results[i].account+'</td>').appendTo(tr);
