@@ -241,7 +241,7 @@ app.get("/",function(req, res){
             {    
                 include_entities:true,
                 screen_name:accounts[i],
-                count:3
+                count:5
             };	
             reqUrl += require('querystring').stringify(params);
         
