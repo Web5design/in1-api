@@ -95,9 +95,13 @@ app.get("/feed",function(req, res){
             {    
                 include_entities:true,
                 screen_name:accounts[i],
-                count:5,
-                since_id:lastId
+                count:5
             };	
+            
+            if (lastId>0) {
+                params.since_id=lastId;                
+            }
+            
             reqUrl += require('querystring').stringify(params);
         
             var reqObj;
