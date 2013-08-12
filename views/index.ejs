@@ -28,10 +28,25 @@ $(document).ready(function(){
     This is a social and content API entrypoint.
     
     <form action="/fetch" method="POST">
-        <%for (var i=0;i<results.length;i++) {%>
-        <input type="checkbox" id="urls" name="urls" <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>checked<%}%> value="<%=results[i].url%>"><%=results[i].url%> (<%=results[i].text%>)<br>
-        <%}%>
-        <button type="submit">OK</button>
+        <table class="table table-striped">
+            <tr>
+                <th>Source</th>
+                <th></th>
+                <th>Url</th>
+                <th>Text</th>
+            </tr>
+            <%for (var i=0;i<results.length;i++) {%>
+            <tr>
+                <td><%=results[i].account%></td>
+                <td><input type="checkbox" id="urls" name="urls" <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>checked<%}%> value="<%=results[i].url%>"></td>
+                <td><%=results[i].url%></td>
+                <td><%=results[i].text%></td>
+            </tr>
+            <%}%>
+            <tr>
+                <td colspan="99"><button type="submit">OK</button></td>
+            </td>
+        </table>
     </form>
     
     <hr>
