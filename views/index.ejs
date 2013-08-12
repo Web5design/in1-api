@@ -11,9 +11,12 @@ $(document).ready(function(){
                 } else {
                     var results = data.results;
                     for(var i=0; i<results.length; ++i) {
-                        var cont = $("<div class='col-6'><b>"+results[i].title+"</b>"+results[i].desc+"</div>");
+                        var cont = $("<div class='col-9'><b>"+results[i].title+"</b>"+results[i].desc+"</div>");
                         if (results[i].images && results[i].images.length>0) {
-                            $("<a href='"+results[i].url+"'><img src='"+results[i].images[0]+"' class='pull-right img-circle' width='150'></a>").appendTo(cont);
+                            $("<div class='col-3'><a href='"+results[i].url+"'><img src='"+results[i].images[0]+"' class='img-responsive'></a></div>").appendTo('#posts');
+                        }
+                        else {
+                             $("<div class='col-3'></div>").appendTo('#posts');
                         }
                         cont.appendTo("#posts");
                     }
