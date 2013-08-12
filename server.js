@@ -22,10 +22,8 @@ app.get('/harvest', function(req,res){
 	image,
 	images=[],
 	tags=[],
-	tw,fb,rss,li,pin,yt,gp,
-	titleFound=0,
-	descFound=0,
-	imgFound=0;
+    tw,fb,rss,li,pin,yt,gp,
+    resolved;
 	
 	if (url) {
 	
@@ -35,154 +33,27 @@ app.get('/harvest', function(req,res){
 		
 			if (typeof body!="undefined") {
                 
-                var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im
-                var headMatches = headPattern.exec(body);
-                var $h;
+                var resolvedUri = response.request.uri;
+                var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
                 
-                if (headMatches.length>0) { // head
-                    
-                    var head = headMatches[1].replace(/\n/g," ");
-                    $h = $("<form>"+head+"</form>");
-                    
-                    // find opengraph
-                    $.each($h.find('meta[property^="og:"]'),function(idx,item){
-                        
-                        console.log("meta og......");                    
-                        
-                        var $item = $(item);
-                        var property = $item.attr("property");
-                        
-                        if (property=="og:image") {
-                            image = $item.attr("content");
-                            images.push(image);
-                            imgFound = 1;
-                        }			
-                        else if (property=="og:title") {
-                            title = $item.attr("content");
-                            titleFound=1;
-                        }
-                        else if (property=="og:description") {
-                            desc = $item.attr("content");
-                            descFound=1;
-                        }
-                    });	
-
-                    console.log("title......");
-                    
-                    var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
-	                if (matches) {
-	                    title = matches[1];
-					}
-                    
-					image = $h.find('link[rel="image_src"],link[rel="shortcut icon"]').attr('href');
-					if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
-						image = baseUrl+image;
-					}
-					images.push(image);
-					imgFound = 1;
-
-					$.each($h.find('meta[name=description]'),function(idx,item){
-                        console.log("meta desc..");         
-						desc = $(item).attr("content");
-					});
-                    
-                    $.each($h.find('meta[name=keywords]'),function(idx,item){
-                        tags.push($(item).attr("content"));
-                    });
-                    
-                    $.each($h.find('link[type="application/rss+xml"]'),function(idx,item){
-                        var rssUrl = $(item).attr("href");
-					    rss = rssUrl;
-                    });
-                }
+                var metaObj = harvestMeta(body,baseUrl);
+                title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
+                desc = metaObj.desc;
+                rss = metaObj.rss;
+                image = metaObj.image;
                 
-				// find images
-				//oURL = URL.parse(sURL);
-				var baseUrl = response.request.uri.href;
-				
-                var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im
-                var bodyMatches = bodyPattern.exec(body);
+                images = harvestImages(body,baseUrl).images;
                 
-                if (bodyMatches.length>0) { // body
+                var socialObj = harvestSocial(body,baseUrl);
+                fb = socialObj.fb;
+                tw = socialObj.tw;
+                li = socialObj.li;
+                yt = socialObj.yt;
+                pin = socialObj.pin;
                 
-                    console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
+                resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;         
                 
-                    $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
-                
-				var imgs = $h.find('img[src*=png],img[src*=jpg]');
-				$.each(imgs,function(idx,item){
-					var src=$(item).attr("src").replace("\t","");
-					console.log("image src:"+src);
-					//src = imgs[i].getAttribute("src");
-					if (src.indexOf('//')==-1) { // prepend baseurl for relative images						
-						src=baseUrl+src;
-						//console.log("image src put http:"+src);
-					}
-					images.push(src);
-				});
-				
-				// find social usernames
-				$.each($h.find('a[href*="twitter.com"]:not(a[href*="status"],a[href*="share"])'),function(idx,item){
-                    
-                    console.log("twitter found......");  
-                    
-					var twUrl = $(item).attr("href").replace('/#!','');
-					twUrl = URL.parse(twUrl,true,true);
-					if (twUrl.query && twUrl.query.via){
-						tw = twUrl.query.via;
-					}
-					else if (twUrl.query && twUrl.query.screen_name){
-						tw = twUrl.query.screen_name;
-					}
-					else {
-						tw = twUrl.pathname;
-					}
-					//console.log("tw------"+twUrl.query.via);
-					if (tw==="" || tw === null || typeof tw === "undefined") {
-						tw = "in1_";
-					}
-					tw = "@"+tw.replace("/","");
-				});
-				
-				$.each($h.find('a[href*="facebook.com/"]:not(a[href*="developers"]):lt(1)'),function(idx,item){
-					var fbPagesUrl = $(item).attr("href");
-					fbPagesUrl = URL.parse(fbPagesUrl);
-					fb = fbPagesUrl.pathname;
-					//fb = fb.replace("/pages","");
-					fb = fb.replace("/","");
-				});
-				
-				$.each($h.find('a[href*="linkedin.com/"]:lt(1)'),function(idx,item){
-					var liUrl = $(item).attr("href");
-					liUrl = URL.parse(liUrl);
-					li = liUrl.pathname;
-				});
-				
-				$.each($h.find('a[href*="feeds.feedburner.com"]:lt(1),a:contains("rss")'),function(idx,item){
-					var rssUrl = $(item).attr("href");
-					//rssUrl = URL.parse(rssUrl);
-					//rss = rssUrl.pathname;
-					rss = rssUrl;
-				});
-				
-				$.each($h.find('a[href*="pinterest.com/"]:not([href*="pin/create"])'),function(idx,item){
-					var pinUrl = $(item).attr("href");
-					pinUrl = URL.parse(pinUrl);
-					pin = pinUrl.pathname;
-				});
-				
-				$.each($h.find('a[href*="youtube.com/user/"]'),function(idx,item){
-					var ytUrl = $(item).attr("href");
-					ytUrl = URL.parse(ytUrl);
-					yt = ytUrl.pathname;
-					yt = yt.replace("/user","");
-				});
-
-				//TODO: google+
-                }
-	
-				$h = null;
-				res.json({title:title,desc:desc,resolved:response.request.uri.pathname,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
+                res.json({title:title,desc:desc,resolved:resolved,images:images,image:image,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
 			}
 			else {
 				res.json({error:'problem harvesting:'+url});
@@ -235,7 +106,6 @@ app.get("/",function(req, res){
                 }
             });
             
-            
         }
     }
     
@@ -260,8 +130,7 @@ app.get("/",function(req, res){
             reqObj = {url:encodeURI(reqUrl), oauth:oauth};
             
             request.get(reqObj, function (e, r, body) {
-        		console.log(e);
-    			console.log("request---------------------------------"+JSON.stringify(reqObj));
+                console.log("request---------------------------------"+JSON.stringify(reqObj));
                 //console.log("body---------------"+body.substring(0,200));
                 
                 var objs,url,mentioned;
@@ -336,7 +205,7 @@ var harvestMeta = function(body,baseUrl){
             if (property=="og:image") {
                 image = $item.attr("content");
                 images.push(image);
-                imgFound = 1;
+                imgFound=1;
             }    		
             else if (property=="og:title") {
                 title = $item.attr("content");
@@ -360,7 +229,6 @@ var harvestMeta = function(body,baseUrl){
             image = baseUrl+image;
         }
         images.push(image);
-        imgFound = 1;
 
 		$.each($h.find('meta[name=description]'),function(idx,item){
             console.log("meta desc..");         
@@ -373,7 +241,7 @@ var harvestMeta = function(body,baseUrl){
         
         $.each($h.find('link[type="application/rss+xml"]'),function(idx,item){
             var rssUrl = $(item).attr("href");
-		    rss = rssUrl;
+	        rss = rssUrl;
         });
     }
     
@@ -400,8 +268,6 @@ var harvestImages = function(body,baseUrl){
     var $h;
                             
         if (bodyMatches.length>0) { // body
-        
-            //console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
         
             $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
             var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
@@ -579,7 +445,6 @@ app.post("/fetch",function(req, res){
 
                         if (typeof body!="undefined") {
                            
-                            //oURL = URL.parse(sURL);
                             var resolvedUri = response.request.uri;
                             var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
                             var metaObj = harvestMeta(body,baseUrl);
@@ -592,7 +457,7 @@ app.post("/fetch",function(req, res){
                             
                             getUrls(i+1);
                             
-            				//res.json({title:title,desc:desc,resolved:response.request.uri.pathname,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
+                            //res.json({title:title,desc:desc,resolved:response.request.uri.pathname,images:images,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
                         }
                         else {
                             //res.json({error:'problem harvesting:'+url});
@@ -637,22 +502,6 @@ app.get('/cache', function(req,res){
         }
     });
 });
-
-app.get('/fff/:id/:size?', function(req,res){
-    console.log("imageshack proxy");
-    
-    var id = req.params.id;
-    var size = req.params.size||'full'; //mini,thumb,mobile,large,full
-    
-    request.get({url:'https://api.parse.com/1/classes/Capture/'+id,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
-        if (b) {
-            var item = b;
-            request({url:item.link}).pipe(res);
-        }
-    });
-});
-
-
 
 app.get('/preview', function(req, res){
     res.render('preview');
