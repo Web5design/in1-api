@@ -46,7 +46,7 @@ $(document).ready(function(){
                             $('<td>'+results[i].text+'</td>').appendTo(tr);
                             tr.prependTo("#tblFeed");
                         }
-                        $('#lastId').val(results[results.length-1].id);
+                        $('#lastId').val(results[0].id);
                     }
                     else {
                         alert("No new updates!");
