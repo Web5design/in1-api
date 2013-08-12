@@ -104,6 +104,7 @@ app.get("/feed",function(req, res){
             
             if (lastId>0) {
                 params.since_id=lastId; // only get latest
+                params.max_id=lastId+20;
                 console.log("added since id.....................");
             }
             
