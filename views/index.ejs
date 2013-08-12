@@ -28,8 +28,8 @@ $(document).ready(function(){
 });
 </script>
 <div class="container">
-    This is a social and content API entrypoint.
     
+    <h2>Feed</h2>
     <form action="/fetch" method="POST">
         <table class="table table-striped">
             <tr>
@@ -55,6 +55,8 @@ $(document).ready(function(){
     <hr>
     <button type="button" id="btnGet">Get Posts</button>
     
+    <h2>Posts</h2>
+    
     <%for (var i=0;i<posts.length;i++) {%>
     <div class="row">
         <div class="col-2">
@@ -68,4 +70,57 @@ $(document).ready(function(){
     <%}%>
     
     <hr>
+    
+    <a href="#modalSource" class="btn btn-primary" data-toggle="modal">Source</a>
+    
+</div>
+
+<div id="modalSource" class="modal">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+            <h3>Source</h3>
+            <p>add a new feed</p>
+        </div>
+        <div class="modal-body">
+              <form class="form form-horizontal" id="formSource">
+                  <div class="control-group">
+                      <label class="control-label">Home page</label>
+                      <div class="controls">
+                          <input type="text" name="urlHome" id="urlHome" placeholder="http://" class="form-control">
+                      </div>
+                  </div>
+                  <div class="control-group">
+                      <label class="control-label">Name</label>
+                      <div class="controls">
+                          <input type="text" name="sourceName" id="sourceName" placeholder="Name / title" class="form-control">
+                      </div>
+                  </div>
+                  <div class="control-group">
+                      <label class="control-label">Description</label>
+                      <div class="controls">
+                          <textarea name="sourceDesc" rows="4" id="sourceDesc" placeholder="Description"  class="form-control"></textarea>
+                      </div>
+                  </div>
+                  <div class="control-group">
+                      <label class="control-label">Logo</label>
+                      <div class="controls">
+                          <input type="text" name="logoSmall" id="logoSmall" placeholder="" class="form-control">
+                      </div>
+                  </div>
+                  <div class="control-group">
+                      <label class="control-label">Tags</label>
+                      <div class="controls">
+                          <input type="text" name="sourceTags" id="sourceTags" placeholder="tag1,tag2,tag3" class="form-control">
+                      </div>
+                  </div>
+              </form>
+        </div>
+        <div class="modal-footer pull-center">
+            <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>     
+            <a href="#" data-dismiss="modal" aria-hidden="true" id="btnSource" role="button" class="btn btn-success">Save</a>
+        </div>
+    </div>
+    </div>
 </div>

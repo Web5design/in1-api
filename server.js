@@ -270,7 +270,9 @@ var harvestImages = function(body,baseUrl){
         if (bodyMatches.length>0) { // body
         
             $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
-            var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
+            //var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
+            
+            var imgs = $h.find('img[src*="cdn"],img[src*="cloudfront"],img[src*="aws"]');
             $.each(imgs,function(idx,item){
                 var src=$(item).attr("src").replace("\t","");
                 if (src.indexOf('//')!=-1) { // exclude relative images
