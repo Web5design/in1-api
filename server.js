@@ -100,8 +100,11 @@ app.get("/feed",function(req, res){
                 trim_user:1
             };	
             
+            console.log("since id........"+lastId);
+            
             if (lastId>0) {
                 params.since_id=lastId; // only get latest
+                console.log("added since id.....................");
             }
             
             reqUrl += require('querystring').stringify(params);
@@ -127,8 +130,6 @@ app.get("/feed",function(req, res){
                             if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
                                 mentioned = objs[j].entities.user_mentions[0].screen_name;
                             }
-                            
-                            console.log("IDID--------------"+objs[j].id);
                             
                             results.push({account:accounts[i],url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count,id:objs[j].id});   
                             
