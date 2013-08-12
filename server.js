@@ -355,7 +355,7 @@ var harvestMeta = function(body,baseUrl){
             title = matches[1];
         }
         
-        image = $h.find('link[rel="image_src"],link[rel="shortcut icon"]').attr('href');
+        image = $h.find('link[rel="image_src"],link[rel="shortcut icon"],link[rel=apple-touch-icon-precomposed]').attr('href');
         if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
             image = baseUrl+image;
         }
@@ -407,8 +407,12 @@ var harvestImages = function(body,baseUrl){
             var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
             $.each(imgs,function(idx,item){
                 var src=$(item).attr("src").replace("\t","");
-                if (src.indexOf('//')!=-1) { // exclude relative images						
-                    images.push(src);
+                if (src.indexOf('//')!=-1) { // exclude relative images
+                    var w=$(item).attr("width");
+                    var h=$(item).attr("height");
+                    if (w>300) {
+                        images.push(src);
+                    }
                 }
             });
         }
