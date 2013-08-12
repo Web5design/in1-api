@@ -25,6 +25,23 @@ $(document).ready(function(){
             error: function (e) {console.log('error:'+e);$('#btnFork').button("reset");}
         });
     });
+    
+    $('#btnFeed').click(function(e){
+        $.ajax({
+            url: "/feed",
+            type: "get",
+            success: function (data) {
+                if (typeof data.error!="undefined") {
+                    alert(data.error);
+                } else {
+                    var results = data.results;
+                    alert(results);
+                }
+                
+            },
+            error: function (e) {console.log('error:'+e); $('#btnFork').button("reset");}
+        });
+    });
 });
 </script>
 <div class="container">
@@ -51,6 +68,8 @@ $(document).ready(function(){
             </td>
         </table>
     </form>
+    <button type="button" id="btnFeed">Get Feed</button>
+    
     
     <hr>
     <button type="button" id="btnGet">Get Posts</button>
