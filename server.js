@@ -391,7 +391,7 @@ var harvestImages = function(body,baseUrl){
             //console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
         
             $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
-            var imgs = $h.find('img[src^="png"],img[src^="jpg"]');
+            var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
             $.each(imgs,function(idx,item){
                 var src=$(item).attr("src").replace("\t","");
 				console.log("image src:"+src);
