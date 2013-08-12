@@ -39,7 +39,7 @@ app.get("/feed",function(req, res){
     var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
     
     var q = req.query["q"];
-    var f = req.query["format"]
+    var f = req.query["format"];
     var lastId = req.query["lastId"]||0;
     
     function checkUni(i){
@@ -121,6 +121,9 @@ app.get("/feed",function(req, res){
                             if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
                                 mentioned = objs[j].entities.user_mentions[0].screen_name;
                             }
+                            
+                            console.log("IDID--------------"+objs[j].id);
+                            
                             results.push({account:accounts[i],url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count,id:objs[j].id});   
                             
                         }
