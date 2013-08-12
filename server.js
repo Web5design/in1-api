@@ -394,10 +394,7 @@ var harvestImages = function(body,baseUrl){
             var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
             $.each(imgs,function(idx,item){
                 var src=$(item).attr("src").replace("\t","");
-                if (src.indexOf('?')===-1){ // exclude images with querystring in source
-                    if (src.indexOf('//')===-1) { // prepend baseurl for relative images						
-                        src=baseUrl+src;
-                    }
+                if (src.indexOf('//')!=-1) { // exclude relative images						
                     images.push(src);
                 }
             });
@@ -566,14 +563,13 @@ app.post("/fetch",function(req, res){
                         if (typeof body!="undefined") {
                            
                             //oURL = URL.parse(sURL);
-                            var baseUrl = response.request.uri.href;
-                            
+                            var resolvedUri = response.request.uri;
+                            var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
                             var metaObj = harvestMeta(body,baseUrl);
                             var images = harvestImages(body,baseUrl).images;
                             var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
                             var desc = metaObj.desc;
                             
-                            var resolvedUri = response.request.uri;
                             var resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;
                             results.push({requested:urls[i],title:title,desc:desc,images:images,resolved:resolved});  
                             
