@@ -44,7 +44,7 @@ $(document).ready(function(){
                             $('<td><input type="checkbox" id="urls" name="urls" value="'+results[i].url+'"></td>').appendTo(tr);
                             $('<td>'+results[i].url+'</td>').appendTo(tr);
                             $('<td>'+results[i].text+'</td>').appendTo(tr);
-                            tr.prependTo("#tblFeed");
+                            tr.prependTo("#tblFeed tbody");
                         }
                         $('#lastId').val(results[0].id);
                     }
@@ -64,12 +64,15 @@ $(document).ready(function(){
     <h2>Feed</h2>
     <form action="/fetch" method="POST">
         <table class="table table-striped" id="tblFeed">
+            <thead>
             <tr>
                 <th>Source</th>
                 <th></th>
                 <th>Url</th>
                 <th>Text</th>
             </tr>
+            </thead>
+            <tbody>
             <%for (var i=0;i<results.length;i++) {%>
             <tr>
                 <td><%=results[i].account%></td>
@@ -78,6 +81,7 @@ $(document).ready(function(){
                 <td><%=results[i].text%></td>
             </tr>
             <%}%>
+            </tbody>
         </table>
         <input type=hidden name="lastId" id="lastId" value="<%=results[0].id%>">
         <button type="submit" class="btn btn-default">Save</button>  <button type="button" id="btnFeed" class="btn btn-default">Refresh Feed</button>
