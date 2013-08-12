@@ -36,7 +36,7 @@ app.get("/",function(req, res){
 app.get("/feed",function(req, res){
    
     var results = [];
-    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
+    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupe","bootply"];
     
     var q = req.query["q"];
     var f = req.query["format"];
@@ -95,11 +95,12 @@ app.get("/feed",function(req, res){
             {    
                 include_entities:true,
                 screen_name:accounts[i],
-                count:5
+                count:5,
+                trim_user:1
             };	
             
             if (lastId>0) {
-                params.since_id=lastId;                
+                params.since_id=lastId; // only get latest
             }
             
             reqUrl += require('querystring').stringify(params);
