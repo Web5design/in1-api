@@ -44,7 +44,7 @@ $(document).ready(function(){
                             $('<td><input type="checkbox" id="urls" name="urls" value="'+results[i].url+'"></td>').appendTo(tr);
                             $('<td>'+results[i].url+'</td>').appendTo(tr);
                             $('<td>'+results[i].text+'</td>').appendTo(tr);
-                            tr.appendTo("#tblFeed");
+                            tr.prependTo("#tblFeed");
                         }
                         $('#lastId').val(results[results.length-1].id);
                     }
