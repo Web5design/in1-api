@@ -36,11 +36,12 @@ app.get("/",function(req, res){
 app.get("/feed",function(req, res){
    
     var results = [];
-    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupe","bootply"];
+    //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupe","bootply"];
+    var accounts = ["mashable","bootply","carolskelly"];
     
     var q = req.query["q"];
     var f = req.query["format"];
-    var lastId = req.query["lastId"]||0;
+    var lastId = (req.query["lastId"])||0;
     
     function checkUni(i){
                    
