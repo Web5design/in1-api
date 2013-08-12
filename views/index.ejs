@@ -13,7 +13,7 @@ $(document).ready(function(){
                     for(var i=0; i<results.length; ++i) {
                         var cont = $("<div class='col-6'><b>"+results[i].title+"</b>"+results[i].desc+"</div>");
                         if (results[i].images && results[i].images.length>0) {
-                            $("<img src='"+results[i].images[0]+"' class='pull-right img-circle' width='150'>").appendTo(cont);
+                            $("<a href='"+results[i].url+"'><img src='"+results[i].images[0]+"' class='pull-right img-circle' width='150'></a>").appendTo(cont);
                         }
                         cont.appendTo("#posts");
                     }

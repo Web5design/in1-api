@@ -262,11 +262,11 @@ app.get("/",function(req, res){
                     for (var j=0;j<objs.length;j++) {
                         if (typeof objs[j].entities !="undefined" && objs[j].entities.urls.length>0){
                             url = objs[j].entities.urls[0].url;
-                            
+                            var txt = objs[j].text.replace(/ *\[[^)]*\] */g,"");
                             if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
                                 mentioned = objs[j].entities.user_mentions[0].screen_name;
                             }
-                            results.push({account:accounts[i],url:url,text:objs[j].text,mentioned:mentioned,rts:objs[j].retweet_count});   
+                            results.push({account:accounts[i],url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count});   
                         }
                     }
                     
