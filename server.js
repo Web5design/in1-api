@@ -37,7 +37,7 @@ app.get("/feed",function(req, res){
    
     var results = [];
     //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupe","bootply"];
-    var accounts = ["mashable","bootply","carolskelly"];
+    var accounts = ["carolskelly"];
     
     var q = req.query["q"];
     var f = req.query["format"];
@@ -104,7 +104,7 @@ app.get("/feed",function(req, res){
             
             if (lastId>0) {
                 params.since_id=lastId; // only get latest
-                params.max_id=lastId+20;
+                //params.max_id=lastId+20;
                 console.log("added since id.....................");
             }
             
