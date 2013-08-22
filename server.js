@@ -225,7 +225,7 @@ app.get('/harvestImages', function(req,res){
 	
 		var sURL = unescape(utils.fixUrl(url));
 		
-		request({url:sURL,followRedirect:true,timeout:-2000,maxRedirects:2}, function (error, response, body) {
+		request({url:sURL,followRedirect:true,timeout:2000,maxRedirects:2}, function (error, response, body) {
 		
 			if (typeof body!="undefined") {
                 
