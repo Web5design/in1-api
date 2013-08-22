@@ -521,9 +521,9 @@ var harvestImages = function(body,baseUrl){
                 if (src.indexOf('//')!=-1) { // exclude relative images
                     var w=$(item).attr("width");
                     var h=$(item).attr("height");
-                    if (w>300) {
+                    //if (w>300) {
                         images.push(src);
-                    }
+                    //}
                 }
             });
         }
