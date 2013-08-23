@@ -500,7 +500,7 @@ var harvestMeta = function(body,baseUrl){
         }
                 
         if (imgFound===0){
-            image = $h.find('meta[name="twitter:image"]').attr('content');
+            image = $h.find('meta[name="twitter:image"],meta[name="og:image"]').attr('content');
             if (image && image.indexOf('//')==-1) {
                 image = baseUrl+image;
                 imgFound=1;
