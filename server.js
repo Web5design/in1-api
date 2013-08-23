@@ -242,7 +242,7 @@ app.get('/harvestImages', function(req,res){
                 
                 resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;         
                 
-                res.json({title:title,resolved:resolved,images:images,image:image});
+                res.json({title:title,resolved:resolved,images:images,icon:icon,logo:logo});
 			}
 			else {
 				res.json({error:'problem harvesting images:'+url});
