@@ -5,6 +5,8 @@ $(document).ready(function(){
     $('#loadImage').click(function(){
     
         var thisUrl = $(this).attr("data-url");
+        var imageContainer = $(this).next('.imagePreview');
+        imageContainer.html("...");
         $.ajax({
             url: "/harvestImages?url="+thisUrl,
             type: "get",
@@ -13,7 +15,7 @@ $(document).ready(function(){
                     alert(data.error);
                     
                 } else if (data.image) {
-                    $('<img src="'+data.image+'" >').appendTo('.imagePreview');
+                    $('<img src="'+data.image+'" >').appendTo(imageContainer);
                 }
             },
             error: function (e) {console.log('error:'+e);}
