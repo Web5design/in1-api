@@ -13,7 +13,7 @@ $(document).ready(function(){
                     alert(data.error);
                     
                 } else if (data.image) {
-                    $('<img src="'+data.image+'" >').appendTo('#imagePreview');
+                    $('<img src="'+data.image+'" >').appendTo('.imagePreview');
                 }
             },
             error: function (e) {console.log('error:'+e);}
@@ -101,6 +101,7 @@ $(document).ready(function(){
                 <td><%=results[i].account%></td>
                 <td><input type="checkbox" id="urls" name="urls" <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>checked<%}%> value="<%=results[i].url%>"></td>
                 <td><%=results[i].url%></td>
+                <td><%=results[i].text%></td>
                 <td><a href="#" class="loadImage" data-url="<%=results[i].url%>">image</a><div class="imagePreview"></div></td>
             </tr>
             <%}%>
