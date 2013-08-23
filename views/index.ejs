@@ -11,14 +11,15 @@ $(document).ready(function(){
             url: "/harvestImages?url="+thisUrl,
             type: "get",
             success: function (data) {
+                imageContainer.empty();
                 if (typeof data.error!="undefined") {
                     alert(data.error);  
                 }
                 if (data.image) {
-                    $('<input type="checkbox" name="imgSrc" value="'+data.image+'"><img src="'+data.image+'" class="img-thumbnail img-responsive" width="150" title="meta image">').html(imageContainer);
+                    $('<input type="checkbox" name="imgSrc" value="'+data.image+'"><img src="'+data.image+'" class="img-thumbnail img-responsive" width="150" title="meta image">').appendTo(imageContainer);
                 }
                 if (data.images && data.images.length>0) {
-                    $('<input type="checkbox" name="imgSrc" value="'+data.image+'"><img src="'+data.images[0]+'" class="img-thumbnail img-responsive" width="150" title="first image">').html(imageContainer);
+                    $('<input type="checkbox" name="imgSrc" value="'+data.image+'"><img src="'+data.images[0]+'" class="img-thumbnail img-responsive" width="150" title="first image">').appendTo(imageContainer);
                 }
             },
             error: function (e) {console.log('error:'+e);}
