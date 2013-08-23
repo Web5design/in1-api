@@ -494,14 +494,14 @@ var harvestMeta = function(body,baseUrl){
         }
         
         image = $h.find('link[rel="image_src"]').attr('href');
-        if (image.length>0 && image.indexOf('//')==-1) {
+        if (typeof image!="undefined" && image.length>0 && image.indexOf('//')==-1) {
             image = baseUrl+image;
             imgFound=1;
         }
                 
         if (imgFound===0){
             image = $h.find('meta[name="twitter:image"]').attr('content');
-            if (image.length>0 && image.indexOf('//')==-1) {
+            if (image && image.indexOf('//')==-1) {
                 image = baseUrl+image;
                 imgFound=1;
             }       
