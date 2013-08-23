@@ -14,8 +14,12 @@ $(document).ready(function(){
                 if (typeof data.error!="undefined") {
                     alert(data.error);
                     
-                } else if (data.image) {
-                    $('<img src="'+data.image+'" >').appendTo(imageContainer);
+                }
+                if (data.image) {
+                    $('<img src="'+data.image+'" class="img-responsive" width="150" title="meta image">').appendTo(imageContainer);
+                }
+                if (data.images) {
+                    $('<img src="'+data.images[0]+'" class="img-responsive" width="150" title="first image">').appendTo(imageContainer);
                 }
             },
             error: function (e) {console.log('error:'+e);}
