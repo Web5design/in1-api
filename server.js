@@ -225,7 +225,7 @@ app.get('/harvestImages', function(req,res){
 	
 		var sURL = unescape(utils.fixUrl(url));
 		
-		request({url:sURL,followRedirect:true,timeout:2000,maxRedirects:2}, function (error, response, body) {
+		request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
 		
 			if (typeof body!="undefined") {
                 
@@ -505,6 +505,7 @@ var harvestImages = function(body,baseUrl){
     var images=[];
     var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im;
     var bodyMatches = bodyPattern.exec(body);
+    var strict = true;
     
     console.log("harvest images..");
     
@@ -513,17 +514,17 @@ var harvestImages = function(body,baseUrl){
         if (bodyMatches.length>0) { // body
         
             $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
-            //var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
             
+            //var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
             var imgs = $h.find('img[src*="cdn"],img[src*="cloudfront"],img[src*="aws"]');
             $.each(imgs,function(idx,item){
                 var src=$(item).attr("src").replace("\t","");
                 if (src.indexOf('//')!=-1) { // exclude relative images
                     var w=$(item).attr("width");
                     var h=$(item).attr("height");
-                    //if (w>300) {
+                    if (w>270) {
                         images.push(src);
-                    //}
+                    }
                 }
             });
         }
