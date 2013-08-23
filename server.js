@@ -250,7 +250,7 @@ app.get('/harvestImages', function(req,res){
                     console.log("getting shot.."+resolved);
                     loadShots(resolved,function(e,r,b){
                         //console.log("got shot.."+JSON.stringify(r));
-                        images.push(r.getHeader("href"));
+                        images.push(r.request.uri.href);
                         res.json({title:title,resolved:resolved,images:images,icon:icon,logo:logo});  
                    });
                 }
