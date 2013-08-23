@@ -277,9 +277,11 @@ app.post("/fetch",function(req, res){
     console.log("fetch..");
     var URL = require('url');
     var urls = req.body["urls"];
+    var imgUrls = req.body["imgSrc"];
     var results = [];
     
-    console.log(urls);
+    //console.log(urls);
+    console.log("selected images---"+imgUrls);
     
     if( typeof urls === 'string' ) {
         urls = [urls];
