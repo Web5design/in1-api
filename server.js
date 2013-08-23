@@ -426,7 +426,7 @@ var harvestMeta = function(body,baseUrl){
         rss,
         titleFound=0,
         descFound=0,
-        imgFound=0;
+        logoFound=0;
     
     var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im;
     var headMatches = headPattern.exec(body);
@@ -449,6 +449,7 @@ var harvestMeta = function(body,baseUrl){
             
             if (property=="og:image") {
                 logo = $item.attr("content");
+                logoFound=1;
             }
             else if (property=="og:title") {
                 title = $item.attr("content");
@@ -467,11 +468,18 @@ var harvestMeta = function(body,baseUrl){
             title = matches[1];
         }
         
-        icon= $h.find('link[rel="image_src"],link[rel="shortcut icon"],link[rel=apple-touch-icon-precomposed]').attr('href');
+        icon = $h.find('link[rel="image_src"],link[rel="shortcut icon"],link[rel=apple-touch-icon-precomposed]').attr('href');
         if (icon && icon.indexOf('//')==-1) { // prepend baseurl for relative images						
             icon = baseUrl+icon;
         }
-
+        
+        if (logoFound===0){
+            logo = $h.find('img[class*="logo"],img[src*="logo"]').attr('src');
+            if (logo && logo.indexOf('//')==-1) {
+                logo = baseUrl+logo;
+            }
+        }
+        
 		$.each($h.find('meta[name=description]'),function(idx,item){
             console.log("meta desc..");         
 			desc = $(item).attr("content");
