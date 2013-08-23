@@ -247,6 +247,8 @@ app.get('/harvestImages', function(req,res){
                     logo = imgsObj.logo;
                 }
                 
+                console.log("images leangth.."+images.length);
+                
                 if (images.length===0) {
                     // go get a screenshot
                     console.log("getting shot.."+resolved);
