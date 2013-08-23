@@ -217,7 +217,8 @@ app.get('/harvestImages', function(req,res){
     
     var url = req.query.url,
     title,
-	image,
+	icon,
+    logo,
 	images=[],
     resolved;
 	
@@ -234,7 +235,8 @@ app.get('/harvestImages', function(req,res){
                 
                 var metaObj = harvestMeta(body,baseUrl);
                 title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
-                image = metaObj.image;
+                icon = metaObj.icon;
+                logo = metaObj.logo;
                 
                 images = harvestImages(body,baseUrl).images;
                 
@@ -418,8 +420,8 @@ var harvestMeta = function(body,baseUrl){
     
     var title,
         desc,
-        image,
-        images=[],
+        icon,
+        logo,
         tags=[],
         rss,
         titleFound=0,
@@ -446,10 +448,8 @@ var harvestMeta = function(body,baseUrl){
             var property = $item.attr("property");
             
             if (property=="og:image") {
-                image = $item.attr("content");
-                images.push(image);
-                imgFound=1;
-            }        	
+                logo = $item.attr("content");
+            }
             else if (property=="og:title") {
                 title = $item.attr("content");
                 titleFound=1;
@@ -467,11 +467,10 @@ var harvestMeta = function(body,baseUrl){
             title = matches[1];
         }
         
-        image = $h.find('link[rel="image_src"],link[rel="shortcut icon"],link[rel=apple-touch-icon-precomposed]').attr('href');
-        if (image && image.indexOf('//')==-1) { // prepend baseurl for relative images						
-            image = baseUrl+image;
+        icon= $h.find('link[rel="image_src"],link[rel="shortcut icon"],link[rel=apple-touch-icon-precomposed]').attr('href');
+        if (icon && icon.indexOf('//')==-1) { // prepend baseurl for relative images						
+            icon = baseUrl+icon;
         }
-        images.push(image);
 
 		$.each($h.find('meta[name=description]'),function(idx,item){
             console.log("meta desc..");         
@@ -484,7 +483,7 @@ var harvestMeta = function(body,baseUrl){
         
         $.each($h.find('link[type="application/rss+xml"]'),function(idx,item){
             var rssUrl = $(item).attr("href");
-	        rss = rssUrl;
+            rss = rssUrl;
         });
     }
     
@@ -492,8 +491,8 @@ var harvestMeta = function(body,baseUrl){
     retObj.title = title;
     retObj.desc = desc;
     retObj.tags = tags;
-    retObj.image = image;
-    retObj.images = images;
+    retObj.icon = icon;
+    retObj.logo = logo;
     retObj.rss = rss;
     
     return retObj;
