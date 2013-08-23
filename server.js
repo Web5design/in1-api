@@ -276,15 +276,26 @@ app.post("/fetch",function(req, res){
     
     console.log("fetch..");
     var URL = require('url');
-    var urls = req.body["urls"];
-    var imgUrls = req.body["imgSrc"];
+    var items = req.body;
+    //var urls = req.body["urls"];
+    //var imgUrls = req.body["imgSrc"];
     var results = [];
     
     //console.log(urls);
-    console.log("selected images---"+imgUrls);
+    //console.log("selected images---"+imgUrls);
     
+    /*
     if( typeof urls === 'string' ) {
         urls = [urls];
+    }
+    */
+    var urls=[];
+    var imgs=[];
+    
+    for (var item in items) {
+        //if (items[item])
+        urls.push(items[item]);
+        imgs.push(items[item.replace("item","img")])
     }
     
     function checkUni(i){
@@ -321,6 +332,7 @@ app.post("/fetch",function(req, res){
                             "title": results[k].title,
                             "desc": results[k].desc,
                             "images": results[k].images,
+                            "image": results[k].image,
                             "origUrl": results[k].requested
                         }
                     });
@@ -341,7 +353,7 @@ app.post("/fetch",function(req, res){
         if (i<urls.length) {
     
                     var sURL = unescape(utils.fixUrl(urls[i]));
-                    request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
+                    request({url:sURL,followRedirect:true,maxRedirects:3}, function (error, response, body) {
                         //console.log("--------------------------------------"+sURL);
 
                         if (typeof body!="undefined") {
@@ -349,12 +361,13 @@ app.post("/fetch",function(req, res){
                             var resolvedUri = response.request.uri;
                             var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
                             var metaObj = harvestMeta(body,baseUrl);
-                            var images = harvestImages(body,baseUrl).images;
+                            //var images = harvestImages(body,baseUrl).images;
+                            var images=[];
                             var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
                             var desc = metaObj.desc;
                             
                             var resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;
-                            results.push({requested:urls[i],title:title,desc:desc,images:images,resolved:resolved});  
+                            results.push({requested:urls[i],title:title,desc:desc,image:imgs[i],images:images,resolved:resolved});  
                             
                             getUrls(i+1);
                             

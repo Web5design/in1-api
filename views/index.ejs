@@ -5,6 +5,7 @@ $(document).ready(function(){
     $('.loadImage').click(function(){
     
         var thisUrl = $(this).attr("data-url");
+        var idx = $(this).attr("data-idx");
         var imageContainer = $(this).next('.imagePreview');
         imageContainer.html("...");
         $.ajax({
@@ -16,10 +17,10 @@ $(document).ready(function(){
                     alert(data.error);  
                 }
                 if (data.image) {
-                    $('<input type="checkbox" name="imgSrc" value="'+data.image+'"><img src="'+data.image+'" class="img-thumbnail img-responsive" width="150" title="meta image">').appendTo(imageContainer);
+                    $('<input type="checkbox" name="img'+idx+'" value="'+data.image+'"><img src="'+data.image+'" class="img-thumbnail img-responsive" width="150" title="meta image">').appendTo(imageContainer);
                 }
                 if (data.images && data.images.length>0) {
-                    $('<input type="checkbox" name="imgSrc" value="'+data.image+'"><img src="'+data.images[0]+'" class="img-thumbnail img-responsive" width="150" title="first image">').appendTo(imageContainer);
+                    $('<input type="checkbox" name="img'+idx+'" value="'+data.image+'"><img src="'+data.images[0]+'" class="img-thumbnail img-responsive" width="150" title="first image">').appendTo(imageContainer);
                 }
             },
             error: function (e) {console.log('error:'+e);}
@@ -105,10 +106,10 @@ $(document).ready(function(){
             <%for (var i=0;i<results.length;i++) {%>
             <tr id="trFeed">
                 <td><%=results[i].account%></td>
-                <td><input type="checkbox" id="urls" name="urls" <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>checked<%}%> value="<%=results[i].url%>"></td>
+                <td><input type="checkbox" id="item<%=i%>" name="item<%=i%>" <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>checked<%}%> value="<%=results[i].url%>" /></td>
                 <td><%=results[i].url%></td>
                 <td><%=results[i].text%></td>
-                <td><a href="#" class="loadImage" data-url="<%=results[i].url%>">image</a><div class="imagePreview"></div></td>
+                <td><a href="#" class="loadImage" data-idx="<%=i%>" data-url="<%=results[i].url%>">image</a><div class="imagePreview"></div></td>
             </tr>
             <%}%>
             </tbody>
