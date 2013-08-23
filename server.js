@@ -36,8 +36,8 @@ app.get("/",function(req, res){
 app.get("/feed",function(req, res){
    
     var results = [];
-    //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupe","bootply"];
-    var accounts = ["carolskelly"];
+    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupe","bootply"];
+    //var accounts = ["carolskelly"];
     
     var q = req.query["q"];
     var f = req.query["format"];
@@ -100,7 +100,7 @@ app.get("/feed",function(req, res){
                 trim_user:1
             };	
             
-            console.log("since id...---------------------------------------------------....."+lastId);
+            console.log("since id....."+lastId);
             
             if (lastId>0) {
                 params.since_id=lastId; // only get latest
