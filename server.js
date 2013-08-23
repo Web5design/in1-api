@@ -238,7 +238,11 @@ app.get('/harvestImages', function(req,res){
                 icon = metaObj.icon;
                 logo = metaObj.logo;
                 
-                images = harvestImages(body,baseUrl).images;
+                var imgsObj = harvestImages(body,baseUrl);
+                images = imgsObj.images;
+                if (typeof imgsObj.logo!="undefined") {
+                    logo = imgsObj.logo;
+                }
                 
                 resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;         
                 
@@ -473,13 +477,6 @@ var harvestMeta = function(body,baseUrl){
             icon = baseUrl+icon;
         }
         
-        if (logoFound===0){
-            logo = $h.find('img[class*="logo"],img[src*="logo"]').attr('src');
-            if (logo && logo.indexOf('//')==-1) {
-                logo = baseUrl+logo;
-            }
-        }
-        
 		$.each($h.find('meta[name=description]'),function(idx,item){
             console.log("meta desc..");         
 			desc = $(item).attr("content");
@@ -522,6 +519,12 @@ var harvestImages = function(body,baseUrl){
         
             $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
             
+            
+            var logo = $h.find('img[class*="logo"],img[src*="logo"]').attr('src');
+            if (logo && logo.indexOf('//')==-1) {
+                logo = baseUrl+logo;
+            }
+            
             //var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
             var imgs = $h.find('img[src*="cdn"],img[src*="cloudfront"],img[src*="aws"]');
             $.each(imgs,function(idx,item){
@@ -538,6 +541,7 @@ var harvestImages = function(body,baseUrl){
         
         var retObj = {};
         retObj.images = images;
+        retObj.logo = logo;
 
         return retObj;
 }
