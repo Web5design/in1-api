@@ -232,6 +232,7 @@ app.get('/harvestImages', function(req,res){
                 
                 var resolvedUri = response.request.uri;
                 var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
+                resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;   
                 
                 var metaObj = harvestMeta(body,baseUrl);
                 title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
@@ -244,9 +245,16 @@ app.get('/harvestImages', function(req,res){
                     logo = imgsObj.logo;
                 }
                 
-                resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;         
-                
-                res.json({title:title,resolved:resolved,images:images,icon:icon,logo:logo});
+                if (images.length===0) {
+                    // go get a screenshot
+                   loadShots(resolved,function(e,r,b){
+                        images.push(r.uri.href);
+                        res.json({title:title,resolved:resolved,images:images,icon:icon,logo:logo});  
+                   });
+                }
+                else {
+                    res.json({title:title,resolved:resolved,images:images,icon:icon,logo:logo});                    
+                }      
 			}
 			else {
 				res.json({error:'problem harvesting images:'+url});
@@ -627,6 +635,11 @@ var harvestSocial = function(body,baseUrl){
         retObj.rss = rss;
         
         return retObj;
-        
+}
+
+var loadShots = function(getUrl,cb){
+    request.get({url:conf.screenshots.apiUrl,json:true,qs:{url:getUrl,size:'large'}},function(e,r,b){
+        cb(e,r,b);
+    });
 }
 
