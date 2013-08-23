@@ -18,7 +18,7 @@ $(document).ready(function(){
                 if (data.image) {
                     $('<img src="'+data.image+'" class="img-responsive" width="150" title="meta image">').appendTo(imageContainer);
                 }
-                if (data.images) {
+                if (data.images && data.images.length>0) {
                     $('<img src="'+data.images[0]+'" class="img-responsive" width="150" title="first image">').appendTo(imageContainer);
                 }
             },
@@ -97,7 +97,7 @@ $(document).ready(function(){
                 <th>Source</th>
                 <th></th>
                 <th>Url</th>
-                <th>Text</th>
+                <th>Tweet</th>
                 <th>Images</th>
             </tr>
             </thead>

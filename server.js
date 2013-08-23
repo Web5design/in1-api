@@ -252,9 +252,9 @@ app.get('/harvestImages', function(req,res){
                     console.log("getting shot.."+resolved);
                     loadShots(resolved,function(e,r,b){
                         //console.log("got shot.."+JSON.stringify(r));
-                        if (r.statusCode!=500){
+                        //if (r.statusCode!=500){
                             images.push(r.request.uri.href);
-                        }
+                        //}
                         res.json({title:title,resolved:resolved,image:image,images:images,icon:icon,logo:logo});  
                    });
                 }
