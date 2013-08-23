@@ -443,6 +443,7 @@ var harvestMeta = function(body,baseUrl){
         rss,
         titleFound=0,
         descFound=0,
+        imgFound=0,
         logoFound=0;
     
     var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im;
@@ -491,8 +492,17 @@ var harvestMeta = function(body,baseUrl){
         }
         
         image = $h.find('link[rel="image_src"]').attr('href');
-        if (image && image.indexOf('//')==-1) {
+        if (image.length>0 && image.indexOf('//')==-1) {
             image = baseUrl+image;
+            imgFound=1;
+        }
+                
+        if (imgFound===0){
+            image = $h.find('meta[name="twitter:image"]').attr('content');
+            if (image.length>0 && image.indexOf('//')==-1) {
+                image = baseUrl+image;
+                imgFound=1;
+            }       
         }
         
 		$.each($h.find('meta[name=description]'),function(idx,item){
