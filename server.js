@@ -247,7 +247,9 @@ app.get('/harvestImages', function(req,res){
                 
                 if (images.length===0) {
                     // go get a screenshot
-                   loadShots(resolved,function(e,r,b){
+                    console.log("getting shot.."+resolved);
+                    loadShots(resolved,function(e,r,b){
+                        console.log("got shot.."+r.uri);
                         images.push(r.uri.href);
                         res.json({title:title,resolved:resolved,images:images,icon:icon,logo:logo});  
                    });
