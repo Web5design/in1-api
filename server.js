@@ -219,6 +219,7 @@ app.get('/harvestImages', function(req,res){
     title,
 	icon,
     logo,
+    image,
 	images=[],
     resolved;
 	
@@ -238,6 +239,7 @@ app.get('/harvestImages', function(req,res){
                 title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
                 icon = metaObj.icon;
                 logo = metaObj.logo;
+                image = metaObj.image; //primary image from head
                 
                 var imgsObj = harvestImages(body,baseUrl);
                 images = imgsObj.images;
@@ -251,11 +253,11 @@ app.get('/harvestImages', function(req,res){
                     loadShots(resolved,function(e,r,b){
                         //console.log("got shot.."+JSON.stringify(r));
                         images.push(r.request.uri.href);
-                        res.json({title:title,resolved:resolved,images:images,icon:icon,logo:logo});  
+                        res.json({title:title,resolved:resolved,image:image,images:images,icon:icon,logo:logo});  
                    });
                 }
                 else {
-                    res.json({title:title,resolved:resolved,images:images,icon:icon,logo:logo});                    
+                    res.json({title:title,resolved:resolved,image:image,images:images,icon:icon,logo:logo});                    
                 }      
 			}
 			else {
@@ -436,6 +438,7 @@ var harvestMeta = function(body,baseUrl){
         desc,
         icon,
         logo,
+        image,
         tags=[],
         rss,
         titleFound=0,
@@ -482,9 +485,14 @@ var harvestMeta = function(body,baseUrl){
             title = matches[1];
         }
         
-        icon = $h.find('link[rel="image_src"],link[rel="shortcut icon"],link[rel=apple-touch-icon-precomposed]').attr('href');
+        icon = $h.find('link[rel="shortcut icon"],link[rel=apple-touch-icon-precomposed]').attr('href');
         if (icon && icon.indexOf('//')==-1) { // prepend baseurl for relative images						
             icon = baseUrl+icon;
+        }
+        
+        image = $h.find('link[rel="image_src"]').attr('href');
+        if (image && image.indexOf('//')==-1) {
+            image = baseUrl+image;
         }
         
 		$.each($h.find('meta[name=description]'),function(idx,item){
@@ -506,6 +514,7 @@ var harvestMeta = function(body,baseUrl){
     retObj.title = title;
     retObj.desc = desc;
     retObj.tags = tags;
+    retObj.image = image;
     retObj.icon = icon;
     retObj.logo = logo;
     retObj.rss = rss;
@@ -528,7 +537,6 @@ var harvestImages = function(body,baseUrl){
         if (bodyMatches.length>0) { // body
         
             $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
-            
             
             var logo = $h.find('img[class*="logo"],img[src*="logo"]').attr('src');
             if (logo && logo.indexOf('//')==-1) {
