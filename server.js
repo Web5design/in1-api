@@ -542,9 +542,9 @@ var harvestImages = function(body,baseUrl){
                 if (src.indexOf('//')!=-1) { // exclude relative images
                     var w=$(item).attr("width");
                     var h=$(item).attr("height");
-                    if (w>270) {
+                    //if (w>270) {
                         images.push(src);
-                    }
+                    //}
                 }
             });
         }
