@@ -232,7 +232,7 @@ app.get('/harvestImages', function(req,res){
                 
                 var resolvedUri = response.request.uri;
                 var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
-                resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;   
+                resolved = baseUrl+""+resolvedUri.pathname;   
                 
                 var metaObj = harvestMeta(body,baseUrl);
                 title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
@@ -250,7 +250,7 @@ app.get('/harvestImages', function(req,res){
                     console.log("getting shot.."+resolved);
                     loadShots(resolved,function(e,r,b){
                         //console.log("got shot.."+JSON.stringify(r));
-                        images.push(r.href);
+                        images.push(r.getHeader("href"));
                         res.json({title:title,resolved:resolved,images:images,icon:icon,logo:logo});  
                    });
                 }
