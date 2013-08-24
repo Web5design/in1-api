@@ -353,7 +353,7 @@ app.post("/fetch",function(req, res){
     
     function getUrls(i){
         //var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
-        if (i<=urls.length) {
+        if (i<urls.length) {
     
                     var sURL = unescape(utils.fixUrl(urls[i]));
                     request({url:sURL,followRedirect:true,maxRedirects:3}, function (error, response, body) {
