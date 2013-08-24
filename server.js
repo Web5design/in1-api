@@ -36,7 +36,7 @@ app.get("/",function(req, res){
 app.get("/feed",function(req, res){
    
     var results = [];
-    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupe","bootply"];
+    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupemag","geekwire"];
     //var accounts = ["carolskelly"];
     
     var q = req.query["q"];
