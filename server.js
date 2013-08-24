@@ -281,19 +281,15 @@ app.post("/fetch",function(req, res){
     var URL = require('url');
     var items = req.body;
     var urls = req.body["urls"];
-    //var imgUrls = req.body["imgSrc"];
+    var imgs=[];
     var results = [];
     
     console.log(JSON.stringify(req.body));
     //console.log("selected images---"+imgUrls);
     
-    /*
     if( typeof urls === 'string' ) {
         urls = [urls];
     }
-    */
-    //var urls=[];
-    var imgs=[];
     
     for (var item in urls) {
         //if (items[item])
@@ -390,7 +386,7 @@ app.post("/fetch",function(req, res){
         }
     }
     
-    setTimeout(getUrls(0),6000); 
+    setTimeout(getUrls(0),4000); 
 });
 
 app.get('/posts', function(req,res){

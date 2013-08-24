@@ -106,7 +106,7 @@ $(document).ready(function(){
             <%for (var i=0;i<results.length;i++) {%>
             <tr id="trFeed">
                 <td><%=results[i].account%></td>
-                <td><input type="checkbox" id="item<%=i%>" name="urls" <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>checked<%}%> value="<%=results[i].url%>" /></td>
+                <td><%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>x<%}else{%><input type="checkbox" id="item<%=i%>" name="urls" value="<%=results[i].url%>" /><%}%></td>
                 <td><%=results[i].url%></td>
                 <td><%=results[i].text%></td>
                 <td><a href="#" class="loadImage" data-idx="<%=i%>" data-url="<%=results[i].url%>">image</a><div class="imagePreview"></div></td>
