@@ -212,6 +212,8 @@ app.get('/harvest', function(req,res){
 
 // get images from a url
 app.get('/harvestImages', function(req,res){ 
+    
+    console.log("/harvestImages..");
 
     var URL = require('url');
     
@@ -274,14 +276,15 @@ app.get('/harvestImages', function(req,res){
 
 app.post("/fetch",function(req, res){
     
-    console.log("fetch..");
+    console.log("/fetch..");
+    
     var URL = require('url');
     var items = req.body;
     //var urls = req.body["urls"];
     //var imgUrls = req.body["imgSrc"];
     var results = [];
     
-    //console.log(urls);
+    console.log(JSON.stringify(req.body));
     //console.log("selected images---"+imgUrls);
     
     /*
@@ -449,7 +452,7 @@ app.get('/*', function(req, res){
 
 ///
 
-var harvestMeta = function(body,baseUrl){
+function harvestMeta(body,baseUrl) {
     
     var title,
         desc,
@@ -546,10 +549,12 @@ var harvestMeta = function(body,baseUrl){
     retObj.logo = logo;
     retObj.rss = rss;
     
+    console.log("/done harvestMeta..");
+    
     return retObj;
 }
 
-var harvestImages = function(body,baseUrl){
+function harvestImages(body,baseUrl){
     
     var URL = require('url');
     var images=[];
@@ -591,7 +596,7 @@ var harvestImages = function(body,baseUrl){
         return retObj;
 }
 
-var harvestSocial = function(body,baseUrl){
+function harvestSocial(body,baseUrl){
     
         var URL = require('url');
         var tw,fb,rss,li,pin,yt,gp;
