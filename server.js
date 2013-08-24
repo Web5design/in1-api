@@ -49,7 +49,7 @@ app.get("/feed",function(req, res){
         
             // exists?
             var whereClause = {"origUrl":results[i].url};
-            request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+            request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url,image",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
                 //console.log("EXISTING-----------------------------------------------"+b.results.length);
                 
@@ -281,21 +281,29 @@ app.post("/fetch",function(req, res){
     var URL = require('url');
     var items = req.body;
     var urls = req.body["urls"];
-    var imgs=[];
+    var imgs = req.body["imgs"];
     var results = [];
     
     console.log(JSON.stringify(req.body));
     //console.log("selected images---"+imgUrls);
-    
+
     if( typeof urls === 'string' ) {
         urls = [urls];
+        imgs = [imgs];
     }
     
+    if (urls.length!=imgs.length) {
+        res.json({error:'select an image for each item'});
+        return;
+    }
+    
+    /*
     for (var item in urls) {
         //if (items[item])
         //urls.push(items[item]);
-        imgs.push(req.body["img"+item])
+        imgs.push(req.body["imgs"])
     }
+    */
     
     function checkUni(i){
                    
