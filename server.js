@@ -63,12 +63,12 @@ app.get("/feed",function(req, res){
         else {
             // done!
             
-            request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
-                if (b.results) {
+            request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e2,r2,b2){
+                if (b2.results) {
                     if (f=="json") { 
-                        res.send({results:results,posts:b.results});
+                        res.send({results:results,posts:b2.results});
                     } else {
-                        res.render("index",{results:results,posts:b.results});
+                        res.render("index",{results:results,posts:b2.results});
                     }
                 }
                 else {
