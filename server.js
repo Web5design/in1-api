@@ -383,7 +383,7 @@ app.post("/fetch",function(req, res){
         }
     }
     
-    setTimeout(getUrls(0),7000); 
+    setTimeout(getUrls(0),10000); 
 });
 
 app.get('/posts', function(req,res){
