@@ -47,3 +47,4 @@
 {"ts":1377336646591,"patch":[[{"diffs":[[0,"ue=\"'+data.image"],[1,"s[0]"],[0,"+'\"><img src=\"'+"]],"start1":942,"start2":942,"length1":32,"length2":36}]],"length":8140,"saved":false}
 {"ts":1377337347351,"patch":[[{"diffs":[[0,"\" name=\""],[-1,"item<%=i%>"],[1,"urls"],[0,"\" <%if(t"]],"start1":4452,"start2":4452,"length1":26,"length2":20}]],"length":8134,"saved":false}
 {"ts":1377337647128,"patch":[[{"diffs":[[0,"i].image"],[-1,"s[0]"],[0,"%>\" clas"]],"start1":5399,"start2":5399,"length1":20,"length2":16}]],"length":8130,"saved":false}
+{"ts":1377338256602,"patch":[[{"diffs":[[0,"ss=\"img-"],[-1,"responsive"],[1,"thumbnail img-responsive\" width=\"200"],[0,"\"></a>\n "]],"start1":5414,"start2":5414,"length1":26,"length2":52}]],"length":8156,"saved":false}

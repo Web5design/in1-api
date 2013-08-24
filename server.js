@@ -27,7 +27,7 @@ app.get("/",function(req, res){
         }
         else {
             //next();
-            res.render("index",{results:results});
+            res.render("index",{results:results,posts:[]});
         }
     });
     
