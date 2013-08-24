@@ -51,11 +51,11 @@ app.get("/feed",function(req, res){
             var whereClause = {"origUrl":results[i].url};
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,image",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
-                //console.log("does exist?.."+b.results.length);
+                console.log("does exist?.."+b.results.length);
                 
                 if (typeof b.results!="undefined" && b.results.length>0){
                     results[i].exists="1";
-                    results[i].image=b.results.image;
+                    results[i].image=b.results[0].image;
                 }
                 
                 checkUni(i+1);
