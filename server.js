@@ -356,7 +356,7 @@ app.post("/fetch",function(req, res){
         if (i<=urls.length) {
     
                     var sURL = unescape(utils.fixUrl(urls[i]));
-                    request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
+                    request({url:sURL,followRedirect:true,maxRedirects:3}, function (error, response, body) {
                         
                         console.log("--------------------------------------"+sURL);
 
@@ -366,7 +366,7 @@ app.post("/fetch",function(req, res){
                             var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
                             var resolved = baseUrl+""+resolvedUri.pathname;
                             
-                            var metaObj = harvestMeta(body,baseUrl);
+                            var metaObj = harvestMeta(body,resolved);
                             //var images = harvestImages(body,baseUrl).images;
                             var images=[];
                             var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
