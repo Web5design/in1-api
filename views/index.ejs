@@ -126,10 +126,10 @@ $(document).ready(function(){
     
     <%for (var i=0;i<posts.length;i++) {%>
     <div class="row">
-        <div class="col-2">
+        <div class="col-md-2">
             <a href="<%=posts[i].url%>"><img src="<%=posts[i].image%>" class="img-thumbnail img-responsive" width="200"></a>
         </div>
-        <div class="col-10">
+        <div class="col-md-10">
             <h4><%=posts[i].title%></h4>
             <%=posts[i].desc%>
         </div>

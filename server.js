@@ -49,9 +49,9 @@ app.get("/feed",function(req, res){
         
             // exists?
             var whereClause = {"origUrl":results[i].url};
-            request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url,image",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+            request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,image",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
-                //console.log("EXISTING-----------------------------------------------"+b.results.length);
+                //console.log("does exist?.."+b.results.length);
                 
                 if (typeof b.results!="undefined" && b.results.length>0){
                     results[i].exists="1";
