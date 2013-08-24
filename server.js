@@ -586,16 +586,26 @@ function harvestImages(body,baseUrl){
             
             //var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
             var imgs = $h.find('img[src*="cdn"],img[src*="main"],img[src*="cloudfront"],img[src*="aws"]');
-            $.each(imgs,function(idx,item){
-                var src=$(item).attr("src").replace("\t","");
-                if (src.indexOf('//')!=-1) { // exclude relative images
-                    var w=$(item).attr("width");
-                    var h=$(item).attr("height");
-                    //if (w>270) {
+            if (imgs.length>0){
+                $.each(imgs,function(idx,item){
+                    var src=$(item).attr("src").replace("\t","");
+                    if (src.indexOf('//')!=-1) { // exclude relative images
                         images.push(src);
-                    //}
-                }
-            });
+                    }
+                });
+            }
+            else {
+                $.each(imgs,function(idx,item){
+                    $h.find('img[src*="wp-content"]');
+                    if (src.indexOf('//')!=-1) { // exclude relative images
+                        var w=$(item).attr("width");
+                        //var h=$(item).attr("height");
+                        if (w>300) {
+                            images.push(src);
+                        }
+                    }
+                });
+            }
         }
         
         var retObj = {};
