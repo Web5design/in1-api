@@ -585,7 +585,7 @@ function harvestImages(body,baseUrl){
             }
             
             //var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
-            var imgs = $h.find('img[src*="cdn"],img[src*="main"],img[src*="cloudfront"],img[src*="aws"]');
+            var imgs = $h.find('img[src*="cdn"],img[src*="main"],img[src*="cloudfront"],img[src*="aws"]'); // typical CDN images
             if (imgs.length>0){
                 $.each(imgs,function(idx,item){
                     var src=$(item).attr("src").replace("\t","");
@@ -595,8 +595,9 @@ function harvestImages(body,baseUrl){
                 });
             }
             else {
+                imgs = $h.find('img[src*="wp-content"]'); // typical wordpress images
                 $.each(imgs,function(idx,item){
-                    $h.find('img[src*="wp-content"]');
+                    var src=$(item).attr("src");
                     if (src.indexOf('//')!=-1) { // exclude relative images
                         var w=$(item).attr("width");
                         //var h=$(item).attr("height");
