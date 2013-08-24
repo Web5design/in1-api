@@ -523,7 +523,7 @@ function harvestMeta(body,baseUrl) {
         image = $h.find('link[rel="image_src"]').attr('href');
         if (typeof image!="undefined" && image.length>0 && image.indexOf('//')==-1) {
             image = baseUrl+image;
-            imgFound=1;
+            //imgFound=1;
         }
                 
         if (imgFound===0){
