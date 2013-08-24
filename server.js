@@ -55,6 +55,7 @@ app.get("/feed",function(req, res){
                 
                 if (typeof b.results!="undefined" && b.results.length>0){
                     results[i].exists="1";
+                    results[i].image=b.results.image;
                 }
                 
                 checkUni(i+1);
