@@ -280,7 +280,7 @@ app.post("/fetch",function(req, res){
     
     var URL = require('url');
     var items = req.body;
-    //var urls = req.body["urls"];
+    var urls = req.body["urls"];
     //var imgUrls = req.body["imgSrc"];
     var results = [];
     
@@ -292,13 +292,13 @@ app.post("/fetch",function(req, res){
         urls = [urls];
     }
     */
-    var urls=[];
+    //var urls=[];
     var imgs=[];
     
-    for (var item in items) {
+    for (var item in urls) {
         //if (items[item])
-        urls.push(items[item]);
-        imgs.push(items[item.replace("item","img")])
+        //urls.push(items[item]);
+        imgs.push(req.body["img"+item])
     }
     
     function checkUni(i){
@@ -366,7 +366,7 @@ app.post("/fetch",function(req, res){
                             var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
                             var resolved = baseUrl+""+resolvedUri.pathname;
                             
-                            var metaObj = harvestMeta(body,resolved);
+                            var metaObj = harvestMeta(body,baseUrl);
                             //var images = harvestImages(body,baseUrl).images;
                             var images=[];
                             var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
