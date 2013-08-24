@@ -585,7 +585,7 @@ function harvestImages(body,baseUrl){
             }
             
             //var imgs = $h.find('img[src*=".png"],img[src*=".jpg"],img[src*=".jpeg"]');
-            var imgs = $h.find('img[src*="cdn"],img[src*="cloudfront"],img[src*="aws"]');
+            var imgs = $h.find('img[src*="cdn"],img[src*="main"],img[src*="cloudfront"],img[src*="aws"]');
             $.each(imgs,function(idx,item){
                 var src=$(item).attr("src").replace("\t","");
                 if (src.indexOf('//')!=-1) { // exclude relative images
