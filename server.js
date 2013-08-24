@@ -309,7 +309,7 @@ app.post("/fetch",function(req, res){
             var whereClause = {"origUrl":results[i].requested};
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
-                //console.log("EXISTING-----------------------------------------------"+b.results.length);
+                console.log("EXISTING-----------------------------------------------"+b.results.length);
                 
                 if (typeof b.results!="undefined" && b.results.length>0){
                     results[i].exists="1";
@@ -353,24 +353,28 @@ app.post("/fetch",function(req, res){
     
     function getUrls(i){
         //var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
-        if (i<urls.length) {
+        if (i<=urls.length) {
     
                     var sURL = unescape(utils.fixUrl(urls[i]));
-                    request({url:sURL,followRedirect:true,maxRedirects:3}, function (error, response, body) {
-                        //console.log("--------------------------------------"+sURL);
+                    request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
+                        
+                        console.log("--------------------------------------"+sURL);
 
                         if (typeof body!="undefined") {
                            
                             var resolvedUri = response.request.uri;
                             var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
+                            var resolved = baseUrl+""+resolvedUri.pathname;
+                            
                             var metaObj = harvestMeta(body,baseUrl);
                             //var images = harvestImages(body,baseUrl).images;
                             var images=[];
                             var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
                             var desc = metaObj.desc;
                             
-                            var resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;
                             results.push({requested:urls[i],title:title,desc:desc,image:imgs[i],images:images,resolved:resolved});  
+                            
+                            console.log("---------get url-----------------------"+i+1);
                             
                             getUrls(i+1);
                             
@@ -386,7 +390,7 @@ app.post("/fetch",function(req, res){
         }
     }
     
-    setTimeout(getUrls(0),10000); 
+    setTimeout(getUrls(0),6000); 
 });
 
 app.get('/posts', function(req,res){
