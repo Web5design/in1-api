@@ -512,7 +512,7 @@ function harvestMeta(body,baseUrl) {
         
         var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
         if (matches) {
-            title = matches[1];
+            title = unescape(matches[1]);
         }
         
         icon = $h.find('link[rel="shortcut icon"],link[rel=apple-touch-icon-precomposed]').attr('href');
