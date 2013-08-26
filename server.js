@@ -499,11 +499,11 @@ function harvestMeta(body,baseUrl) {
                 logoFound=1;
             }
             else if (property=="og:title") {
-                title = unescape($item.attr("content"));
+                title = $("<div/>").html($item.attr("content")).text();
                 titleFound=1;
             }
             else if (property=="og:description") {
-                desc = $item.attr("content");
+                desc = $("<div/>").html($item.attr("content")).text();
                 descFound=1;
             }
         });	
@@ -512,10 +512,7 @@ function harvestMeta(body,baseUrl) {
         
         var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
         if (matches) {
-            //title = unescape(matches[1]);
-            
-            title = $("<div/>").html(matches[1]).text();
-            
+            title = $("<div/>").html(matches[1]).text(); // decode escaped HTML
         }
         
         icon = $h.find('link[rel="shortcut icon"],link[rel=apple-touch-icon-precomposed]').attr('href');
@@ -539,7 +536,7 @@ function harvestMeta(body,baseUrl) {
         
 		$.each($h.find('meta[name=description]'),function(idx,item){
             console.log("meta desc..");         
-			desc = $(item).attr("content");
+			desc = $("<div/>").html($(item).attr("content")).text();
 		});
         
         $.each($h.find('meta[name=keywords]'),function(idx,item){
