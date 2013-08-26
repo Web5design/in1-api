@@ -499,7 +499,7 @@ function harvestMeta(body,baseUrl) {
                 logoFound=1;
             }
             else if (property=="og:title") {
-                title = $item.attr("content");
+                title = unescape($item.attr("content"));
                 titleFound=1;
             }
             else if (property=="og:description") {
