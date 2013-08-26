@@ -499,7 +499,7 @@ function harvestMeta(body,baseUrl) {
                 logoFound=1;
             }
             else if (property=="og:title") {
-                title = unescape($item.attr("content"));
+                title = escape($item.attr("content"));
                 titleFound=1;
             }
             else if (property=="og:description") {
@@ -512,7 +512,7 @@ function harvestMeta(body,baseUrl) {
         
         var matches = body.match(/<title>\s*(.+?)\s*<\/title>/);
         if (matches) {
-            title = unescape(matches[1]);
+            title = escape(matches[1]);
         }
         
         icon = $h.find('link[rel="shortcut icon"],link[rel=apple-touch-icon-precomposed]').attr('href');
