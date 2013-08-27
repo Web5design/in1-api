@@ -441,7 +441,7 @@ app.post("/source",function(req, res){
         body:source}, function (e,r,b){
         console.log("wrote to parse....."+e);
         
-        if (typeof e!="undefined") {
+        if (e) {
             res.json({error:"no write"});
         }
         else {
