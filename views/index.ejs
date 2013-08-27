@@ -92,7 +92,7 @@ $(document).ready(function(){
         $.ajax({
             url: "/source",
             type: "post",
-            data: $('#formSource').serializeObject();
+            data: $('#formSource').serializeObject(),
             success: function (data) {
                 if (typeof data.error!="undefined") {
                     alert(data.error);
