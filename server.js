@@ -413,6 +413,41 @@ app.get('/posts', function(req,res){
     
 });
 
+app.get('/sources', function(req,res){
+    
+    request.get({url:'https://api.parse.com/1/classes/Source',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        if (b.results) {
+            res.json({results:b.results});
+        }
+        else {
+            //next();
+            res.json({error:"no results"});
+        }
+    });
+    
+});
+
+app.post("/source",function(req, res){
+    
+    console.log("post /source..");
+    
+    var source = req.body;
+    
+    request.post({url:'https://api.parse.com/1/classes/Source',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+        body:source}, function (e,r,b){
+        console.log("wrote to parse....."+e);
+        
+        if (typeof e!="undefined") {
+            res.json({error:"no write"});
+        }
+        else {
+            var objectId = b.objectId;
+            res.json(objectId);      
+        }
+    });
+    
+});
+
 /* given a cached url, redirect to proxy image */
 app.get('/cache', function(req,res){
     console.log("cached");
