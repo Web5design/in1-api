@@ -86,7 +86,43 @@ $(document).ready(function(){
             error: function (e) {console.log('error:'+e); $('#btnFork').button("reset");}
         });
     });
-});
+    
+    $('#btnSource').click(function(e){
+            
+            $.ajax({
+            url: "/source",
+            type: "post",
+            data: $('#formSource').serializeObject();
+            success: function (data) {
+                if (typeof data.error!="undefined") {
+                    alert(data.error);
+                } else {
+                    alert("OK");      
+                }
+            },
+            error: function (e) {console.log('error:'+e);}
+        });
+            
+    });
+    
+}); // end doc ready
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
 </script>
 <div class="container">
     
