@@ -136,7 +136,7 @@ app.get("/feed",function(req, res){
                                 mentioned = objs[j].entities.user_mentions[0].screen_name;
                             }
                             
-                            results.push({account:accounts[i].twitter,source:accounts[i].source,url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count,id:objs[j].id});   
+                            results.push({account:accounts[i].twitter,source:accounts[i].name,url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count,id:objs[j].id});   
                             
                         }
                     }
@@ -381,6 +381,8 @@ app.post("/fetch",function(req, res){
                     request({url:sURL,followRedirect:true,maxRedirects:3}, function (error, response, body) {
                         
                         console.log("--------------------------------------"+sURL);
+                        
+                        var source = req.body["source"+i];
 
                         if (typeof body!="undefined") {
                            
@@ -394,7 +396,7 @@ app.post("/fetch",function(req, res){
                             var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
                             var desc = metaObj.desc;
                             
-                            results.push({requested:urls[i],title:title,desc:desc,image:imgs[i],images:images,resolved:resolved});  
+                            results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,resolved:resolved});  
                             
                             console.log("---------get url-----------"+i+1);
                             
