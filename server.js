@@ -160,7 +160,7 @@ app.get("/feed",function(req, res){
         if (b.results) {
             
             //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupemag","geekwire"];
-            var accounts = b.results;
+            accounts = b.results;
             
             setTimeout(getTweets(0),5000);
         }
