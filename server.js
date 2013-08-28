@@ -850,8 +850,8 @@ function doTweet(msg,screen_name,cb){
 			
 		url += require('querystring').stringify(params)
 		request.post({url:url, oauth:oauth, json:true}, function (e, r, body) {
-			//console.log(e);
-			//console.log(body);
+			console.log(e);
+			console.log("twitter--------------"+body);
 			cb(e,body);
 		})
 	}
