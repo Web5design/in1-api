@@ -30,7 +30,9 @@ var stati = [
         "Did a squatter get your brand name on Facebook, Twitter or YouTube? #in1 can help http://www.in1.com"
     ];
 //var job = new cronJob('00 49 */1 * * 1-5', function(){
-var job = new cronJob('00 */5 * * * 1-5', function(){
+//var job = new cronJob('00 */5 * * * 1-5', function(){
+
+var job = new cronJob('*/2 * * * *', function(){
     // Runs every four hours (Monday through Friday)
     
     var rnd = Math.floor((Math.random()*(stati.length-1)));
