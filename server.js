@@ -162,6 +162,8 @@ app.get("/feed",function(req, res){
             //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupemag","geekwire"];
             accounts = b.results;
             
+            console.log(JSON.stringify(accounts));
+            
             setTimeout(getTweets(0),5000);
         }
         else {
