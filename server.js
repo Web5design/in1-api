@@ -358,7 +358,8 @@ app.post("/fetch",function(req, res){
                             "desc": results[k].desc,
                             "images": results[k].images,
                             "image": results[k].image,
-                            "origUrl": results[k].requested
+                            "origUrl": results[k].requested,
+                            "source": results[k].source
                         }
                     });
                 }
