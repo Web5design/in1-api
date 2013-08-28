@@ -148,6 +148,7 @@ $.fn.serializeObject = function()
                 <td><%=results[i].url%></td>
                 <td><%=results[i].text%></td>
                 <td><%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%><img src="<%=results[i].image%>" width="150" class="img-thumbnail" /><%}else{%><a href="#" class="loadImage" data-idx="<%=i%>" data-url="<%=results[i].url%>">image</a><div class="imagePreview"></div><%}%></td>
+                <input type="hidden" name="source" value="<% =results[i].source %>" />
             </tr>
             <%}%>
             </tbody>
