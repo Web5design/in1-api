@@ -13,23 +13,7 @@ app.get('/hello', function(req,res){
 
 app.get("/",function(req, res){
    
-    //console.log("b:"+req.body.status);
-	//console.log("user:"+JSON.stringify(req.user));
-	//console.log("tw:"+JSON.stringify(req.session));
-	//if (req.user.loggedInWith.indexOf("twitter")!=-1) {
-    
-    var results = [];
-    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions"];
-    
-    request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
-        if (b.results) {
-            res.render("index",{results:results,posts:b.results});
-        }
-        else {
-            //next();
-            res.render("index",{results:results,posts:[]});
-        }
-    });
+    res.send("hello");
     
 });
 
@@ -346,7 +330,7 @@ app.post("/fetch",function(req, res){
         else {
             // done!
             
-            var postRequests = [];
+            var postRequests=[],q=[];
             for(var k=0; k<results.length; ++k) {
                 if (results[k].exists==="0"){
                     postRequests.push({
@@ -362,14 +346,33 @@ app.post("/fetch",function(req, res){
                             "source": results[k].source
                         }
                     });
+                    q.push(
+                        {
+                        "method": "POST",
+                        "path": "/1/classes/Queue",
+                        "body":{tweet:results[k].title + "-" + results[k].requested}
+                        }
+                    );
                 }
             }
         
             request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
                 body:{requests:postRequests}}, function (e,r,b){
-                console.log("Adding batch to parse api...");
-                res.locals.msg={"success":"Perfect. Now you can login."};
-                res.json({ok:b});    
+                console.log("added batch to parse api...");
+                res.locals.msg={"success":"Items posted."};
+                
+                request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                    body:{requests:q}}, function (e,r,b){
+                    console.log("wrote to parse.."+e);
+                    
+                    if (e) {
+                        res.json({error:"no write batch",status:-1});
+                    }
+                    else {
+                        res.json({status:1});      
+                    }
+                });
+            
             });
         }
     }
@@ -514,7 +517,9 @@ app.get('/*', function(req, res){
 });
 
 
-///
+
+
+/* functions ------------------------------------------------------------------ */
 
 function harvestMeta(body,baseUrl) {
     
@@ -758,5 +763,10 @@ var loadShots = function(getUrl,cb){
     request.get({url:conf.screenshots.apiUrl,json:true,qs:{url:getUrl,size:'large'}},function(e,r,b){
         cb(e,r,b);
     });
-}
+};
 
+function doTweet(msg,screen_name){
+    
+    
+    
+};
