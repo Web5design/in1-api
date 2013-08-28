@@ -35,6 +35,8 @@ var stati = [
 var job = new cronJob('*/2 * * * *', function(){
     // Runs every four hours (Monday through Friday)
     
+    console.log("running cron.............................................................");
+    
     var rnd = Math.floor((Math.random()*(stati.length-1)));
     if ((rnd%2) === 0){
         doTweet(stati[rnd]);
