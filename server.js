@@ -819,6 +819,17 @@ var loadShots = function(getUrl,cb){
 function doTweet(msg,screen_name,cb){
     
     if (1===1) {
+        
+        /*
+        var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+        if (i<accounts.length) {
+            var oauth = 
+                { consumer_key: conf.twit.consumerKey
+                , consumer_secret: conf.twit.consumerSecret
+                , token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
+                , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
+            };
+	    */
 	
         var status = msg;
 		var oauth = 
@@ -827,7 +838,7 @@ function doTweet(msg,screen_name,cb){
             , token: '480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB'
             , token_secret: 'D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc'
             }
-        , url = 'https://api.twitter.com/1/statuses/update.json?'
+        , url = 'https://api.twitter.com/1.1/statuses/update.json?'
         , params = 
 			{ 
 				//status: req.body.status + " via http://in1.com"
