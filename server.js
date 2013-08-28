@@ -654,17 +654,23 @@ function harvestMeta(body,baseUrl) {
             console.log("meta desc..");         
 			desc = $("<div/>").html($(item).attr("content")).text();
 		});
+		
         
         // tags - keywords
         $.each($h.find('meta[name=keywords]'),function(idx,item){
-            tags.push($(item).attr("content"));
+            var tagArr = $(item).attr("content").split(",");
+            for (var i in tagArr){
+                tags.push($.trim(tagArr[i]));
+            }
+            
         });
         
         $.each($b.find('a[href*="tag"]'),function(idx,item){
             tags.push($(item).html());
         });
         
-        //
+        
+        // rss
         $.each($h.find('link[type="application/rss+xml"]'),function(idx,item){
             var rssUrl = $(item).attr("href");
             rss = rssUrl;
