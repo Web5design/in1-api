@@ -128,7 +128,7 @@ $.fn.serializeObject = function()
 <div class="container">
     
     <h2>Feed</h2>
-    <% if (typeof results!="undefined") {%>
+    <% if (typeof results!="undefined" && results.length>0) {%>
     <form action="/fetch" method="POST">
         <table class="table table-striped" id="tblFeed">
             <thead>
