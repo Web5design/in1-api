@@ -4,8 +4,51 @@ var port = process.env.PORT || 4000,
     conf = require('./conf'),
     window = require('jsdom').jsdom().createWindow(),
     $ = require('jquery'),
-    request = require('request');
+    request = require('request'),
+    cronJob = require('cron').CronJob;
+
+var stati = [
+        "A new #jquery social plugin that combines your social feed: http://plugins.in1.com",
+        "@flowtown blog bookmarking this one: http://www.in1.com/resources/2313e2af898e8af94cd022588b4b5fb4 Love It.",
+        "Do your domain name, Facebook page and Twitter screen names match your brand? http://in1.com",
+        "Vigilance and consistency are essential for your social media strategy.",
+        "#google #apple and #sony todays tech stories from @thenextweb #in1 http://in1.com/soc?url=thenextweb.com",
+        "Calling all startups. Tell us about your brand and we may feature it @in1dotcom",
+        "Does your brand have too many social endpoints? Combine them http://in1.com #in1 #SoMe",
+        "#b2c vs #b2b: social sharing tips for linkedin vs. twitter #infographic http://t.co/Fv5tdy8z",
+        "Loving the newstyles @jcrew http://in1.com/soc?url=jcrew.com",
+        "75% of blog administrators are also managing their company's social media channels",
+		"Write great content, be honest and gain #SoMe influence.",
+        "@Toyoya - here is your social brand snapsnot #in1 http://in1.com/soc?url=toyota.com",
+        //"How are brands using #in1 for marketing?",
+        "Success stories for #entrepreneurs and #startups @YFSMagazine http://in1.com/soc?url=yfsentrepreneur.com",
+        "From #Gangnam Style to gaming @mashable covers it http://in1.com/soc?url=mashable.com",
+        "@ReadWriteWeb is still one of my best daily reads http://in1.com/soc?url=readwriteweb.com",
+        "Are all of those social sharing buttons on your blog are a good idea? http://in1blog.tumblr.com/post/31980230415/6-reasons-why-its-ridiculous-to-have-multiple-social",
+        "what is @VentureBeat saying on social media today http://in1.com/soc?url=venturebeat.com",
+		"Brands need to give customers a social snapshot, not 5 different social channels to follow them on http://www.in1.com",
+        "Did a squatter get your brand name on Facebook, Twitter or YouTube? #in1 can help http://www.in1.com"
+    ];
+//var job = new cronJob('00 49 */1 * * 1-5', function(){
+var job = new cronJob('00 */5 * * * 1-5', function(){
+    // Runs every four hours (Monday through Friday)
     
+    var rnd = Math.floor((Math.random()*(stati.length-1)));
+    if ((rnd%2) === 0){
+        doTweet(stati[rnd]);
+    }
+    else{
+        
+    }
+    
+  }, function () {
+    // This function is executed when the job stops
+    console.log("tweeted all");
+  }, 
+  true,
+  "America/Chicago"
+);
+
 /* default route */
 app.get('/hello', function(req,res){
    res.render("index");
@@ -350,7 +393,7 @@ app.post("/fetch",function(req, res){
                         {
                         "method": "POST",
                         "path": "/1/classes/Queue",
-                        "body":{tweet:results[k].title + "-" + results[k].requested}
+                        "body":{tweet:results[k].title.substring(0,115) + "-" + results[k].requested}
                         }
                     );
                 }
@@ -765,8 +808,31 @@ var loadShots = function(getUrl,cb){
     });
 };
 
-function doTweet(msg,screen_name){
+function doTweet(msg,screen_name,cb){
     
-    
+    if (1===1) {
+	
+        var status = msg;
+		var oauth = 
+			{ consumer_key: conf.twit.consumerKey
+            , consumer_secret: conf.twit.consumerSecret
+            , token: '480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB'
+            , token_secret: 'D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc'
+            }
+        , url = 'https://api.twitter.com/1/statuses/update.json?'
+        , params = 
+			{ 
+				//status: req.body.status + " via http://in1.com"
+                status: status,
+                via: "in1.com"
+			};
+			
+		url += require('querystring').stringify(params)
+		request.post({url:url, oauth:oauth, json:true}, function (e, r, body) {
+			//console.log(e);
+			//console.log(body);
+			cb(e,body);
+		})
+	}
     
 };

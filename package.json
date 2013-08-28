@@ -8,6 +8,8 @@
     "ejs-locals": "1.0.2",
     "jquery": ">=1.6.x",
     "jsdom": ">=0.5.2",
+    "cron": ">=0.3.x",
+    "time": ">=0.8.3",
     "request": ">=2.x"
   },
    "engines": {
