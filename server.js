@@ -32,14 +32,14 @@ var stati = [
 //var job = new cronJob('00 49 */1 * * 1-5', function(){
 //var job = new cronJob('00 */5 * * * 1-5', function(){
 
-var job = new cronJob('*/1 * * * *', function(){
+var job = new cronJob('*/6 * * * *', function(){
     // Runs every four hours (Monday through Friday)
     
     console.log("running cron.............................................................");
     
     var rnd = Math.floor((Math.random()*(stati.length-1)));
     //if ((rnd%2) === 0){
-    if (rnd>=0){
+    if (rnd>=40){
         doTweet(stati[rnd],"CarolSkelly",function(e,b){
             
             console.log("tweeted done..."+e+"------"+b);
