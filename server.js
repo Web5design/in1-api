@@ -136,7 +136,7 @@ app.get("/feed",function(req, res){
                                 mentioned = objs[j].entities.user_mentions[0].screen_name;
                             }
                             
-                            results.push({account:accounts[i],url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count,id:objs[j].id});   
+                            results.push({account:accounts[i].twitter,url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count,id:objs[j].id});   
                             
                         }
                     }
