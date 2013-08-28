@@ -33,7 +33,7 @@ var stati = [
 //var job = new cronJob('00 */5 * * * 1-5', function(){
 
 var job = new cronJob('*/6 * * * *', function(){
-    // Runs every four hours (Monday through Friday)
+    // Runs every six minutes
     
     console.log("running cron.............................................................");
     
@@ -242,6 +242,7 @@ app.get('/harvest', function(req,res){
                 desc = metaObj.desc;
                 rss = metaObj.rss;
                 image = metaObj.image;
+                tags = metaObj.tags;
                 
                 images = harvestImages(body,baseUrl).images;
                 
@@ -591,7 +592,7 @@ function harvestMeta(body,baseUrl) {
     
     var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im;
     var headMatches = headPattern.exec(body);
-    var $h;
+    var $h,$b;
     
     console.log("harvest meta..");
     
@@ -599,6 +600,7 @@ function harvestMeta(body,baseUrl) {
         
         var head = headMatches[1].replace(/\n/g," ");
         $h = $("<form>"+head+"</form>");
+        $b = $("<form>"+body+"</form>");
         
         // find opengraph
         $.each($h.find('meta[property^="og:"]'),function(idx,item){
@@ -653,10 +655,16 @@ function harvestMeta(body,baseUrl) {
 			desc = $("<div/>").html($(item).attr("content")).text();
 		});
         
+        // tags - keywords
         $.each($h.find('meta[name=keywords]'),function(idx,item){
             tags.push($(item).attr("content"));
         });
         
+        $.each($b.find('a[href*="tag"]'),function(idx,item){
+            tags.push($(item).html());
+        });
+        
+        //
         $.each($h.find('link[type="application/rss+xml"]'),function(idx,item){
             var rssUrl = $(item).attr("href");
             rss = rssUrl;
