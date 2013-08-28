@@ -41,11 +41,13 @@ var job = new cronJob('*/1 * * * *', function(){
     if ((rnd%2) === 0){
         doTweet(stati[rnd],"CarolSkelly",function(e,b){
             
-            console.log("tweeted done..."+e);
+            console.log("tweeted done..."+e+"------"+b);
             
         });
     }
     else{
+        
+        console.log("no randome number..");
         
     }
     
