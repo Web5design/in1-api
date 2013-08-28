@@ -38,7 +38,8 @@ var job = new cronJob('*/1 * * * *', function(){
     console.log("running cron.............................................................");
     
     var rnd = Math.floor((Math.random()*(stati.length-1)));
-    if ((rnd%2) === 0){
+    //if ((rnd%2) === 0){
+    if (rnd>=0){
         doTweet(stati[rnd],"CarolSkelly",function(e,b){
             
             console.log("tweeted done..."+e+"------"+b);
