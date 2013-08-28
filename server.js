@@ -32,14 +32,18 @@ var stati = [
 //var job = new cronJob('00 49 */1 * * 1-5', function(){
 //var job = new cronJob('00 */5 * * * 1-5', function(){
 
-var job = new cronJob('*/2 * * * *', function(){
+var job = new cronJob('*/1 * * * *', function(){
     // Runs every four hours (Monday through Friday)
     
     console.log("running cron.............................................................");
     
     var rnd = Math.floor((Math.random()*(stati.length-1)));
     if ((rnd%2) === 0){
-        doTweet(stati[rnd]);
+        doTweet(stati[rnd],"CarolSkelly",function(e,b){
+            
+            console.log("tweeted done..."+e);
+            
+        });
     }
     else{
         
@@ -81,7 +85,7 @@ app.get("/feed",function(req, res){
             var whereClause = {"origUrl":results[i].url};
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,image",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
-                console.log("does exist?.."+b.results.length);
+                //console.log("does exist?.."+b.results.length);
                 
                 if (typeof b.results!="undefined" && b.results.length>0){
                     results[i].exists="1";
