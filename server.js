@@ -36,8 +36,7 @@ app.get("/",function(req, res){
 app.get("/feed",function(req, res){
    
     var results = [];
-    var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupemag","geekwire"];
-    //var accounts = ["carolskelly"];
+    var accounts = [];
     
     var q = req.query["q"];
     var f = req.query["format"];
@@ -100,7 +99,7 @@ app.get("/feed",function(req, res){
             var params = 
             {    
                 include_entities:true,
-                screen_name:accounts[i],
+                screen_name:accounts[i].twitter,
                 count:5,
                 trim_user:1
             };	
@@ -157,7 +156,19 @@ app.get("/feed",function(req, res){
         }
     }
     
-    setTimeout(getTweets(0),5000);
+    request.get({url:'https://api.parse.com/1/classes/Source',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        if (b.results) {
+            
+            //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupemag","geekwire"];
+            var accounts = b.results;
+            
+            setTimeout(getTweets(0),5000);
+        }
+        else {
+            //next();
+            res.json({error:"no results"});
+        }
+    });
     
 });
 
@@ -383,7 +394,7 @@ app.post("/fetch",function(req, res){
                             
                             results.push({requested:urls[i],title:title,desc:desc,image:imgs[i],images:images,resolved:resolved});  
                             
-                            console.log("---------get url-----------------------"+i+1);
+                            console.log("---------get url-----------"+i+1);
                             
                             getUrls(i+1);
                             
