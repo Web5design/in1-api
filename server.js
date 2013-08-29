@@ -30,7 +30,7 @@ var stati = [
         "Did a squatter get your brand name on Facebook, Twitter or YouTube? #in1 can help http://www.in1.com"
     ];
 
-var job = new cronJob('*/10 * * * *', function(){
+var job = new cronJob('*/23 * * * *', function(){
     
         // runs every 5 minutes
         console.log("running cron.............................................................");
@@ -423,7 +423,10 @@ app.post("/fetch",function(req, res){
                         {
                         "method": "POST",
                         "path": "/1/classes/Queue",
-                        "body":{posted:false,tweet:results[k].title.substring(0,115) + "-" + results[k].requested}
+                        "body":{
+                            posted:false,
+                            tweet:results[k].title.substring(0,110) + " " + results[k].requested + "#"+((results[k].tags[0])||"tech")
+                            }
                         }
                     );
                 }
