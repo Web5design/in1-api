@@ -48,7 +48,7 @@ var job = new cronJob('*/2 * * * *', function(){
                 doTweet(b.results[0].tweet,"CarolSkelly",function(e,b){
                     console.log("tweeted done..."+e+"------"+JSON.stringify(b));
                     
-                    request.post({url:'https://api.parse.com/1/classes/Queue/'+objId,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                    request.put({url:'https://api.parse.com/1/classes/Queue/'+objId,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
                         body:{posted:true}}, function (e,r,b){
                         
                         if (typeof e!="undefined") {
