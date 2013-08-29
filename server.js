@@ -29,38 +29,50 @@ var stati = [
 		"Brands need to give customers a social snapshot, not 5 different social channels to follow them on http://www.in1.com",
         "Did a squatter get your brand name on Facebook, Twitter or YouTube? #in1 can help http://www.in1.com"
     ];
-//var job = new cronJob('00 49 */1 * * 1-5', function(){
-//var job = new cronJob('00 */5 * * * 1-5', function(){
 
-var job = new cronJob('*/6 * * * *', function(){
-    // Runs every six minutes
+var job = new cronJob('*/2 * * * *', function(){
     
-    console.log("running cron.............................................................");
-    
-    var rnd = Math.floor((Math.random()*(stati.length-1)));
-    //if ((rnd%2) === 0){
-    if (rnd>=40){
-        doTweet(stati[rnd],"CarolSkelly",function(e,b){
+        // runs every 5 minutes
+        console.log("running cron.............................................................");
+        
+        
+        // check q
+        var whereClause = {"posted":false};
+        request.get({url:'https://api.parse.com/1/classes/Queue',json:true,qs:{keys:"origUrl,image",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+                
+            //console.log("does exist?.."+b.results.length);
             
-            console.log("tweeted done..."+e+"------"+b);
+            if (typeof b.results!="undefined" && b.results.length>0){
+                
+                var objId = b.results[0].objectId;
+                doTweet(b.results[0].tweet,"CarolSkelly",function(e,b){
+                    console.log("tweeted done..."+e+"------"+b);
+                    
+                    request.post({url:'https://api.parse.com/1/classes/Queue/'+objId,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                        body:{posted:true}}, function (e,r,b){
+                        
+                        console.log("updated q.."+e);
+    
+                    });
+                    
+                });
+            }
+            
             
         });
-    }
-    else{
         
-        console.log("no randome number..");
-        
-    }
+        //var rnd = Math.floor((Math.random()*(stati.length-1)));
     
-  }, function () {
-    // This function is executed when the job stops
-    console.log("tweeted all");
-  }, 
-  true,
-  "America/Chicago"
+    }, function () {
+        console.log("job completed.........");
+    }, 
+    true,
+    "America/Chicago"
 );
 
-/* default route */
+
+
+/*---------------------- default route ----------------------*/
 app.get('/hello', function(req,res){
    res.render("index");
 });
@@ -660,15 +672,15 @@ function harvestMeta(body,baseUrl) {
         $.each($h.find('meta[name=keywords]'),function(idx,item){
             var tagArr = $(item).attr("content").split(",");
             for (var i in tagArr){
-                tags.push($.trim(tagArr[i]));
+                if (tagArr[i].length<20){ //any tag over 20 chars is tooo long
+                    tags.push($.trim(tagArr[i]).toLowerCase());
+                }
             }
-            
         });
         
         $.each($b.find('a[href*="tag"]'),function(idx,item){
             tags.push($(item).html());
         });
-        
         
         // rss
         $.each($h.find('link[type="application/rss+xml"]'),function(idx,item){
