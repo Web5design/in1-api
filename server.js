@@ -54,10 +54,13 @@ var job = new cronJob('*/2 * * * *', function(){
                         if (typeof e!="undefined") {
                             console.log("update q error.."+JSON.stringify(e));
                         }
-    
                     });
                     
                 });
+            }
+            else {
+                
+                console.log("nothing in queue.");
             }
             
             
@@ -446,14 +449,14 @@ app.post("/fetch",function(req, res){
         }
     }
     
-    function getUrls(i){
-        //var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+    function getUrls(i){ // harvest metadata and images from each url
+        
         if (i<urls.length) {
     
                     var sURL = unescape(utils.fixUrl(urls[i]));
                     request({url:sURL,followRedirect:true,maxRedirects:3}, function (error, response, body) {
                         
-                        console.log("--------------------------------------"+sURL);
+                        console.log("-------------------"+sURL);
                         
                         var source = req.body["source"+i];
 
@@ -468,10 +471,9 @@ app.post("/fetch",function(req, res){
                             var images=[];
                             var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
                             var desc = metaObj.desc;
+                            var tags = metaObj.tags;
                             
-                            results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,resolved:resolved});  
-                            
-                            console.log("---------get url-----------"+i+1);
+                            results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,resolved:resolved});  
                             
                             getUrls(i+1);
                             
