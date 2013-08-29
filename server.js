@@ -684,7 +684,9 @@ function harvestMeta(body,baseUrl) {
         });
         
         $.each($b.find('a[href*="tag"]'),function(idx,item){
-            tags.push($(item).html());
+            if ($(item).html().length<20){ //any tag over 20 chars is tooo long
+                tags.push($(item).html().toLowerCase());
+            }
         });
         
         // rss
