@@ -38,7 +38,7 @@ var job = new cronJob('*/2 * * * *', function(){
         
         // check q
         var whereClause = {"posted":false};
-        request.get({url:'https://api.parse.com/1/classes/Queue',json:true,qs:{keys:"origUrl,image",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        request.get({url:'https://api.parse.com/1/classes/Queue',json:true,qs:{where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
             //console.log("does exist?.."+b.results.length);
             
