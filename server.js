@@ -46,12 +46,14 @@ var job = new cronJob('*/2 * * * *', function(){
                 
                 var objId = b.results[0].objectId;
                 doTweet(b.results[0].tweet,"CarolSkelly",function(e,b){
-                    console.log("tweeted done..."+e+"------"+b);
+                    console.log("tweeted done..."+e+"------"+JSON.stringify(b));
                     
                     request.post({url:'https://api.parse.com/1/classes/Queue/'+objId,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
                         body:{posted:true}}, function (e,r,b){
                         
-                        console.log("updated q.."+e);
+                        if (typeof e!="undefined") {
+                            console.log("update q error.."+JSON.stringify(e));
+                        }
     
                     });
                     
@@ -417,7 +419,7 @@ app.post("/fetch",function(req, res){
                         {
                         "method": "POST",
                         "path": "/1/classes/Queue",
-                        "body":{tweet:results[k].title.substring(0,115) + "-" + results[k].requested}
+                        "body":{posted:false,tweet:results[k].title.substring(0,115) + "-" + results[k].requested}
                         }
                     );
                 }
