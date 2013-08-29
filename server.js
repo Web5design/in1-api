@@ -426,7 +426,7 @@ app.post("/fetch",function(req, res){
                         "path": "/1/classes/Queue",
                         "body":{
                             posted:false,
-                            tweet:results[k].title.substring(0,110) + " " + results[k].requested + "#"+((results[k].tags[0])||"tech")
+                            tweet:results[k].title.substring(0,110) + " " + results[k].requested + " #"+((results[k].tags[0])||"tech")
                             }
                         }
                     );
