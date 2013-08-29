@@ -416,7 +416,8 @@ app.post("/fetch",function(req, res){
                             "image": results[k].image,
                             "origUrl": results[k].requested,
                             "source": results[k].source,
-                            "tags": results[k].tags
+                            "tags": results[k].tags,
+                            "shares":1
                         }
                     });
                     q.push(
