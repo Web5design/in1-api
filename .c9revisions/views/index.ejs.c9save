@@ -112,3 +112,7 @@
 {"ts":1377976961196,"patch":[[{"diffs":[[0," postObj"],[-1," "],[0,",\n      "]],"start1":4906,"start2":4906,"length1":17,"length2":16}]],"length":13420,"saved":false}
 {"ts":1377977164277,"patch":[[{"diffs":[[0,"le.log('error:'+"],[-1,"e"],[1,"JSON.stringify(e)"],[0,");}\n            "]],"start1":5222,"start2":5222,"length1":33,"length2":49}]],"length":13436,"saved":false}
 {"ts":1377977284439,"patch":[[{"diffs":[[0," \"desc\":"],[-1,"\"title\":"],[0,"$(objId+"]],"start1":4729,"start2":4729,"length1":24,"length2":16}]],"length":13428,"saved":false}
+{"ts":1377977447855,"patch":[[{"diffs":[[0,"      <tbody"],[1," id=\"feedContainer\""],[0,">\n          "]],"start1":6692,"start2":6692,"length1":24,"length2":43}]],"length":13447,"saved":false}
+{"ts":1377977488039,"patch":[[{"diffs":[[0,"/tbody>\n"],[1,"                <tfoot>\n                <tr><td><ul class=\"pagination pager list-pager\" id=\"feedPager\"></ul></td></tr>\n                </tfoot>\n"],[0,"        "]],"start1":7611,"start2":7611,"length1":16,"length2":160}]],"length":13591,"saved":false}
+{"ts":1377977492274,"patch":[[{"diffs":[[0,"nation pager"],[-1," list-pager"],[0,"\" id=\"feedPa"]],"start1":7682,"start2":7682,"length1":35,"length2":24}]],"length":13580,"saved":false}
+{"ts":1377977518251,"patch":[[{"diffs":[[0,"r:'.row'});\n"],[1,"    $('#feedContainer').pageMe({perPage:6,pagerSelector:'#feedPager',childSelector:'.tr'});\n"],[0,"    //$('#le"]],"start1":5493,"start2":5493,"length1":24,"length2":116}]],"length":13672,"saved":false}

@@ -139,6 +139,7 @@ $(document).ready(function(){
     /* paging ---------------------------------------------------------------- */
     
     $('#postsContainer').pageMe({perPage:6,pagerSelector:'#postsPager',childSelector:'.row'});
+    $('#feedContainer').pageMe({perPage:6,pagerSelector:'#feedPager',childSelector:'.tr'});
     //$('#leaderList').pageMe({perPage:15,pagerSelector:'#leaderListPager',showPrevNext:true,hidePageNumbers:true});
     
     
@@ -175,7 +176,7 @@ $(document).ready(function(){
                     <th>Images</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="feedContainer">
                 <%for (var i=0;i<results.length;i++) {%>
                 <tr id="trFeed">
                     <td><%=results[i].account%><input type="hidden" name="source<%=i%>" value="<%= results[i].source %>" /></td>
@@ -186,6 +187,9 @@ $(document).ready(function(){
                 </tr>
                 <%}%>
                 </tbody>
+                <tfoot>
+                <tr><td><ul class="pagination pager" id="feedPager"></ul></td></tr>
+                </tfoot>
             </table>
             <input type=hidden name="lastId" id="lastId" value="<%=results[0].id%>">
             <button type="submit" class="btn btn-default">Save</button>  <button type="button" id="btnFeed" class="btn btn-default">Refresh Feed</button>
