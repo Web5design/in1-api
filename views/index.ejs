@@ -108,7 +108,7 @@ $(document).ready(function(){
     
     /* paging ---------------------------------------------------------------- */
     
-    $('#postsContainer').pageMe({perPage:10,pagerSelector:'#postsPager',childSelector:'.row'});
+    $('#postsContainer').pageMe({perPage:6,pagerSelector:'#postsPager',childSelector:'.row'});
     //$('#leaderList').pageMe({perPage:15,pagerSelector:'#leaderListPager',showPrevNext:true,hidePageNumbers:true});
     
     
@@ -172,7 +172,7 @@ $.fn.pageMe = function(opts){
         $('<li><a href="#" class="next_link">&raquo;</a></li>').appendTo(pager);
     }
     
-    pager.find('.page_link:first').addClass('active');
+    pager.find('.page_link:first').parent('li').addClass('active');
     pager.find('.prev_link').hide();
     if (numPages<=1) {
         pager.find('.next_link').hide();
@@ -211,15 +211,17 @@ $.fn.pageMe = function(opts){
         
         children.css('display','none').slice(startAt, endOn).css('display','block');
         
+        pager.find('li').removeClass('active');
+        
         if (page>=1) {
-            pager.find('.prev_link').show();
+            pager.find('.prev_link').show().addClass('active');
         }
         else {
             pager.find('.prev_link').hide();
         }
         
         if (page<(numPages-1)) {
-            pager.find('.next_link').show();
+            pager.find('.next_link').show().addClass('active');
         }
         else {
             pager.find('.next_link').hide();
