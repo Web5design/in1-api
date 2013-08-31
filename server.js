@@ -264,7 +264,7 @@ app.get('/harvest', function(req,res){
 	
 		var sURL = unescape(utils.fixUrl(url));
 		
-		request({url:sURL,followRedirect:true,maxRedirects:2}, function (error, response, body) {
+		request({url:sURL,followRedirect:true,maxRedirects:3}, function (error, response, body) {
 		
 			if (typeof body!="undefined") {
                 
@@ -480,10 +480,9 @@ app.post("/fetch",function(req, res){
                         
                         console.log("-------------------"+sURL);
                         
-                        var source = req.body["source"+i];
-
                         if (typeof body!="undefined") {
-                           
+                        
+                            var source = req.body["source"+i];   
                             var resolvedUri = response.request.uri;
                             var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
                             var resolved = baseUrl+""+resolvedUri.pathname;
@@ -495,7 +494,8 @@ app.post("/fetch",function(req, res){
                             var desc = metaObj.desc;
                             var tags = metaObj.tags;
                             
-                            results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,resolved:resolved});  
+                            //results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,resolved:resolved});  
+                            results.push({requested:urls[i],source:resolvedUri.hostname.replace("www",""),title:title,desc:desc,image:imgs[i],images:images,tags:tags,resolved:resolved});  
                             
                             getUrls(i+1);
                             
