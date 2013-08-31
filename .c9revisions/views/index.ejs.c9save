@@ -122,3 +122,4 @@
 {"ts":1377981735348,"patch":[[{"diffs":[[0,"nation pager"],[1," list-pager"],[0,"\" id=\"feedPa"]],"start1":7816,"start2":7816,"length1":24,"length2":35}]],"length":13725,"saved":false}
 {"ts":1377981750347,"patch":[[{"diffs":[[0," <tr><td"],[1," colspan=\"99\""],[0,"><ul cla"]],"start1":7792,"start2":7792,"length1":16,"length2":29}]],"length":13738,"saved":false}
 {"ts":1377981842646,"patch":[[{"diffs":[[0,"title:$("],[1,"\"#\"+"],[0,"objId+\"_"]],"start1":4680,"start2":4680,"length1":16,"length2":20},{"diffs":[[0," desc:$("],[1,"\"#\"+"],[0,"objId+\"_"]],"start1":4731,"start2":4731,"length1":16,"length2":20}]],"length":13746,"saved":false}
+{"ts":1377982109289,"patch":[[{"diffs":[[0,"lector:'"],[-1,"."],[0,"tr'});\n "]],"start1":5631,"start2":5631,"length1":17,"length2":16}]],"length":13745,"saved":false}
