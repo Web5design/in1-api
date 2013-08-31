@@ -163,6 +163,7 @@ app.get("/feed",function(req, res){
                 // search by hashtag
                 reqUrl = 'https://api.twitter.com/1.1/search/tweets.json?';
                 params.q = accounts[i].twitter;
+                params.result_type="mixed";
             }
             else {
                 // get by screen_name
@@ -186,7 +187,7 @@ app.get("/feed",function(req, res){
             
             request.get(reqObj, function (e, r, body) {
                 //console.log("request---------------------------------"+JSON.stringify(reqObj));
-                console.log("body---------------"+body.substring(0,200));
+                console.log("body---------------"+body.substring(0,600));
                 
                 var objs,url,mentioned;
                 
