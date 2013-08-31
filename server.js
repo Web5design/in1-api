@@ -195,6 +195,10 @@ app.get("/feed",function(req, res){
                     
                     objs = JSON.parse(body);
                     
+                    if (typeof objs.statuses!="undefined"){ // search API results contains the results array inside 'statuses' object
+                        objs = objs.statuses;
+                    }
+                    
                     for (var j=0;j<objs.length;j++) {
                         if (typeof objs[j].entities !="undefined" && objs[j].entities.urls.length>0){ // must have url
                             
