@@ -113,12 +113,15 @@ $(document).ready(function(){
         $(this).blur(function(){
             $(this).prop('contenteditable',false);
             
-            var postObj = {};
+            var postObj = {
+                "title":$(objId+"_title").text();
+                "desc":"title":$(objId+"_desc").text();
+            };
             
             $.ajax({
                 url: "/post/"+objId,
                 type: "put",
-                data: {"title":$(objId+"_title").text()},
+                data: postObj,
                 success: function (data) {
                     if (typeof data.error!="undefined") {
                         alert(data.error);
@@ -126,7 +129,7 @@ $(document).ready(function(){
                         console.log("edited");   
                     }
                 },
-                error: function (e) {console.log('error:'+e);}
+                error: function (e) {console.log('error:'+JSON.stringify(e));}
             });
         });
         
