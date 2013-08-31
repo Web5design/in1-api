@@ -494,9 +494,9 @@ app.post("/fetch",function(req, res){
             // generate snap
             if (postRequests[i].body.image.indexOf(conf.screenshots.apiUrl)===-1) {
         
-                loadShots(postRequests[i],function(e,r,b){
+                saveImage(postRequests[i],function(e,r,b){
                     
-                    console.log("snapping-------------------"+postRequests[i]);
+                    console.log("saving image-------------------"+postRequests[i]);
                     postRequests[i].body.image = r.request.uri.href;
                     generateSnap(i+1,cb);
                     
