@@ -87,7 +87,7 @@
         }
         
         children.css('display', 'none');
-        children.slice(0, perPage).css('display', 'block');
+        children.slice(0, perPage).css('display','');
         
         pager.find('li .page_link').click(function(){
             var clickedPage = $(this).html().valueOf()-1;
