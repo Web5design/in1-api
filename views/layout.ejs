@@ -117,7 +117,7 @@
             var startAt = page * perPage,
                 endOn = startAt + perPage;
             
-            children.css('display','none').slice(startAt, endOn).css('display','block');
+            children.css('display','none').slice(startAt, endOn).css('display','');
             
             pager.find('li').removeClass('active');
             pager.find('li:eq('+page+')').addClass('active');

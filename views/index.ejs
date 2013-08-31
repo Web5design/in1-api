@@ -141,7 +141,7 @@ $(document).ready(function(){
     /* paging ---------------------------------------------------------------- */
     
     $('#postsContainer').pageMe({perPage:6,pagerSelector:'#postsPager',childSelector:'.row'});
-    $('#feedContainer').pageMe({perPage:12,pagerSelector:'#feedPager',childSelector:'tr'});
+    $('#feedContainer').pageMe({perPage:10,pagerSelector:'#feedPager',childSelector:'tr'});
     //$('#leaderList').pageMe({perPage:15,pagerSelector:'#leaderListPager',showPrevNext:true,hidePageNumbers:true});
     
     
@@ -165,7 +165,7 @@ $(document).ready(function(){
     <div class="tab-content">
       <div class="tab-pane active panel-content" id="feed">
 
-        <h2>Feed</h2>
+        <h4>Latest Results from Twitter</h4>
         <% if (typeof results!="undefined" && results.length>0) {%>
         <form action="/fetch" method="POST">
             <table class="table table-striped" id="tblFeed">
@@ -201,7 +201,7 @@ $(document).ready(function(){
       </div>
       <div class="tab-pane" id="posts">
     
-        <h2>Posts</h2>
+        <h4>Posted Content</h4>
         <div id="postsContainer">
         
             <%for (var i=0;i<posts.length;i++) {%>
@@ -226,7 +226,7 @@ $(document).ready(function(){
       </div>
       <div class="tab-pane" id="sources">
     
-        <h2>Sources</h2>
+        <h4>Feed Sources</h4>
         
         <%for (var i=0;i<sources.length;i++) {%>
         <div class="row">

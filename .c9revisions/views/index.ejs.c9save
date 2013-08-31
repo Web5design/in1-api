@@ -126,3 +126,7 @@
 {"ts":1377982591773,"patch":[[{"diffs":[[0,"an=\""],[-1,"99"],[1,"5"],[0,"\"><u"]],"start1":7813,"start2":7813,"length1":10,"length2":9}]],"length":13744,"saved":false}
 {"ts":1377982602248,"patch":[[{"diffs":[[0,"            "],[1,"    "],[0,"<tr><td cols"]],"start1":7788,"start2":7788,"length1":24,"length2":28}]],"length":13748,"saved":false}
 {"ts":1377982618215,"patch":[[{"diffs":[[0,"pageMe({perPage:"],[-1,"6"],[1,"12"],[0,",pagerSelector:'"]],"start1":5579,"start2":5579,"length1":33,"length2":34}]],"length":13749,"saved":false}
+{"ts":1377982661531,"patch":[[{"diffs":[[0,"  <h"],[-1,"2>Feed</h2"],[1,"4>Latest Results from Twitter</h4"],[0,">\n  "]],"start1":6372,"start2":6372,"length1":18,"length2":41}]],"length":13772,"saved":false}
+{"ts":1377982679866,"patch":[[{"diffs":[[0,"  <h"],[-1,"2"],[1,"4"],[0,">Post"],[-1,"s</h2"],[1,"ed Content</h4"],[0,">\n  "]],"start1":8303,"start2":8303,"length1":19,"length2":28}]],"length":13781,"saved":false}
+{"ts":1377982689688,"patch":[[{"diffs":[[0,"      <h"],[-1,"2>"],[1,"4>Feed "],[0,"Sources<"]],"start1":9273,"start2":9273,"length1":18,"length2":23},{"diffs":[[0,"urces</h"],[-1,"2"],[1,"4"],[0,">\n      "]],"start1":9290,"start2":9290,"length1":17,"length2":17}]],"length":13786,"saved":false}
+{"ts":1377982768090,"patch":[[{"diffs":[[0,"erPage:1"],[-1,"2"],[1,"0"],[0,",pagerSe"]],"start1":5588,"start2":5588,"length1":17,"length2":17}]],"length":13786,"saved":false}
