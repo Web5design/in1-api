@@ -154,8 +154,7 @@ app.get("/feed",function(req, res){
         var params = 
             {    
                 include_entities:true,
-                count:tweetsToFetch,
-                trim_user:1
+                count:tweetsToFetch
             };
         
         if (i<accounts.length) {
@@ -168,6 +167,7 @@ app.get("/feed",function(req, res){
             else {
                 // get by screen_name
                 params.screen_name = accounts[i].twitter;
+                params.trim_user = 1;
             }
             
             console.log("since id....."+lastId);
