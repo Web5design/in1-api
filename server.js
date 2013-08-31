@@ -96,7 +96,7 @@ app.get("/feed",function(req, res){
     var q = req.query["q"];
     var f = req.query["format"];
     var lastId = (req.query["lastId"])||0;
-    var tweetsToFetch=10;
+    var tweetsToFetch=4;
     
     function checkUni(i){
                    
