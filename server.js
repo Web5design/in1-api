@@ -551,7 +551,7 @@ app.put("/post/:id",function(req, res){
     var p = req.body;
     var id = req.params.id;
     
-    request.put({url:'https://api.parse.com/1/classes/Posts/'+id,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+    request.put({url:'https://api.parse.com/1/classes/Post/'+id,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
         body:p}, function (e,r,b){
         console.log("wrote post to parse....."+e);
         
