@@ -482,7 +482,6 @@ app.post("/fetch",function(req, res){
                         
                         if (typeof body!="undefined") {
                         
-                            var source = req.body["source"+i];   
                             var resolvedUri = response.request.uri;
                             var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
                             var resolved = baseUrl+""+resolvedUri.pathname;
@@ -494,8 +493,10 @@ app.post("/fetch",function(req, res){
                             var desc = metaObj.desc;
                             var tags = metaObj.tags;
                             
-                            //results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,resolved:resolved});  
-                            results.push({requested:urls[i],source:resolvedUri.hostname.replace("www",""),title:title,desc:desc,image:imgs[i],images:images,tags:tags,resolved:resolved});  
+                            //var source = req.body["source"+i];
+                            var source = resolvedUri.hostname.replace("www.","")
+                            
+                            results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,resolved:resolved});  
                             
                             getUrls(i+1);
                             
@@ -539,6 +540,29 @@ app.get('/sources', function(req,res){
             //next();
             res.json({error:"no results"});
         }
+    });
+    
+});
+
+app.put("/post/:id",function(req, res){
+    
+    console.log("put /post..");
+    
+    var p = req.body;
+    var id = req.params.id;
+    
+    request.put({url:'https://api.parse.com/1/classes/Posts/'+id,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+        body:p}, function (e,r,b){
+        console.log("wrote post to parse....."+e);
+        
+        if (typeof e!="undefined") {
+            res.json({error:"no write"});
+        }
+        else {
+            var objectId = b.objectId;
+            res.json(objectId);      
+        }
+        
     });
     
 });

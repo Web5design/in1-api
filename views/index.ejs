@@ -105,6 +105,31 @@ $(document).ready(function(){
         return false;
     });
     
+     $('.editable').click(function(e){
+        
+        var objId = $(this).prop('data-id');
+        
+        $(this).prop('contenteditable',true).focus();
+        $(this).blur(function(){
+            $(this).prop('contenteditable',false);
+            
+            $.ajax({
+                url: "/post/"+objId,
+                type: "put",
+                data: {title:'foo'},
+                success: function (data) {
+                    if (typeof data.error!="undefined") {
+                        alert(data.error);
+                    } else {
+                        location.href="/"; // refresh    
+                    }
+                },
+                error: function (e) {console.log('error:'+e);}
+            });
+        });
+        
+        return false;
+    });
     
     /* paging ---------------------------------------------------------------- */
     
@@ -294,8 +319,8 @@ $.fn.pageMe = function(opts){
                     <a href="<%=posts[i].url%>"><img src="<%=posts[i].image%>" class="img-thumbnail img-responsive" width="200"></a>
                 </div>
                 <div class="col-md-10">
-                    <h4><%=posts[i].title%></h4>
-                    <%=posts[i].desc%>
+                    <h4 id="<%=posts[i].objectId%>_title" class="editable" data-id="<%=posts[i].objectId%>"><%=posts[i].title%></h4>
+                    <div id="<%=posts[i].objectId%>_desc" class="editable" data-id="<%=posts[i].objectId%>"><%=posts[i].desc%></div>
                 </div>
             </div>
             <%}%>
