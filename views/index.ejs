@@ -107,21 +107,23 @@ $(document).ready(function(){
     
      $('.editable').click(function(e){
         
-        var objId = $(this).prop('data-id');
+        var objId = $(this).data('uid');
         
         $(this).prop('contenteditable',true).focus();
         $(this).blur(function(){
             $(this).prop('contenteditable',false);
             
+            var postObj = {};
+            
             $.ajax({
                 url: "/post/"+objId,
                 type: "put",
-                data: {title:'foo'},
+                data: {"title":$(objId+"_title").text()},
                 success: function (data) {
                     if (typeof data.error!="undefined") {
                         alert(data.error);
                     } else {
-                        location.href="/"; // refresh    
+                        console.log("edited");   
                     }
                 },
                 error: function (e) {console.log('error:'+e);}
@@ -138,126 +140,6 @@ $(document).ready(function(){
     
     
 }); // end doc ready
-
-$.fn.serializeObject = function()
-{
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
-};
-
-$.fn.pageMe = function(opts){
-    var $this = this,
-        defaults = {
-            perPage: 7,
-            showPrevNext: false,
-            hidePageNumbers: false
-        },
-        settings = $.extend(defaults, opts);
-    
-    var listElement = $this;
-    var perPage = settings.perPage; 
-    var children = listElement.children();
-    var pager = $('.pager');
-    
-    if (typeof settings.childSelector!="undefined") {
-        children = listElement.find(settings.childSelector);
-    }
-    
-    if (typeof settings.pagerSelector!="undefined") {
-        pager = $(settings.pagerSelector);
-    }
-    
-    var numItems = children.size();
-    var numPages = Math.ceil(numItems/perPage);
-
-    pager.data("curr",0);
-    
-    if (settings.showPrevNext){
-        $('<li><a href="#" class="prev_link">&laquo;</a></li>').appendTo(pager);
-    }
-    
-    var curr = 0;
-    while(numPages > curr && (settings.hidePageNumbers==false)){
-        $('<li><a href="#" class="page_link">'+(curr+1)+'</a></li>').appendTo(pager);
-        curr++;
-    }
-    
-    if (settings.showPrevNext){
-        $('<li><a href="#" class="next_link">&raquo;</a></li>').appendTo(pager);
-    }
-    
-    pager.find('.page_link:first').parent('li').addClass('active');
-    pager.find('.prev_link').hide();
-    if (numPages<=1) {
-        pager.find('.next_link').hide();
-    }
-    
-    children.css('display', 'none');
-    children.slice(0, perPage).css('display', 'block');
-    
-    pager.find('li .page_link').click(function(){
-        var clickedPage = $(this).html().valueOf()-1;
-        goTo(clickedPage,perPage);
-        return false;
-    });
-    pager.find('li .prev_link').click(function(){
-        previous();
-        return false;
-    });
-    pager.find('li .next_link').click(function(){
-        next();
-        return false;
-    });
-    
-    function previous(){
-        var goToPage = parseInt(pager.data("curr")) - 1;
-        goTo(goToPage);
-    }
-     
-    function next(){
-        goToPage = parseInt(pager.data("curr")) + 1;
-        goTo(goToPage);
-    }
-    
-    function goTo(page){
-        var startAt = page * perPage,
-            endOn = startAt + perPage;
-        
-        children.css('display','none').slice(startAt, endOn).css('display','block');
-        
-        pager.find('li').removeClass('active');
-        pager.find('li:eq('+page+')').addClass('active');
-        
-        if (page>=1) {
-            pager.find('.prev_link').show();
-        }
-        else {
-            pager.find('.prev_link').hide();
-        }
-        
-        if (page<(numPages-1)) {
-            pager.find('.next_link').show();
-        }
-        else {
-            pager.find('.next_link').hide();
-        }
-        
-        pager.data("curr",page);
-        pager.attr("curr",page);
-    }
-};
-
 
 </script>
 <div class="container">
@@ -319,8 +201,8 @@ $.fn.pageMe = function(opts){
                     <a href="<%=posts[i].url%>"><img src="<%=posts[i].image%>" class="img-thumbnail img-responsive" width="200"></a>
                 </div>
                 <div class="col-md-10">
-                    <h4 id="<%=posts[i].objectId%>_title" class="editable" data-id="<%=posts[i].objectId%>"><%=posts[i].title%></h4>
-                    <div id="<%=posts[i].objectId%>_desc" class="editable" data-id="<%=posts[i].objectId%>"><%=posts[i].desc%></div>
+                    <h4 id="<%=posts[i].objectId%>_title" class="editable" data-uid="<%=posts[i].objectId%>"><%=posts[i].title%></h4>
+                    <div id="<%=posts[i].objectId%>_desc" class="editable" data-uid="<%=posts[i].objectId%>"><%=posts[i].desc%></div>
                 </div>
             </div>
             <%}%>
