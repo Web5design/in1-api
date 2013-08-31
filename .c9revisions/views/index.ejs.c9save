@@ -111,3 +111,4 @@
 {"ts":1377976956551,"patch":[[{"diffs":[[0,"ta: "],[-1,"{\"title\":$(objId+\"_title\").text()}"],[1,"postObj "],[0,",\n  "]],"start1":4903,"start2":4903,"length1":42,"length2":16}]],"length":13421,"saved":false}
 {"ts":1377976961196,"patch":[[{"diffs":[[0," postObj"],[-1," "],[0,",\n      "]],"start1":4906,"start2":4906,"length1":17,"length2":16}]],"length":13420,"saved":false}
 {"ts":1377977164277,"patch":[[{"diffs":[[0,"le.log('error:'+"],[-1,"e"],[1,"JSON.stringify(e)"],[0,");}\n            "]],"start1":5222,"start2":5222,"length1":33,"length2":49}]],"length":13436,"saved":false}
+{"ts":1377977284439,"patch":[[{"diffs":[[0," \"desc\":"],[-1,"\"title\":"],[0,"$(objId+"]],"start1":4729,"start2":4729,"length1":24,"length2":16}]],"length":13428,"saved":false}
