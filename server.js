@@ -145,20 +145,30 @@ app.get("/feed",function(req, res){
     
     function getTweets(i){
         var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
-        if (i<accounts.length) {
-            var oauth = 
+        var oauth = 
                 { consumer_key: conf.twit.consumerKey
                 , consumer_secret: conf.twit.consumerSecret
                 , token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
                 , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
             };
-            var params = 
+        var params = 
             {    
                 include_entities:true,
-                screen_name:accounts[i].twitter,
                 count:tweetsToFetch,
                 trim_user:1
-            };	
+            };
+        
+        if (i<accounts.length) {
+            
+            if (accounts[i].type=="hashtag") {
+                // search by hashtag
+                reqUrl = 'https://api.twitter.com/1.1/search/tweets.json?';
+                params.q = accounts[i].twitter;
+            }
+            else {
+                // get by screen_name
+                params.screen_name = accounts[i].twitter;
+            }
             
             console.log("since id....."+lastId);
             
