@@ -168,14 +168,13 @@ app.get("/feed",function(req, res){
                 // get by screen_name
                 params.screen_name = accounts[i].twitter;
                 params.trim_user = 1;
-            }
-            
-            console.log("since id....."+lastId);
-            
-            if (lastId>0) {
-                params.since_id=lastId; // only get latest
-                //params.max_id=lastId+20;
-                console.log("added since id.....................");
+                
+                if (lastId>0) {
+                    params.since_id=lastId; // only get latest
+                    //params.max_id=lastId+20;
+                    console.log("added since id.....................");
+                }
+                
             }
             
             reqUrl += require('querystring').stringify(params);
