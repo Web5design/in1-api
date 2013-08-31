@@ -118,6 +118,8 @@ $(document).ready(function(){
                 desc:$(objId+"_desc").text()
             };
             
+            console.log(objId);  
+            
             $.ajax({
                 url: "/post/"+objId,
                 type: "put",
