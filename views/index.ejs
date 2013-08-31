@@ -114,8 +114,8 @@ $(document).ready(function(){
             $(this).prop('contenteditable',false);
             
             var postObj = {
-                title:$(objId+"_title").text(),
-                desc:$(objId+"_desc").text()
+                title:$("#"+objId+"_title").text(),
+                desc:$("#"+objId+"_desc").text()
             };
             
             console.log(objId);  
@@ -190,7 +190,7 @@ $(document).ready(function(){
                 <%}%>
                 </tbody>
                 <tfoot>
-                <tr><td><ul class="pagination pager" id="feedPager"></ul></td></tr>
+                <tr><td colspan="99"><ul class="pagination pager list-pager" id="feedPager"></ul></td></tr>
                 </tfoot>
             </table>
             <input type=hidden name="lastId" id="lastId" value="<%=results[0].id%>">
