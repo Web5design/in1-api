@@ -256,10 +256,10 @@ $(document).ready(function(){
                 <tbody id="queueContainer">
                 <%for (var i=0;i<queue.length;i++) {%>
                 <tr id="trFeed">
-                    <td><input type="hidden" name="source<%=i%>" value="<%= queue[i].objectId %>" /></td>
+                    <td><input type="hidden" name="queue<%=i%>" value="<%= queue[i].objectId %>" /></td>
                     <td></td>
                     <td><%=queue[i].tweet%></td>
-                    <td><%=queue[i].posted%></td>
+                    <td><input type="checkbox" id="" name="<%=queue[i].objectId%>_posted" value="true" <%if(queue[i].posted){%>checked<%}%> /></td>
                     <td>-</td>
                 </tr>
                 <%}%>

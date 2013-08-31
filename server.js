@@ -399,6 +399,9 @@ app.post("/fetch",function(req, res){
     }
     */
     
+    var snaps=[];
+    var postRequests=[];
+    
     function checkUni(i){
                    
         if (i<results.length) {
@@ -420,11 +423,17 @@ app.post("/fetch",function(req, res){
             });
         }
         else {
-            // done!
+            // done with checkUni ------
             
-            var postRequests=[],q=[];
+            var q=[];
             for(var k=0; k<results.length; ++k) {
                 if (results[k].exists==="0"){
+                    
+                    // generate snaps
+                    if (results[k].image.indexOf(conf.screenshots.apiUrl)===-1) {
+                        snaps.push(results[k].image);
+                    }
+                    
                     postRequests.push({
                         "method": "POST",
                         "path": "/1/classes/Post",
@@ -432,7 +441,6 @@ app.post("/fetch",function(req, res){
                             "url": results[k].resolved,
                             "title": results[k].title,
                             "desc": results[k].desc,
-                            "images": results[k].images,
                             "image": results[k].image,
                             "origUrl": results[k].requested,
                             "source": results[k].source,
@@ -453,24 +461,58 @@ app.post("/fetch",function(req, res){
                 }
             }
         
-            request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
-                body:{requests:postRequests}}, function (e,r,b){
-                console.log("added batch to parse api...");
-                res.locals.msg={"success":"Items posted."};
+            generateSnap(0,function(){
                 
-                request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
-                    body:{requests:q}}, function (e,r,b){
-                    console.log("wrote to parse.."+e);
+                    request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                    body:{requests:postRequests}}, function (e,r,b){
+                    console.log("added batch posts to parse api...");
+                    res.locals.msg={"success":"Items posted."};
                     
-                    if (e) {
-                        res.json({error:"no write batch",status:-1});
-                    }
-                    else {
-                        res.json({status:1});      
-                    }
+                    request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                        body:{requests:q}}, function (e,r,b){
+                        console.log("wrote queue to parse.."+e);
+                        
+                        if (e) {
+                            res.json({error:"no write batch",status:-1});
+                        }
+                        else {
+                            res.json({status:1});      
+                        }
+                    });
+            
+                });        
+                
+            });
+        
+        }
+    }
+    
+    function generateSnap(i,cb){ // capture image from url
+        
+        if (i<postRequests.length) {
+    
+            // generate snap
+            if (postRequests[i].body.image.indexOf(conf.screenshots.apiUrl)===-1) {
+        
+                loadShots(postRequests[i],function(e,r,b){
+                    
+                    console.log("snapping-------------------"+postRequests[i]);
+                    postRequests[i].body.image = r.request.uri.href;
+                    generateSnap(i+1,cb);
+                    
                 });
             
-            });
+            }
+            else {
+                generateSnap(i+1,cb);
+            }
+                
+        }
+        else {
+            // done
+            
+            cb();
+            
         }
     }
     
@@ -511,6 +553,8 @@ app.post("/fetch",function(req, res){
                     });
         }
         else {
+            // done getting urls
+            
             checkUni(0);
         }
     }
