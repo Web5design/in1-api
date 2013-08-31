@@ -182,6 +182,8 @@ app.get("/feed",function(req, res){
             var reqObj;
             reqObj = {url:encodeURI(reqUrl), oauth:oauth};
             
+            console.log("url---------------"+reqUrl);
+            
             request.get(reqObj, function (e, r, body) {
                 //console.log("request---------------------------------"+JSON.stringify(reqObj));
                 console.log("body---------------"+body.substring(0,200));
