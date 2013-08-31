@@ -555,7 +555,7 @@ app.put("/post/:id",function(req, res){
         body:p}, function (e,r,b){
         console.log("wrote post to parse....."+e);
         
-        if (typeof e!="undefined") {
+        if (e) {
             res.json({error:"no write"});
         }
         else {
