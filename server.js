@@ -494,7 +494,7 @@ app.post("/fetch",function(req, res){
             // generate snap
             if (postRequests[i].body.image.indexOf(conf.screenshots.apiUrl)===-1) {
         
-                saveImage(postRequests[i],function(e,r,b){
+                saveImage(postRequests[i].body.image,function(e,r,b){
                     
                     console.log("saving image-------------------"+postRequests[i]);
                     postRequests[i].body.image = r.request.uri.href;
@@ -944,8 +944,8 @@ var loadShots = function(getUrl,cb){
     });
 };
 
-var saveImage = function(getUrl,cb){
-    request.get({url:conf.screenshots.apiUrl,json:true,qs:{imgurl:getUrl}},function(e,r,b){
+var saveImage = function(imgUrl,cb){
+    request.get({url:conf.screenshots.apiUrl,json:true,qs:{imgurl:imgUrl}},function(e,r,b){
         cb(e,r,b);
     });
 };
