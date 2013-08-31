@@ -399,10 +399,9 @@ app.post("/fetch",function(req, res){
     }
     */
     
-    var snaps=[];
     var postRequests=[];
     
-    function checkUni(i){
+    function checkExisting(i){ // determine if url has already been posted
                    
         if (i<results.length) {
         
@@ -419,22 +418,17 @@ app.post("/fetch",function(req, res){
                     results[i].exists="0";
                 }
                 
-                checkUni(i+1);
+                checkExisting(i+1);
             });
         }
         else {
-            // done with checkUni ------
+            // done with checkExisting ------
             
             var q=[];
             for(var k=0; k<results.length; ++k) {
                 if (results[k].exists==="0"){
                     
-                    // generate snaps
-                    if (results[k].image.indexOf(conf.screenshots.apiUrl)===-1) {
-                        snaps.push(results[k].image);
-                    }
-                    
-                    postRequests.push({
+                    postRequests.push({                 // create a post obj for each result
                         "method": "POST",
                         "path": "/1/classes/Post",
                         "body": {
@@ -448,7 +442,7 @@ app.post("/fetch",function(req, res){
                             "shares":1
                         }
                     });
-                    q.push(
+                    q.push(                             // create a queue obj for each result
                         {
                         "method": "POST",
                         "path": "/1/classes/Queue",
@@ -461,7 +455,7 @@ app.post("/fetch",function(req, res){
                 }
             }
         
-            generateSnap(0,function(){
+            generateSnap(0,function(){ // determine if we need to copy image from remote to CDN
                 
                     request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
                     body:{requests:postRequests}}, function (e,r,b){
@@ -492,7 +486,7 @@ app.post("/fetch",function(req, res){
         if (i<postRequests.length) {
     
             // generate snap
-            if (postRequests[i].body.image.indexOf(conf.screenshots.apiUrl)===-1) {
+            if (postRequests[i].body.image.indexOf(conf.screenshots.apiUrl)===-1) { // only copy the image if the image url doesn't contain the CDN baseurl
         
                 saveImage(postRequests[i].body.image,function(e,r,b){
                     
@@ -516,7 +510,7 @@ app.post("/fetch",function(req, res){
         }
     }
     
-    function getUrls(i){ // harvest metadata and images from each url
+    function getUrls(i){ // harvest metadata and images from each url ---------------------------------------
         
         if (i<urls.length) {
     
@@ -555,7 +549,7 @@ app.post("/fetch",function(req, res){
         else {
             // done getting urls
             
-            checkUni(0);
+           checkExisting(0);
         }
     }
     
