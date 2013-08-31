@@ -944,6 +944,12 @@ var loadShots = function(getUrl,cb){
     });
 };
 
+var saveImage = function(getUrl,cb){
+    request.get({url:conf.screenshots.apiUrl,json:true,qs:{imgurl:getUrl}},function(e,r,b){
+        cb(e,r,b);
+    });
+};
+
 function doTweet(msg,screen_name,cb){
     
     if (1===1) {
