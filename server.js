@@ -699,7 +699,7 @@ function harvestMeta(body,baseUrl) {
     
     console.log("harvest meta..");
     
-    if (typeof headMatches!="undefined" && headMatches.length>0) { // head
+    if (headMatches!==null && headMatches.length>0) { // head
         
         var head = headMatches[1].replace(/\n/g," ");
         $h = $("<form>"+head+"</form>");
