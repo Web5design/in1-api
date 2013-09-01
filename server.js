@@ -853,12 +853,20 @@ function harvestSocial(body,baseUrl){
     
         var URL = require('url');
         var tw,fb,rss,li,pin,yt,gp;
-        var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im;
-        var bodyMatches = bodyPattern.exec(body);
         var twFound = 0;
         
-        var $b;
-        var $h = $("<form>"+body+"</form>");
+        var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im;
+        var bodyMatches = bodyPattern.exec(body);
+        
+        var headPattern = /<head[^>]*>((.|[\n\r])*)<\/head>/im;
+        var headMatches = headPattern.exec(body);
+        
+        var $h,$b;
+        
+        if (headMatches.length>0) { // head
+            var head = headMatches[1].replace(/\n/g," ");
+            $h = $("<form>"+head+"</form>");
+        }
                             
         if (bodyMatches.length>0) { // body
         
@@ -891,8 +899,8 @@ function harvestSocial(body,baseUrl){
                 twFound==1;
 			});
 			
-			if (twFound===0){
-                $.each($b.find('meta[name="twitter:site"],meta[property="twitter:creator"]'),function(idx,item){
+			if (twFound===0 && typeof $h!="undefined"){
+                $.each($h.find('meta[name="twitter:site"],meta[property="twitter:creator"]'),function(idx,item){
                     tw = $(item).attr("content");
                     twFound=1;
                 });
