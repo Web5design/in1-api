@@ -453,6 +453,7 @@ app.post("/fetch",function(req, res){
                             "image": results[k].image,
                             "origUrl": results[k].requested,
                             "source": results[k].source,
+                            "sourceObj":{"__type": "Pointer","className":"Source","objectId":"oc0DFqvmgo"},
                             "tags": results[k].tags,
                             "tw": results[k].tw,
                             "shares":1
