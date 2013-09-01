@@ -793,7 +793,7 @@ function harvestMeta(body,baseUrl) {
             }
         });
         
-        $.each($b.find('a[href*="/tag"]'),function(idx,item){
+        $.each($b.find('a[href*="/tag"],a[href*="/category/"]'),function(idx,item){
             if ($(item).text().length<20){ //any tag over 20 chars is tooo long
                 tags.push($(item).text().toLowerCase());
             }
