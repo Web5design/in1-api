@@ -267,7 +267,7 @@ app.get('/harvest', function(req,res){
 	
 		var sURL = unescape(utils.fixUrl(url));
 		
-		request({url:sURL,followRedirect:true,maxRedirects:3}, function (error, response, body) {
+		request({url:sURL,followRedirect:true,maxRedirects:3,headers:{'user-agent':'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36'}}, function (error, response, body) {
 		
 			if (typeof body!="undefined") {
                 
