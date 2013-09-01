@@ -889,12 +889,17 @@ function harvestSocial(body,baseUrl){
         
         var $h,$b;
         
-        if (headMatches.length>0) { // head
+        if (headMatches!==null && headMatches.length>0) { // head
             var head = headMatches[1].replace(/\n/g," ");
             $h = $("<form>"+head+"</form>");
         }
+        else {
+            
+            return;
+            
+        }
                             
-        if (bodyMatches.length>0) { // body
+        if (bodyMatches!==null && bodyMatches.length>0) { // body
         
             //console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
         
