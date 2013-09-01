@@ -347,31 +347,39 @@ app.get('/harvestImages', function(req,res){
                 resolved = baseUrl+""+resolvedUri.pathname;   
                 
                 var metaObj = harvestMeta(body,baseUrl);
-                title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
-                icon = metaObj.icon;
-                logo = metaObj.logo;
-                image = metaObj.image; //primary image from head
                 
-                var imgsObj = harvestImages(body,baseUrl);
-                images = imgsObj.images;
-                if (typeof imgsObj.logo!="undefined") {
-                    logo = imgsObj.logo;
-                }
+                if (typeof metaObj != "undefined") {
                 
-                if (images.length===0) {
-                    // go get a screenshot
-                    console.log("getting shot.."+resolved);
-                    loadShots(resolved,function(e,r,b){
-                        //console.log("got shot.."+JSON.stringify(r));
-                        //if (r.statusCode!=500){
-                            images.push(r.request.uri.href);
-                        //}
-                        res.json({title:title,resolved:resolved,image:image,images:images,icon:icon,logo:logo});  
-                   });
+                    title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
+                    icon = metaObj.icon;
+                    logo = metaObj.logo;
+                    image = metaObj.image; //primary image from head
+                    
+                    var imgsObj = harvestImages(body,baseUrl);
+                    images = imgsObj.images;
+                    if (typeof imgsObj.logo!="undefined") {
+                        logo = imgsObj.logo;
+                    }
+                    
+                    if (images.length===0) {
+                        // go get a screenshot
+                        console.log("getting shot.."+resolved);
+                        loadShots(resolved,function(e,r,b){
+                            //console.log("got shot.."+JSON.stringify(r));
+                            //if (r.statusCode!=500){
+                                images.push(r.request.uri.href);
+                            //}
+                            res.json({title:title,resolved:resolved,image:image,images:images,icon:icon,logo:logo});  
+                       });
+                    }
+                    else {
+                        res.json({title:title,resolved:resolved,image:image,images:images,icon:icon,logo:logo});                    
+                    }
+                
                 }
                 else {
-                    res.json({title:title,resolved:resolved,image:image,images:images,icon:icon,logo:logo});                    
-                }      
+                    res.json({error:'no parseable response:'+url});
+                }
 			}
 			else {
 				res.json({error:'problem harvesting images:'+url});
@@ -792,7 +800,8 @@ function harvestMeta(body,baseUrl) {
         });
     }
     else {
-        return; // null
+        
+        return; // no head or body ! -- return null
     }
     
     var retObj = {};
@@ -821,7 +830,7 @@ function harvestImages(body,baseUrl){
     
     var $h;
                             
-        if (bodyMatches.length>0) { // body
+        if (bodyMatches!==null && bodyMatches.length>0) { // body
         
             $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
             
@@ -846,13 +855,17 @@ function harvestImages(body,baseUrl){
                     var src=$(item).attr("src");
                     if (src.indexOf('//')!=-1) { // exclude relative images
                         var w=$(item).attr("width");
-                        //var h=$(item).attr("height");
                         if (w>300) {
                             images.push(src);
                         }
                     }
                 });
             }
+        }
+        else {
+            
+            return; // no body in HTML!
+            
         }
         
         var retObj = {};
