@@ -275,6 +275,8 @@ app.get('/harvest', function(req,res){
                 var resolvedUri = response.request.uri;
                 var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
                 
+                console.log("received body---"+body.substring(0,500));
+                
                 var metaObj = harvestMeta(body,baseUrl);
                 title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
                 desc = metaObj.desc;
@@ -695,7 +697,7 @@ function harvestMeta(body,baseUrl) {
     
     console.log("harvest meta..");
     
-    if (headMatches.length>0) { // head
+    if (typeof headMatches!="undefined" && headMatches.length>0) { // head
         
         var head = headMatches[1].replace(/\n/g," ");
         $h = $("<form>"+head+"</form>");
