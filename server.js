@@ -330,6 +330,8 @@ app.get('/harvestImages', function(req,res){
             console.log("request error "+sURL+".. "+error);
 			if (typeof body!="undefined") {
                 
+                console.log("body is.."+body.substring(0,500));
+                
                 var resolvedUri = response.request.uri;
                 var baseUrl = resolvedUri.protocol+"//"+resolvedUri.hostname;
                 resolved = baseUrl+""+resolvedUri.pathname;   
