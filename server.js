@@ -7,6 +7,7 @@ var port = process.env.PORT || 4000,
     request = require('request'),
     cronJob = require('cron').CronJob;
 
+var ua = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36';
 var stati = [
         "A new #jquery social plugin that combines your social feed: http://plugins.in1.com",
         "@flowtown blog bookmarking this one: http://www.in1.com/resources/2313e2af898e8af94cd022588b4b5fb4 Love It.",
@@ -267,7 +268,7 @@ app.get('/harvest', function(req,res){
 	
 		var sURL = unescape(utils.fixUrl(url));
 		
-		request({url:sURL,followRedirect:true,maxRedirects:3,headers:{'user-agent':'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36'}}, function (error, response, body) {
+		request({url:sURL,followRedirect:true,maxRedirects:3,headers:{'user-agent':ua}}, function (error, response, body) {
 		
 			if (typeof body!="undefined") {
                 
@@ -370,7 +371,7 @@ app.get('/harvestImages', function(req,res){
 
 app.post("/fetch",function(req, res){
     
-    console.log("/fetch..");
+    console.log("/fetch................................");
     
     var URL = require('url');
     var items = req.body;
@@ -391,14 +392,6 @@ app.post("/fetch",function(req, res){
         return;
     }
     
-    /*
-    for (var item in urls) {
-        //if (items[item])
-        //urls.push(items[item]);
-        imgs.push(req.body["imgs"])
-    }
-    */
-    
     var postRequests=[];
     
     function checkExisting(i){ // determine if url has already been posted
@@ -409,7 +402,7 @@ app.post("/fetch",function(req, res){
             var whereClause = {"origUrl":results[i].requested};
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
                 
-                console.log("EXISTING-----------------------------------------------"+b.results.length);
+                console.log("EXISTING..............."+b.results.length);
                 
                 if (typeof b.results!="undefined" && b.results.length>0){
                     results[i].exists="1";
@@ -439,6 +432,7 @@ app.post("/fetch",function(req, res){
                             "origUrl": results[k].requested,
                             "source": results[k].source,
                             "tags": results[k].tags,
+                            "tw": results[k].tw,
                             "shares":1
                         }
                     });
@@ -515,7 +509,7 @@ app.post("/fetch",function(req, res){
         if (i<urls.length) {
     
                     var sURL = unescape(utils.fixUrl(urls[i]));
-                    request({url:sURL,followRedirect:true,maxRedirects:3}, function (error, response, body) {
+                    request({url:sURL,followRedirect:true,maxRedirects:3,headers:{'user-agent':ua}}, function (error, response, body) {
                         
                         console.log("-------------------"+sURL);
                         
@@ -526,16 +520,18 @@ app.post("/fetch",function(req, res){
                             var resolved = baseUrl+""+resolvedUri.pathname;
                             
                             var metaObj = harvestMeta(body,baseUrl);
+                            var socObj = harvestSocial(body,baseUrl);
                             //var images = harvestImages(body,baseUrl).images;
                             var images=[];
                             var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
                             var desc = metaObj.desc;
                             var tags = metaObj.tags;
+                            var tw = socObj.tw;
                             
                             //var source = req.body["source"+i];
                             var source = resolvedUri.hostname.replace("www.","")
                             
-                            results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,resolved:resolved});  
+                            results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,tw:tw,resolved:resolved});  
                             
                             getUrls(i+1);
                             
@@ -900,7 +896,7 @@ function harvestSocial(body,baseUrl){
 			});
 			
 			if (twFound===0 && typeof $h!="undefined"){
-                $.each($h.find('meta[name="twitter:site"],meta[property="twitter:creator"]'),function(idx,item){
+                $.each($h.find('meta[name="twitter:site"],meta[name="twitter:creator"]'),function(idx,item){
                     tw = $(item).attr("content");
                     twFound=1;
                 });
