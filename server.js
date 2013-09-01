@@ -278,24 +278,34 @@ app.get('/harvest', function(req,res){
                 console.log("received body---"+body.substring(0,500));
                 
                 var metaObj = harvestMeta(body,baseUrl);
-                title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
-                desc = metaObj.desc;
-                rss = metaObj.rss;
-                image = metaObj.image;
-                tags = metaObj.tags;
                 
-                images = harvestImages(body,baseUrl).images;
+                if (typeof metaObj!="undefined") {
                 
-                var socialObj = harvestSocial(body,baseUrl);
-                fb = socialObj.fb;
-                tw = socialObj.tw;
-                li = socialObj.li;
-                yt = socialObj.yt;
-                pin = socialObj.pin;
-                
-                resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;         
-                
-                res.json({title:title,desc:desc,resolved:resolved,images:images,image:image,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
+                    title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
+                    desc = metaObj.desc;
+                    rss = metaObj.rss;
+                    image = metaObj.image;
+                    tags = metaObj.tags;
+                    
+                    images = harvestImages(body,baseUrl).images;
+                    
+                    var socialObj = harvestSocial(body,baseUrl);
+                    fb = socialObj.fb;
+                    tw = socialObj.tw;
+                    li = socialObj.li;
+                    yt = socialObj.yt;
+                    pin = socialObj.pin;
+                    
+                    resolved = resolvedUri.protocol+"//"+resolvedUri.hostname+""+resolvedUri.pathname;         
+                    
+                    res.json({title:title,desc:desc,resolved:resolved,images:images,image:image,tags:tags,tw:tw,facebook:fb,youtube:yt,linkedin:li,rss:rss,pinterest:pin});
+                    
+                }
+                else {
+                    
+                    res.json({error:'no parseable body was contained in the response:'+url});
+                    
+                }
 			}
 			else {
 				res.json({error:'problem harvesting:'+url});
@@ -780,6 +790,9 @@ function harvestMeta(body,baseUrl) {
             var rssUrl = $(item).attr("href");
             rss = rssUrl;
         });
+    }
+    else {
+        return; // null
     }
     
     var retObj = {};
