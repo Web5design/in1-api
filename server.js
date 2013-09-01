@@ -855,17 +855,19 @@ function harvestSocial(body,baseUrl){
         var tw,fb,rss,li,pin,yt,gp;
         var bodyPattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im;
         var bodyMatches = bodyPattern.exec(body);
+        var twFound = 0;
         
-        var $h;
+        var $b;
+        var $h = $("<form>"+body+"</form>");
                             
         if (bodyMatches.length>0) { // body
         
             //console.log("body--------------------------------"+bodyMatches[1].substring(0,500));
         
-            $h = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
+            $b = $("<form>"+bodyMatches[1].replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")+"</form>");
             
             // find social usernames
-			$.each($h.find('a[href*="twitter.com"]:not(a[href*="status"],a[href*="share"])'),function(idx,item){
+			$.each($b.find('a[href*="twitter.com"]:not(a[href*="status"],a[href*="share"])'),function(idx,item){
                 
                 console.log("twitter found......");  
                 
@@ -885,9 +887,18 @@ function harvestSocial(body,baseUrl){
 					tw = "in1_";
 				}
                 tw = "@"+tw.replace("/","");
+                
+                twFound==1;
 			});
 			
-			$.each($h.find('a[href*="facebook.com/"]:not(a[href*="developers"]):lt(1)'),function(idx,item){
+			if (twFound===0){
+                $.each($b.find('meta[name="twitter:site"],meta[property="twitter:creator"]'),function(idx,item){
+                    tw = $(item).attr("content");
+                    twFound=1;
+                });
+			}
+			
+			$.each($b.find('a[href*="facebook.com/"]:not(a[href*="developers"]):lt(1)'),function(idx,item){
                 var fbPagesUrl = $(item).attr("href");
                 fbPagesUrl = URL.parse(fbPagesUrl);
                 fb = fbPagesUrl.pathname;
@@ -895,24 +906,24 @@ function harvestSocial(body,baseUrl){
                 fb = fb.replace("/","");
             });
 			
-			$.each($h.find('a[href*="linkedin.com/"]:lt(1)'),function(idx,item){
+			$.each($b.find('a[href*="linkedin.com/"]:lt(1)'),function(idx,item){
                 var liUrl = $(item).attr("href");
                 liUrl = URL.parse(liUrl);
                 li = liUrl.pathname;
             });
 
-            $.each($h.find('a[href*="feeds.feedburner.com"]:lt(1),a:contains("rss")'),function(idx,item){
+            $.each($b.find('a[href*="feeds.feedburner.com"]:lt(1),a:contains("rss")'),function(idx,item){
                 var rssUrl = $(item).attr("href");
                 rss = rssUrl;
             });
 
-			$.each($h.find('a[href*="pinterest.com/"]:not([href*="pin/create"])'),function(idx,item){
+			$.each($b.find('a[href*="pinterest.com/"]:not([href*="pin/create"])'),function(idx,item){
                 var pinUrl = $(item).attr("href");
                 pinUrl = URL.parse(pinUrl);
                 pin = pinUrl.pathname;
             });
 			
-			$.each($h.find('a[href*="youtube.com/user/"]'),function(idx,item){
+			$.each($b.find('a[href*="youtube.com/user/"]'),function(idx,item){
                 var ytUrl = $(item).attr("href");
                 ytUrl = URL.parse(ytUrl);
                 yt = ytUrl.pathname;
