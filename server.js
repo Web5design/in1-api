@@ -531,7 +531,7 @@ app.post("/fetch",function(req, res){
         if (i<urls.length) {
     
                     var sURL = unescape(utils.fixUrl(urls[i]));
-                    request({url:sURL,followRedirect:true,maxRedirects:3,headers:{'user-agent':ua}}, function (error, response, body) {
+                    request({url:sURL,followRedirect:true,maxRedirects:3}, function (error, response, body) {
                         
                         console.log("-------------------"+sURL);
                         
@@ -544,16 +544,22 @@ app.post("/fetch",function(req, res){
                             var metaObj = harvestMeta(body,baseUrl);
                             var socObj = harvestSocial(body,baseUrl);
                             //var images = harvestImages(body,baseUrl).images;
-                            var images=[];
-                            var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
-                            var desc = metaObj.desc;
-                            var tags = metaObj.tags;
-                            var tw = socObj.tw;
                             
-                            //var source = req.body["source"+i];
-                            var source = resolvedUri.hostname.replace("www.","")
+                            if (typeof metaObj !== "undefined") {
                             
-                            results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,tw:tw,resolved:resolved});  
+                                var images=[];
+                                var title = metaObj.title.replace(/ *\[[^)]*\] */g,"");
+                                var desc = metaObj.desc;
+                                var tags = metaObj.tags;
+                                var tw = socObj.tw;
+    
+                                
+                                //var source = req.body["source"+i];
+                                var source = resolvedUri.hostname.replace("www.","")
+                                
+                                results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,tw:tw,resolved:resolved});  
+                            
+                            }
                             
                             getUrls(i+1);
                             
