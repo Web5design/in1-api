@@ -506,7 +506,7 @@ app.post("/fetch",function(req, res){
         
                 saveImage(postRequests[i].body.image,function(e,r,b){
                     
-                    console.log("saving image-------------------"+postRequests[i]);
+                    console.log("saving image-------------------"+postRequests[i].body.image);
                     postRequests[i].body.image = r.request.uri.href;
                     generateSnap(i+1,cb);
                     
@@ -514,12 +514,17 @@ app.post("/fetch",function(req, res){
             
             }
             else {
+                
+                console.log("no image save required..");
+                
                 generateSnap(i+1,cb);
             }
                 
         }
         else {
             // done
+            
+            console.log("done all image saves..");
             
             cb();
             
