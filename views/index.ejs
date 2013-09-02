@@ -216,8 +216,8 @@ $(document).ready(function(){
                 <tbody id="feedContainer">
                 <%for (var i=0;i<results.length;i++) {%>
                 <tr id="trFeed">
-                    <td><%=results[i].account%><input type="checkbox" name="uid" value="<%= results[i].id %>" /><input type="hidden" name="source<%= results[i].id %>" value="<%= results[i].sourceObj %>" /></td>
-                    <td><%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>x<%}else{%><input type="hidden" name="url<%= results[i].id %>" id="url<%= results[i].id %>" value="<%=results[i].url%>" /><%}%></td>
+                    <td><%=results[i].account%><input type="hidden" name="source<%= results[i].id %>" value="<%= results[i].sourceObj %>" /></td>
+                    <td><%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>x<%}else{%><input type="checkbox" name="uid" value="<%= results[i].id %>" /><input type="hidden" name="url<%= results[i].id %>" id="url<%= results[i].id %>" value="<%=results[i].url%>" /><%}%></td>
                     <td><%=results[i].url%></td>
                     <td><%=results[i].text%></td>
                     <td>
