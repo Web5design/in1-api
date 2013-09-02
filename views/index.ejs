@@ -45,9 +45,10 @@ $(document).ready(function(){
                 }
             
                 $('#carousel'+id).carousel({
-                	interval:false,
-                	slide-to:0
+                	interval:false
                 });
+                
+                $('#carousel'+id).carousel(0);
                 
                 $('#carousel-img'+id).html($('.item.active').find('img').attr('src'));
                 
