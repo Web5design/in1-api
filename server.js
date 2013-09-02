@@ -413,9 +413,8 @@ app.post("/fetch",function(req, res){
     }
     
     console.log(JSON.stringify(req.body));
-    //console.log("selected images---"+imgUrls);
-
-    if (uids.length===0) {
+    
+    if (typeof uids=="undefined" || uids.length===0) {
         res.json({error:'nothing selected to save'});
         return;
     }
@@ -497,7 +496,7 @@ app.post("/fetch",function(req, res){
                         }
                     });
             
-                });        
+                }); 
                 
             });
         
@@ -570,7 +569,7 @@ app.post("/fetch",function(req, res){
                                 var source = resolvedUri.hostname.replace("www.","");
                                 var sourceObj = req.body["source"+i];
                                 
-                                results.push({requested:urls[i],source:source,sourceObj:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,tw:tw,resolved:resolved});  
+                                results.push({requested:urls[i],source:source,sourceObj:sourceObj,title:title,desc:desc,image:imgs[i],images:images,tags:tags,tw:tw,resolved:resolved});  
                             
                             }
                             
