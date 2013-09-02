@@ -5,8 +5,15 @@ $(document).ready(function(){
     
         var thisUrl = $(this).data("url");
         var id = $(this).data("id");
-        var imageContainer = $(this).next('.imagePreview');
-        imageContainer.html("...");
+        var imgContainer = $(this).prev('.imagePreview');
+        imgContainer.html("...");
+        
+        //<div class="item" data-slide-number="0">
+        //    <img class="img-rounded img-responsive" src="http://lorempixel.com/120/100"  width="150">
+        //</div>
+        
+        var imgDiv = '<div class="item"></div>';
+        
         $.ajax({
             url: "/harvestImages?url="+thisUrl,
             type: "get",
@@ -16,10 +23,11 @@ $(document).ready(function(){
                     alert(data.error);  
                 }
                 if (data.image) {
-                    $('<input type="checkbox" name="imgs" value="'+data.image+'"><img src="'+data.image+'" class="img-thumbnail img-responsive" width="150" title="meta image">').appendTo(imageContainer);
+                    $('<img src="'+data.image+'" class="img-thumbnail img-responsive" width="150" title="meta image">').attr("data-slide-number",0).appendTo(imgDiv);
+                    imgDiv.appendTo(imgContainer);
                 }
                 if (data.images && data.images.length>0) {
-                    $('<input type="checkbox" name="imgs" value="'+data.images[0]+'"><img src="'+data.images[0]+'" class="img-thumbnail img-responsive" width="150" title="first image">').appendTo(imageContainer);
+                    $('<img src="'+data.images[0]+'" class="img-thumbnail img-responsive" width="150" title="first image">').appendTo(imgContainer);
                 }
             },
             error: function (e) {console.log('error:'+e);}
@@ -180,7 +188,7 @@ $(document).ready(function(){
                 <tbody id="feedContainer">
                 <%for (var i=0;i<results.length;i++) {%>
                 <tr id="trFeed">
-                    <td><%=results[i].account%><input type="hidden" name="uid" value="<%= results[i].id %>" /><input type="hidden" name="source<%= results[i].id %>" value="000" /><input type="hidden" name="image<%= results[i].id %>" value="" /></td>
+                    <td><%=results[i].account%><input type="hidden" name="uid" value="<%= results[i].id %>" /><input type="hidden" name="source<%= results[i].id %>" value="<%= results[i].sourceObj %>" /><input type="hidden" name="image<%= results[i].id %>" value="" /></td>
                     <td><%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>x<%}else{%><input type="checkbox" name="url<%= results[i].id %>" id="url<%= results[i].id %>" value="<%=results[i].url%>" /><%}%></td>
                     <td><%=results[i].url%></td>
                     <td><%=results[i].text%></td>
@@ -191,16 +199,16 @@ $(document).ready(function(){
                     <div id="myCarousel" class="carousel slide">
                         <div class="carousel-inner">
                             <div class="active item" data-slide-number="0">
-                                <img class="img-rounded img-responsive" src="<%=results[i].image%>">
+                                <img class="img-rounded img-responsive" src="<%=results[i].image%>" width="150">
                             </div>
                     </div>
                       
                     <%}else{%>
                      
                     <div id="myCarousel" class="carousel slide">
-                        <div class="carousel-inner">
+                        <div class="carousel-inner imagePreview">
                             <div class="active item" data-slide-number="0">
-                                <img class="img-rounded img-responsive" src="http://lorempixel.com/120/100">
+                                <img class="img-rounded img-responsive" src="http://lorempixel.com/120/100"  width="150">
                             </div>
                         </div>
                     </div>

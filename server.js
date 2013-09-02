@@ -92,7 +92,7 @@ app.get("/",function(req, res){
 app.get("/feed",function(req, res){
    
     var results = [];
-    var accounts = [];
+    var sources = [];
     
     var q = req.query["q"];
     var f = req.query["format"];
@@ -162,17 +162,17 @@ app.get("/feed",function(req, res){
                 count:tweetsToFetch
             };
         
-        if (i<accounts.length) {
+        if (i<sources.length) {
             
-            if (accounts[i].type=="hashtag") {
+            if (sources[i].type=="hashtag") {
                 // search by hashtag
                 reqUrl = 'https://api.twitter.com/1.1/search/tweets.json?';
-                params.q = accounts[i].twitter;
+                params.q = sources[i].twitter;
                 params.result_type="mixed";
             }
             else {
                 // get by screen_name
-                params.screen_name = accounts[i].twitter;
+                params.screen_name = sources[i].twitter;
                 params.trim_user = 1;
             }
             
@@ -212,7 +212,7 @@ app.get("/feed",function(req, res){
                                 mentioned = objs[j].entities.user_mentions[0].screen_name;
                             }
                             
-                            results.push({account:accounts[i].twitter,source:accounts[i].name,url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count,id:objs[j].id});   
+                            results.push({account:sources[i].twitter,source:sources[i].name,sourceObj:sources[i].objectId,url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count,id:objs[j].id});   
                             
                         }
                     }
@@ -236,9 +236,9 @@ app.get("/feed",function(req, res){
         if (b.results) {
             
             //var accounts = ["thenextweb","medium","mashable","techcrunch","sixrevisions","noupemag","geekwire"];
-            accounts = b.results;
+            sources = b.results;
             
-            console.log(JSON.stringify(accounts));
+            console.log(JSON.stringify(sources));
             
             setTimeout(getTweets(0),5000);
         }
