@@ -1,5 +1,7 @@
 <script>
 $(document).ready(function(){
+    
+    
 
     $('.loadImage').click(function(){
     
@@ -12,23 +14,42 @@ $(document).ready(function(){
         //    <img class="img-rounded img-responsive" src="http://lorempixel.com/120/100"  width="150">
         //</div>
         
-        var imgDiv = '<div class="item"></div>';
-        
         $.ajax({
             url: "/harvestImages?url="+thisUrl,
             type: "get",
             success: function (data) {
-                imageContainer.empty();
+                imgContainer.empty();
                 if (typeof data.error!="undefined") {
                     alert(data.error);  
                 }
                 if (data.image) {
+                     var imgDiv = '<div class="item"></div>';
                     $('<img src="'+data.image+'" class="img-thumbnail img-responsive" width="150" title="meta image">').attr("data-slide-number",0).appendTo(imgDiv);
                     imgDiv.appendTo(imgContainer);
+                    imgDiv.addClass("active");
                 }
                 if (data.images && data.images.length>0) {
-                    $('<img src="'+data.images[0]+'" class="img-thumbnail img-responsive" width="150" title="first image">').appendTo(imgContainer);
+                    for (i in data.images) {
+                        var imgDiv = '<div class="item"></div>';
+                        $('<img src="'+data.images[i]+'" class="img-thumbnail img-responsive" width="150" title="first image">').attr("data-slide-number",i).appendTo(imgDiv);
+                        imgDiv.appendTo(imgContainer);
+                    }
                 }
+                
+                
+                
+                $('.carousel').carousel({
+            	interval: 4000
+                });
+                
+                $('#carousel-img').html($('.item.active').find('img').attr('src'));
+                
+                // When the carousel slides, auto update the selected img url
+                $('.carousel').on('slid', function (e) {
+                  var currSlide = $('.item.active');
+                  $('#carousel-img').html(currSlide.find('img').attr('src'));
+                });
+                
             },
             error: function (e) {console.log('error:'+e);}
         });
@@ -207,9 +228,7 @@ $(document).ready(function(){
                      
                     <div id="myCarousel" class="carousel slide">
                         <div class="carousel-inner imagePreview">
-                            <div class="active item" data-slide-number="0">
-                                <img class="img-rounded img-responsive" src="http://lorempixel.com/120/100"  width="150">
-                            </div>
+                           
                         </div>
                     </div>
                       
