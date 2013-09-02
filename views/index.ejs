@@ -306,26 +306,20 @@ $(document).ready(function(){
             <table class="table table-striped table-bordered" id="tblFeed">
                 <thead>
                 <tr>
-                    <th>Source</th>
-                    <th></th>
                     <th>Tweet</th>
                     <th>Posted</th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody id="queueContainer">
                 <%for (var i=0;i<queue.length;i++) {%>
                 <tr id="trFeed">
-                    <td><input type="hidden" name="queue<%=i%>" value="<%= queue[i].objectId %>" /></td>
-                    <td><input type="checkbox" name="queue<%=i%>" value="<%= queue[i].id %>" /></td>
-                    <td><%=queue[i].tweet%></td>
+                    <td><input type="hidden" name="queue<%=i%>" value="<%= queue[i].objectId %>" /><%=queue[i].tweet%></td>
                     <td><input type="checkbox" id="" name="<%=queue[i].objectId%>_posted" value="true" <%if(queue[i].posted){%>checked<%}%> /></td>
-                    <td>-</td>
                 </tr>
                 <%}%>
                 </tbody>
                 <tfoot>
-                    <tr><td colspan="5"><ul class="pagination pager list-pager" id="queuePager"></ul></td></tr>
+                    <tr><td colspan="2"><ul class="pagination pager list-pager" id="queuePager"></ul></td></tr>
                 </tfoot>
             </table>
             <button type="submit" class="btn btn-default">Save</button>
