@@ -481,7 +481,7 @@ app.post("/fetch",function(req, res){
                 
                 request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
                     body:{requests:postRequests}}, function (e,r,b){
-                    console.log("added batch posts to parse api..."+e+postRequests.length);
+                    console.log("added batch posts to parse api..."+JSON.stringify(b));
                     
                     res.locals.msg={"success":"Items posted."};
                     
