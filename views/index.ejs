@@ -1,3 +1,12 @@
+<style>
+    .carousel-controls-mini > a {
+	    border:1px solid #eee;
+  	    width:20px;
+        display:block;
+        float:left;
+        text-align:center;
+    }
+</style>
 <script>
 $(document).ready(function(){
     
@@ -39,15 +48,15 @@ $(document).ready(function(){
                 
                 
                 $('#carousel'+id).carousel({
-            	interval: 4000
+                	interval:false
                 });
                 
-                $('#carousel-img').html($('.item.active').find('img').attr('src'));
+                $('#carousel-img'+id).html($('.item.active').find('img').attr('src'));
                 
                 // When the carousel slides, auto update the selected img url
                 $('#carousel'+id).on('slid', function (e) {
                   var currSlide = $('.item.active');
-                  $('#carousel-img').html(currSlide.find('img').attr('src'));
+                  $('#carousel-img'+id).html(currSlide.find('img').attr('src'));
                 });
                 
             },
@@ -217,7 +226,7 @@ $(document).ready(function(){
                     <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>
                       <!--<img src="<%=results[i].image%>" width="150" class="img-thumbnail" />-->
                       
-                    <div id="carousel<%= results[i].id %>" class="carousel slide">
+                    <div id="carousel<%= results[i].id %>" class="carousel">
                         <div class="carousel-inner">
                             <div class="active item" data-slide-number="0">
                                 <img class="img-rounded img-responsive" src="<%=results[i].image%>" width="150">
@@ -226,10 +235,11 @@ $(document).ready(function(){
                       
                     <%}else{%>
                      
-                    <div id="carousel<%= results[i].id %>" class="carousel slide">
+                    <div id="carousel<%= results[i].id %>" class="carousel">
                         <div class="carousel-inner imagePreview">
                            
                         </div>
+                        <div id="carousel-img<%= results[i].id %>"></div>
                     </div>
                       
                     <%}%>
@@ -237,7 +247,7 @@ $(document).ready(function(){
                     <!-- carousel nav -->
                     <div class="carousel-controls-mini">
                      <a href="#myCarousel" data-slide="prev">‹</a><a href="#myCarousel" data-slide="next">›</a>
-                     <a href="#" class="loadImage" data-id="<%= results[i].id %>" data-url="<%=results[i].url%>">..</a>
+                     <a href="#" class="loadImage" data-id="<%= results[i].id %>" data-url="<%=results[i].url%>"><span class=".glyphicon .glyphicon-refresh"></span></a>
                     </div>
                     
                     </td>
