@@ -38,14 +38,14 @@ $(document).ready(function(){
                 
                 
                 
-                $('.carousel').carousel({
+                $('#carousel'+id).carousel({
             	interval: 4000
                 });
                 
                 $('#carousel-img').html($('.item.active').find('img').attr('src'));
                 
                 // When the carousel slides, auto update the selected img url
-                $('.carousel').on('slid', function (e) {
+                $('#carousel'+id).on('slid', function (e) {
                   var currSlide = $('.item.active');
                   $('#carousel-img').html(currSlide.find('img').attr('src'));
                 });
@@ -217,7 +217,7 @@ $(document).ready(function(){
                     <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>
                       <!--<img src="<%=results[i].image%>" width="150" class="img-thumbnail" />-->
                       
-                    <div id="myCarousel" class="carousel slide">
+                    <div id="carousel<%= results[i].id %>" class="carousel slide">
                         <div class="carousel-inner">
                             <div class="active item" data-slide-number="0">
                                 <img class="img-rounded img-responsive" src="<%=results[i].image%>" width="150">
@@ -226,7 +226,7 @@ $(document).ready(function(){
                       
                     <%}else{%>
                      
-                    <div id="myCarousel" class="carousel slide">
+                    <div id="carousel<%= results[i].id %>" class="carousel slide">
                         <div class="carousel-inner imagePreview">
                            
                         </div>
