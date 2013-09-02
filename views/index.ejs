@@ -7,7 +7,7 @@ $(document).ready(function(){
     
         var thisUrl = $(this).data("url");
         var id = $(this).data("id");
-        var imgContainer = $(this).prev('.imagePreview');
+        var imgContainer = $(this).parent().parent().find('.imagePreview');
         imgContainer.html("...");
         
         //<div class="item" data-slide-number="0">
