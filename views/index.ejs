@@ -35,7 +35,6 @@ $(document).ready(function(){
                     var imgDiv = $('<div class="item"></div>');
                     $('<img src="'+data.image+'" class="img-thumbnail img-responsive" width="150" title="meta image">').attr("data-slide-number",0).appendTo(imgDiv);
                     imgDiv.appendTo(imgContainer);
-                    imgDiv.addClass("active");
                 }
                 if (data.images && data.images.length>0) {
                     for (i in data.images) {
@@ -246,8 +245,10 @@ $(document).ready(function(){
                     
                     <!-- carousel nav -->
                     <div class="carousel-controls-mini">
-                     <a href="#myCarousel" data-slide="prev">‹</a><a href="#myCarousel" data-slide="next">›</a>
-                     <a href="#" class="loadImage" data-id="<%= results[i].id %>" data-url="<%=results[i].url%>"><span class=".glyphicon .glyphicon-refresh"></span></a>
+                     <a href="#carousel<%= results[i].id %>" data-slide="prev">‹</a><a href="#carousel<%= results[i].id %>" data-slide="next">›</a>
+                     <a href="#" class="loadImage" data-id="<%= results[i].id %>" data-url="<%=results[i].url%>">
+                     <span class="glyphicon glyphicon-refresh"></span>
+                     </a>
                     </div>
                     
                     </td>
