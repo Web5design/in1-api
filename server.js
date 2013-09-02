@@ -479,9 +479,10 @@ app.post("/fetch",function(req, res){
         
             generateSnap(0,function(){ // determine if we need to copy image from remote to CDN
                 
-                    request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
                     body:{requests:postRequests}}, function (e,r,b){
-                    console.log("added batch posts to parse api...");
+                    console.log("added batch posts to parse api..."+e+postRequests.length);
+                    
                     res.locals.msg={"success":"Items posted."};
                     
                     request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
