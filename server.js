@@ -408,8 +408,8 @@ app.post("/fetch",function(req, res){
     }
     
     for (var i in uids) {
-        urls.push("url"+uids[i]);
-        imgs.push("img-container"+uids[i]);
+        urls.push(req.body["url"+uids[i]]);
+        imgs.push(req.body["img-container"+uids[i]]);
     }
     
     console.log(JSON.stringify(req.body));
