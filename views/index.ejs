@@ -317,7 +317,7 @@ $(document).ready(function(){
                 <%for (var i=0;i<queue.length;i++) {%>
                 <tr id="trFeed">
                     <td><input type="hidden" name="queue<%=i%>" value="<%= queue[i].objectId %>" /></td>
-                    <td></td>
+                    <td><input type="checkbox" name="queue<%=i%>" value="<%= queue[i].id %>" /></td>
                     <td><%=queue[i].tweet%></td>
                     <td><input type="checkbox" id="" name="<%=queue[i].objectId%>_posted" value="true" <%if(queue[i].posted){%>checked<%}%> /></td>
                     <td>-</td>
