@@ -49,12 +49,12 @@ $(document).ready(function(){
                 });
                 
                 imgContainer.find('.item:first-child').addClass("active");
-                $('#carousel-img'+id).html($('.item.active').find('img').attr('src'));
+                $('#carousel-img'+id).val(imgContainer.find('.item.active img').attr('src'));
                 
                 // When the carousel slides, auto update the selected img url
                 $('#carousel'+id).on('slid', function (e) {
                   var currSlide = $(this).find('.item.active');
-                  $('#carousel-img'+id).html(currSlide.find('img').attr('src'));
+                  $('#carousel-img'+id).val(currSlide.find('img').attr('src'));
                 });
                 
             },
@@ -237,7 +237,7 @@ $(document).ready(function(){
                         <div class="carousel-inner imagePreview">
                            
                         </div>
-                        <div id="carousel-img<%= results[i].id %>"></div>
+                        <input type="hidden" id="carousel-img<%= results[i].id %>" />
                     </div>
                       
                     <%}%>
