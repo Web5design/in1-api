@@ -397,20 +397,26 @@ app.post("/fetch",function(req, res){
     
     var URL = require('url');
     var items = req.body;
-    var urls = req.body["urls"];
-    var imgs = req.body["imgs"];
+    var urls = [];
+    var imgs = [];
     var results = [];
+    
+    var uids = req.body["uid"];
+    
+    if( typeof uids === 'string' ) {
+        uids = [uids];
+    }
+    
+    for (var i in uids) {
+        urls.push("url"+uids[i]);
+        imgs.push("img-container"+uids[i]);
+    }
     
     console.log(JSON.stringify(req.body));
     //console.log("selected images---"+imgUrls);
 
-    if( typeof urls === 'string' ) {
-        urls = [urls];
-        imgs = [imgs];
-    }
-    
-    if (urls.length!=imgs.length) {
-        res.json({error:'select an image for each item'});
+    if (uids.length===0) {
+        res.json({error:'nothing selected to save'});
         return;
     }
     
@@ -453,7 +459,7 @@ app.post("/fetch",function(req, res){
                             "image": results[k].image,
                             "origUrl": results[k].requested,
                             "source": results[k].source,
-                            "sourceObj":{"__type": "Pointer","className":"Source","objectId":"oc0DFqvmgo"},
+                            "sourceObj":{"__type": "Pointer","className":"Source","objectId":results[k].sourceObj},
                             "tags": results[k].tags,
                             "tw": results[k].tw,
                             "shares":1
@@ -561,9 +567,10 @@ app.post("/fetch",function(req, res){
     
                                 
                                 //var source = req.body["source"+i];
-                                var source = resolvedUri.hostname.replace("www.","")
+                                var source = resolvedUri.hostname.replace("www.","");
+                                var sourceObj = req.body["source"+i];
                                 
-                                results.push({requested:urls[i],source:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,tw:tw,resolved:resolved});  
+                                results.push({requested:urls[i],source:source,sourceObj:source,title:title,desc:desc,image:imgs[i],images:images,tags:tags,tw:tw,resolved:resolved});  
                             
                             }
                             
