@@ -48,8 +48,7 @@ $(document).ready(function(){
                 	interval:false
                 });
                 
-                $('#carousel'+id).carousel(0);
-                
+                imgContainer.find('.item:first-child').addClass("active");
                 $('#carousel-img'+id).html($('.item.active').find('img').attr('src'));
                 
                 // When the carousel slides, auto update the selected img url

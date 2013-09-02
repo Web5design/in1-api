@@ -856,7 +856,7 @@ function harvestImages(body,baseUrl){
             if (imgs.length>0){
                 $.each(imgs,function(idx,item){
                     var src=$(item).attr("src").replace("\t","");
-                    if (src.indexOf('//')!=-1) { // exclude relative images
+                    if (src.indexOf('//')!=-1 || src.indexOf('?')!=-1) { // exclude relative images && images with '?' in path
                         images.push(src);
                     }
                 });
