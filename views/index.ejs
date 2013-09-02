@@ -3,8 +3,8 @@ $(document).ready(function(){
 
     $('.loadImage').click(function(){
     
-        var thisUrl = $(this).attr("data-url");
-        var idx = $(this).attr("data-idx");
+        var thisUrl = $(this).data("url");
+        var id = $(this).data("id");
         var imageContainer = $(this).next('.imagePreview');
         imageContainer.html("...");
         $.ajax({
@@ -180,11 +180,40 @@ $(document).ready(function(){
                 <tbody id="feedContainer">
                 <%for (var i=0;i<results.length;i++) {%>
                 <tr id="trFeed">
-                    <td><%=results[i].account%><input type="hidden" name="source<%=i%>" value="<%= results[i].source %>" /></td>
-                    <td><%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>x<%}else{%><input type="checkbox" id="item<%=i%>" name="urls" value="<%=results[i].url%>" /><%}%></td>
+                    <td><%=results[i].account%><input type="hidden" name="uid" value="<%= results[i].id %>" /><input type="hidden" name="source<%= results[i].id %>" value="<%= results[i].sourceObj.objectId %>" /><input type="hidden" name="image<%= results[i].id %>" value="" /></td>
+                    <td><%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>x<%}else{%><input type="checkbox" name="url<%= results[i].id %>" id="url<%= results[i].id %>" value="<%=results[i].url%>" /><%}%></td>
                     <td><%=results[i].url%></td>
                     <td><%=results[i].text%></td>
-                    <td><%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%><img src="<%=results[i].image%>" width="150" class="img-thumbnail" /><%}else{%><a href="#" class="loadImage" data-idx="<%=i%>" data-url="<%=results[i].url%>">image</a><div class="imagePreview"></div><%}%></td>
+                    <td>
+                    <%if(typeof results[i].exists!="undefined" && results[i].exists==="1"){%>
+                      <!--<img src="<%=results[i].image%>" width="150" class="img-thumbnail" />-->
+                      
+                    <div id="myCarousel" class="carousel slide">
+                        <div class="carousel-inner">
+                            <div class="active item" data-slide-number="0">
+                                <img class="img-rounded img-responsive" src="<%=results[i].image%>">
+                            </div>
+                    </div>
+                      
+                    <%}else{%>
+                     
+                    <div id="myCarousel" class="carousel slide">
+                        <div class="carousel-inner">
+                            <div class="active item" data-slide-number="0">
+                                <img class="img-rounded img-responsive" src="http://lorempixel.com/120/100">
+                            </div>
+                        </div>
+                    </div>
+                      
+                    <%}%>
+                    
+                    <!-- carousel nav -->
+                    <div class="carousel-controls-mini">
+                     <a href="#myCarousel" data-slide="prev">‹</a><a href="#myCarousel" data-slide="next">›</a>
+                     <a href="#" class="loadImage" data-id="<%= results[i].id %>" data-url="<%=results[i].url%>">..</a>
+                    </div>
+                    
+                    </td>
                 </tr>
                 <%}%>
                 </tbody>
