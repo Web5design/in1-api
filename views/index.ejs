@@ -268,6 +268,7 @@ $(document).ready(function(){
                 <div class="col-md-10">
                     <h4 id="<%=posts[i].objectId%>_title" class="editable" data-uid="<%=posts[i].objectId%>"><%=posts[i].title%></h4>
                     <div id="<%=posts[i].objectId%>_desc" class="editable" data-uid="<%=posts[i].objectId%>"><%=posts[i].desc%></div>
+                    <input class="form-control" id="<%=posts[i].objectId%>_tags" data-uid="<%=posts[i].objectId%>" value="<%=posts[i].tags%>" />
                 </div>
             </div>
             <%}%>
