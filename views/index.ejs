@@ -23,14 +23,14 @@ $(document).ready(function(){
                     alert(data.error);  
                 }
                 if (data.image) {
-                     var imgDiv = '<div class="item"></div>';
+                    var imgDiv = $('<div class="item"></div>');
                     $('<img src="'+data.image+'" class="img-thumbnail img-responsive" width="150" title="meta image">').attr("data-slide-number",0).appendTo(imgDiv);
                     imgDiv.appendTo(imgContainer);
                     imgDiv.addClass("active");
                 }
                 if (data.images && data.images.length>0) {
                     for (i in data.images) {
-                        var imgDiv = '<div class="item"></div>';
+                        var imgDiv = $('<div class="item"></div>');
                         $('<img src="'+data.images[i]+'" class="img-thumbnail img-responsive" width="150" title="first image">').attr("data-slide-number",i).appendTo(imgDiv);
                         imgDiv.appendTo(imgContainer);
                     }
