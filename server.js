@@ -399,6 +399,7 @@ app.post("/fetch",function(req, res){
     var items = req.body;
     var urls = [];
     var imgs = [];
+    var sources = [];
     var results = [];
     
     var uids = req.body["uid"];
@@ -407,9 +408,12 @@ app.post("/fetch",function(req, res){
         uids = [uids];
     }
     
+    
+    // create arrays from form inputs
     for (var i in uids) {
         urls.push(req.body["url"+uids[i]]);
         imgs.push(req.body["image"+uids[i]]);
+        sources.push(req.body["source"+uids[i]]);
     }
     
     console.log(JSON.stringify(req.body));
@@ -568,9 +572,8 @@ app.post("/fetch",function(req, res){
                                 
                                 //var source = req.body["source"+i];
                                 var source = resolvedUri.hostname.replace("www.","");
-                                var sourceObj = req.body["source"+i];
                                 
-                                results.push({requested:urls[i],source:source,sourceObj:sourceObj,title:title,desc:desc,image:imgs[i],images:images,tags:tags,tw:tw,resolved:resolved});  
+                                results.push({requested:urls[i],source:source,sourceObj:sources[i],title:title,desc:desc,image:imgs[i],images:images,tags:tags,tw:tw,resolved:resolved});  
                             
                             }
                             
