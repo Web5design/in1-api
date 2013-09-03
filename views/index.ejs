@@ -145,6 +145,7 @@ $(document).ready(function(){
         var postObj = $('#formPost').serializeObject();
         var tagsStr = (postObj.tags)||"web,tech,apps,social-media";
         postObj.tags = tagsStr.split(",");
+        postObj.shares = 0;
         
         $.ajax({
             url: "/post",
@@ -489,7 +490,6 @@ $(document).ready(function(){
                               <input type="text" name="tags" id="tags" placeholder="tag1,tag2,tag3" class="form-control">
                           </div>
                       </div>
-                      <input type="hidden" name="shares" value="1">
                   </form>
             </div>
             <div class="modal-footer pull-center">

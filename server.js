@@ -639,10 +639,25 @@ app.post("/post",function(req, res){
             res.json({error:"no write"});
         }
         else {
-            var objectId = b.objectId;
-            res.json(objectId);      
+            //var objectId = b.objectId;
+            var q = {
+                posted:false,
+                tweet:p.title.substring(0,110) + " " + p.url + " #"+((p.tags[0])||"tech")
+            }
+
+            request.post({url:'https://api.parse.com/1/classes/Queue',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                body:q}, function (e,r,b){
+                console.log("wrote q to parse....."+JSON.stringify(b));
+                
+                if (e) {
+                    res.json({error:"no write"});
+                }
+                else {
+                    //var objectId = b.objectId;
+                    res.json({status:1});   
+                }
+            });
         }
-        
     });
     
 });

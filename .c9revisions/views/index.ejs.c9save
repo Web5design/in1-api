@@ -232,3 +232,5 @@
 {"ts":1378174546601,"patch":[[{"diffs":[[0,"gs = tag"],[-1,"s"],[1,"Str"],[0,".split(\""]],"start1":5802,"start2":5802,"length1":17,"length2":19},{"diffs":[[0,"          data: "],[-1,"postObj"],[1,"$('#formPost').serializeObject()"],[0,",\n            su"]],"start1":5906,"start2":5906,"length1":39,"length2":64}]],"length":21207,"saved":false}
 {"ts":1378174552703,"patch":[[{"diffs":[[0,"ta: "],[-1,"$('#formPost').serializeObject()"],[1,"postObj"],[0,",\n  "]],"start1":5918,"start2":5918,"length1":40,"length2":15}]],"length":21182,"saved":false}
 {"ts":1378174725807,"patch":[[{"diffs":[[0,"gs = tag"],[1,"s"],[0,"Str.spli"]],"start1":5802,"start2":5802,"length1":16,"length2":17}]],"length":21183,"saved":false}
+{"ts":1378175130433,"patch":[[{"diffs":[[0,"split(\",\");\n"],[1,"        postObj.shares = 0;\n"],[0,"        \n   "]],"start1":5815,"start2":5815,"length1":24,"length2":52}]],"length":21211,"saved":false}
+{"ts":1378175141759,"patch":[[{"diffs":[[0,"iv>\n"],[-1,"                      <input type=\"hidden\" name=\"shares\" value=\"1\">\n"],[0,"    "]],"start1":20763,"start2":20763,"length1":76,"length2":8}]],"length":21143,"saved":false}
