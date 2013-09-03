@@ -141,6 +141,24 @@ $(document).ready(function(){
         return false;
     });
     
+    $('#btnPost').click(function () {
+                
+        $.ajax({
+            url: "/post",
+            type: "post",
+            data: $('#formPost').serializeObject(),
+            success: function (data) {
+                if (typeof data.error!="undefined") {
+                    alert(data.error);
+                } else {
+                    location.href="/"; // refresh    
+                }
+            },
+            error: function (e) {console.log('error:'+e);}
+        });
+        
+    });
+    
      $('.editable').click(function(e){
         
         var objId = $(this).data('uid');
@@ -279,7 +297,7 @@ $(document).ready(function(){
         
         <hr>
         
-        <button type="button" id="btnGet">Get Posts</button>
+        <a href="#modalPost" class="btn btn-primary" data-toggle="modal">Add Post..</a>
         
       </div>
       <div class="tab-pane" id="sources">
@@ -417,3 +435,66 @@ $(document).ready(function(){
     </div>
     </div>
 </div>
+
+<div id="modalPost" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+                <h3>Post Resource</h3>
+                <p></p>
+            </div>
+            <div class="modal-body">
+                  <form class="form form-horizontal" id="formPost">
+                      <div class="control-group">
+                          <label class="control-label">URL</label>
+                          <div class="controls">
+                              <input type="text" name="url" id="url" placeholder="http://" class="form-control">
+                          </div>
+                      </div>
+                      <div class="control-group">
+                          <div class="row">
+                            <div class="col-md-8">
+                                <label class="control-label">Title</label>
+                                <div class="controls">
+                                    <input type="text" name="title" id="title" placeholder="Name / title" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label">Twitter</label>
+                                <div class="controls">
+                                    <input type="text" name="tw" id="twitter" placeholder="@screenname" class="form-control">
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="control-group">
+                          <label class="control-label">Description</label>
+                          <div class="controls">
+                              <textarea name="desc" rows="4" id="desc" placeholder="Description"  class="form-control"></textarea>
+                          </div>
+                      </div>
+                      <div class="control-group">
+                          <label class="control-label">Image</label>
+                          <div class="controls">
+                              <input type="text" name="image" id="image" placeholder="Image URL" class="form-control">
+                          </div>
+                      </div>
+                      <div class="control-group">
+                          <label class="control-label">Tags</label>
+                          <div class="controls">
+                              <input type="text" name="tags" id="tags" placeholder="tag1,tag2,tag3" class="form-control">
+                          </div>
+                      </div>
+                      <input type="hidden" name="shares" value="1">
+                  </form>
+            </div>
+            <div class="modal-footer pull-center">
+                <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>     
+                <a href="#" data-dismiss="modal" aria-hidden="true" id="btnPost" role="button" class="btn btn-success">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
