@@ -142,11 +142,14 @@ $(document).ready(function(){
     });
     
     $('#btnPost').click(function () {
-                
+        var postObj = $('#formPost').serializeObject();
+        var tagsStr = (postObj.tags)||"web,tech,apps,social-media";
+        postObj.tags = tags.split(",");
+        
         $.ajax({
             url: "/post",
             type: "post",
-            data: $('#formPost').serializeObject(),
+            data: postObj,
             success: function (data) {
                 if (typeof data.error!="undefined") {
                     alert(data.error);
