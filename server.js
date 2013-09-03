@@ -630,6 +630,9 @@ app.post("/post",function(req, res){
     console.log("post /post..");
     
     var p = req.body;
+    p.shares = parseInt(p.shares);
+    
+    //TODO: copy pulled image to CDN
     
     request.post({url:'https://api.parse.com/1/classes/Post',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
         body:p}, function (e,r,b){
