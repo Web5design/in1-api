@@ -631,7 +631,7 @@ app.post("/post",function(req, res){
     
     var p = req.body;
     
-    request.put({url:'https://api.parse.com/1/classes/Post',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+    request.post({url:'https://api.parse.com/1/classes/Post',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
         body:p}, function (e,r,b){
         console.log("wrote post to parse....."+e);
         
