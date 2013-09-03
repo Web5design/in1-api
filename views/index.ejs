@@ -144,7 +144,7 @@ $(document).ready(function(){
     $('#btnPost').click(function () {
         var postObj = $('#formPost').serializeObject();
         var tagsStr = (postObj.tags)||"web,tech,apps,social-media";
-        postObj.tags = tagStr.split(",");
+        postObj.tags = tagsStr.split(",");
         
         $.ajax({
             url: "/post",
