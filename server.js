@@ -583,6 +583,9 @@ app.post("/fetch",function(req, res){
                         }
                         else {
                             //res.json({error:'problem harvesting:'+url});
+                            
+                            console.log("stuck here??");
+                            
                         }
                     });
         }
@@ -593,7 +596,7 @@ app.post("/fetch",function(req, res){
         }
     }
     
-    setTimeout(getUrls(0),4000); 
+    setTimeout(getUrls(0),3000); 
 });
 
 app.get('/posts', function(req,res){
