@@ -637,6 +637,10 @@ app.post("/post",function(req, res){
     
     //TODO: copy pulled image to CDN
     
+    //get source from url
+    var resolvedUri = p.url;
+    p.source = resolvedUri.hostname;
+    
     request.post({url:'https://api.parse.com/1/classes/Post',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
         body:p}, function (e,r,b){
         console.log("wrote post to parse....."+JSON.stringify(b));
@@ -1064,29 +1068,27 @@ function doTweet(msg,screen_name,cb){
     if (1===1) {
         
         /*
-        var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
-        if (i<accounts.length) {
-            var oauth = 
-                { consumer_key: conf.twit.consumerKey
-                , consumer_secret: conf.twit.consumerSecret
-                , token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
-                , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
-            };
-	    */
-	
-        var status = msg;
-		var oauth = 
+        var oauth = 
 			{ consumer_key: conf.twit.consumerKey
             , consumer_secret: conf.twit.consumerSecret
             , token: '480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB'
             , token_secret: 'D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc'
+            }
+	    */
+	
+        var status = msg;
+		var oauth = 
+			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
+            , consumer_secret: 'WnkFtgCH5bBBVkqzLKycoRF4C2QQYgWGD1o8Fe3o0'
+            , token: '1731403982-yeHlGfi4NCDFtbST3XTv41UKq5IJ8ycRJhzwvPH'
+            , token_secret: 'Yu4qwpkjbHrzmqQTqCITqb7iHShAko5PsJaBK9jMIk'
             }
         , url = 'https://api.twitter.com/1.1/statuses/update.json?'
         , params = 
 			{ 
 				//status: req.body.status + " via http://in1.com"
                 status: status,
-                via: "in1.com"
+                via: "@TechVisually"
 			};
 			
 		url += require('querystring').stringify(params)
