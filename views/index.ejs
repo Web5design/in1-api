@@ -239,7 +239,8 @@ $(document).ready(function(){
         //$(this).blur(function(){
         //    $(this).prop('contenteditable',false);
             
-            var qObj[name] = val;
+            var qObj = {};
+            qObj[name]=val;
             //console.log("q.."+objId);  
             
             $.ajax({
