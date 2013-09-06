@@ -69,15 +69,17 @@ var job = new cronJob('*/4 * * * *', function(){
                
                var objs = JSON.parse(b);
                
-               if (objs.statuses[rnd].retweet_count>0 && objs.statuses[rnd].retweet_count<3)
+               if (objs.statuses[rnd].retweet_count>0 && objs.statuses[rnd].retweet_count<3) {
                
-               tId = objs.statuses[rnd].id_str;
-               
-               doReTweet(tId,function(e,b){
-            
-                   console.log("RT...."+tId);
+                   tId = objs.statuses[rnd].id_str;
                    
-               });
+                   doReTweet(tId,function(e,b){
+                
+                       console.log("RT...."+tId);
+                       
+                   });
+               
+               }
                 
             });
         }
@@ -89,15 +91,17 @@ var job = new cronJob('*/4 * * * *', function(){
                
                var objs = JSON.parse(b);
                
-               if (objs[10].statuses_count>0 && objs[10].followers_count<objs[10].friends_count)
+               if (objs[10].statuses_count>0 && objs[10].followers_count<objs[10].friends_count) {
                
-               tId = objs[10].screen_name;
-               
-               doFollow(tId,function(e,b){
-            
-                   console.log("following...."+tId);
+                   tId = objs[10].screen_name;
                    
-               });
+                   doFollow(tId,function(e,b){
+                
+                       console.log("following...."+tId);
+                       
+                   });
+               
+               }
                 
             });
             
