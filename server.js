@@ -31,7 +31,7 @@ var stati = [
         "Did a squatter get your brand name on Facebook, Twitter or YouTube? #in1 can help http://www.in1.com"
     ];
 
-var hashTags = ["#tech","#startup","brands","#some","#apps","#mobile","#html5"];
+var hashTags = ["#tech","#startup","brands","#some","#apps","#mobile","#html5","#rwd","#socialmedia","#webdesign","#tools","#brandmarketing","#smm"];
 
 var job = new cronJob('*/1 * * * *', function(){
     
@@ -1165,7 +1165,7 @@ function doFavoriteTweet(tweetId,cb){
 		url += require('querystring').stringify(params)
 		request.post({url:url, oauth:oauth, json:true}, function (e, r, body) {
 			console.log(e);
-			console.log("twitter fav--------------"+body);
+			console.log("twitter fav--------------"+JSON.stringify(body));
 			cb(e,body);
 		})
 	}
