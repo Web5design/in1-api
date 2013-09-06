@@ -51,7 +51,7 @@ var job = new cronJob('*/5 * * * *', function(){
                
                var objs = JSON.parse(b);
                
-               var firstId = objs.statuses[1].id_str;
+               var firstId = objs.statuses[rnd].id_str;
                
                doFavoriteTweet(firstId,function(e,b){
             
