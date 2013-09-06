@@ -474,6 +474,8 @@ app.post("/fetch",function(req, res){
         else {
             // done with checkExisting ------
             
+             console.log("done with check exisint..............."+results.length);
+            
             var q=[];
             for(var k=0; k<results.length; ++k) {
                 if (results[k].exists==="0"){
@@ -508,6 +510,8 @@ app.post("/fetch",function(req, res){
             }
         
             generateSnap(0,function(){ // determine if we need to copy image from remote to CDN
+            
+                console.log("generating snaps complete...............");
                 
                 request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
                     body:{requests:postRequests}}, function (e,r,b){
@@ -537,6 +541,9 @@ app.post("/fetch",function(req, res){
     function generateSnap(i,cb){ // capture image from url
         
         if (i<postRequests.length) {
+            
+            console.log("generating snap..............."+i);
+                
     
             // generate snap
             if (postRequests[i].body.image.indexOf(conf.screenshots.apiUrl)===-1) { // only copy the image if the image url doesn't contain the CDN baseurl
