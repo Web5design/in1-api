@@ -232,9 +232,15 @@ $(document).ready(function(){
     $('.toggleQueue').click(function(e){
         
         var objId = $(this).data('uid');
-        var name = $(this).attr('name');
-        var val = $(this).attr('value');
+        var val,name = $(this).attr('name');
         
+        if ($(this).is(':checked')) {
+            val = true;
+        }
+        else {
+            val = false;
+        }
+          
         //$(this).prop('contenteditable',true).focus();
         //$(this).blur(function(){
         //    $(this).prop('contenteditable',false);
