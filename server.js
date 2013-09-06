@@ -31,11 +31,34 @@ var stati = [
         "Did a squatter get your brand name on Facebook, Twitter or YouTube? #in1 can help http://www.in1.com"
     ];
 
-var job = new cronJob('*/23 * * * *', function(){
+var hashTags = ["#tech","#startup","brands","#some","#apps","#mobile","#html5"];
+
+var job = new cronJob('*/5 * * * *', function(){
     
         // runs every 5 minutes
         console.log("running cron.............................................................");
         
+        var currentTime = new Date();
+        var minutes = currentTime.getMinutes();
+        
+        if (minutes%2===0){
+        
+            var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
+            
+            favoriteTweetsByTag(hashTags[rnd],function(e,b){
+               
+               var firstId = b.statuses[0].id
+                
+               doFavoriteTweet(firstId,function(e,b){
+                   
+                   
+                   console.log("favorited...."+firstId);
+                   
+               });
+                
+            });
+        }
+        else {
         
         // check q
         var whereClause = {"posted":false};
@@ -67,7 +90,7 @@ var job = new cronJob('*/23 * * * *', function(){
             
         });
         
-        //var rnd = Math.floor((Math.random()*(stati.length-1)));
+        }
     
     }, function () {
         console.log("job completed.........");
@@ -179,7 +202,7 @@ app.get("/feed",function(req, res){
             if (lastId>0) {
                 params.since_id=lastId; // only get latest
                 //params.max_id=lastId+20;
-                console.log("added since id.....................");
+                //console.log("added since id.....................");
             }
             
             reqUrl += require('querystring').stringify(params);
@@ -187,11 +210,11 @@ app.get("/feed",function(req, res){
             var reqObj;
             reqObj = {url:encodeURI(reqUrl), oauth:oauth};
             
-            console.log("url---------------"+reqUrl);
+            //console.log("url---------------"+reqUrl);
             
             request.get(reqObj, function (e, r, body) {
                 //console.log("request---------------------------------"+JSON.stringify(reqObj));
-                console.log("body---------------"+body.substring(0,600));
+                //console.log("body---------------"+body.substring(0,600));
                 
                 var objs,url,mentioned;
                 
@@ -1084,6 +1107,75 @@ var saveImage = function(imgUrl,cb){
     request.get({url:conf.screenshots.apiUrl,json:true,qs:{imgurl:imgUrl}},function(e,r,b){
         cb(e,r,b);
     });
+};
+
+function favoriteTweetsByTag(tag,cb){
+    var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+    var oauth = 
+            { consumer_key: conf.twit.consumerKey
+            , consumer_secret: conf.twit.consumerSecret
+            , token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
+            , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
+        };
+    var params = 
+        {    
+            /*include_entities:true,*/
+            count:5
+        };
+        
+    // search by hashtag
+    reqUrl = 'https://api.twitter.com/1.1/search/tweets.json?';
+    params.q = tag;
+    params.result_type="mixed";
+        
+    reqUrl += require('querystring').stringify(params);
+    
+    var reqObj;
+    reqObj = {url:encodeURI(reqUrl), oauth:oauth};
+        
+    //console.log("url---------------"+reqUrl);
+    
+    request.get(reqObj, function (e, r, body) {
+        //console.log("request---------------------------------"+JSON.stringify(reqObj));
+        //console.log("body---------------"+body.substring(0,600));
+        
+        cb(e,body);
+    });
+}
+
+function doFavoriteTweet(tweetId,cb){
+    
+    if (1===1) {
+        
+        /*
+        var oauth = 
+			{ consumer_key: conf.twit.consumerKey
+            , consumer_secret: conf.twit.consumerSecret
+            , token: '480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB'
+            , token_secret: 'D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc'
+            }
+	    */
+	
+		var oauth = 
+			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
+            , consumer_secret: 'WnkFtgCH5bBBVkqzLKycoRF4C2QQYgWGD1o8Fe3o0'
+            , token: '1731403982-fVgDAKshexoEUpJqDTOqjWyzrPMIIZ4kRIsGNbD'
+            , token_secret: '6DzLLA5P5St6jrkEn4mgEgkkIMVlNcu0vt1LXxIw0'
+            }
+        , url = 'https://api.twitter.com/1.1/favorites/create.json?'
+        , params = 
+			{ 
+                id: tweetId
+			};
+			
+		url += require('querystring').stringify(params)
+		request.post({url:url, oauth:oauth, json:true}, function (e, r, body) {
+			console.log(e);
+			console.log("twitter fav--------------"+body);
+			cb(e,body);
+		})
+	}
+    
 };
 
 function doTweet(msg,screen_name,cb){
