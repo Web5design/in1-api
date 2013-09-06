@@ -43,7 +43,7 @@ var job = new cronJob('*/4 * * * *', function(){
         var tId;
         var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
         
-        if (seconds%3===0){
+        if (seconds%6===0){
         
             console.log("favorited...."+hashTags[rnd]);
             
