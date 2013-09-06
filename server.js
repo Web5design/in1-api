@@ -1175,7 +1175,8 @@ function tweetsByTag(tag,cb){
     var params = 
         {    
             /*include_entities:true,*/
-            count:20
+            count:20,
+            lang:"en"
         };
         
     // search by hashtag
