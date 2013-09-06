@@ -247,7 +247,9 @@ $(document).ready(function(){
             
             var qObj = {};
             qObj[name]=val;
-            //console.log("q.."+objId);  
+            
+            
+            console.log("q.."+val);  
             
             $.ajax({
                 url: "/q/"+objId,
@@ -265,7 +267,6 @@ $(document).ready(function(){
             
         //});
         
-        return false;
     });
     
     /* paging ---------------------------------------------------------------- */
