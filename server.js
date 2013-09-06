@@ -158,7 +158,7 @@ app.get("/feed",function(req, res){
             };
         var params = 
             {    
-                include_entities:true,
+                /*include_entities:true,*/
                 count:tweetsToFetch
             };
         
