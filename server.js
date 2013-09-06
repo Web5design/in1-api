@@ -33,15 +33,15 @@ var stati = [
 
 var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#brandmarketing","#smm"];
 
-var job = new cronJob('*/5 * * * *', function(){
+var job = new cronJob('*/6 * * * *', function(){
     
         // runs every 5 minutes
         console.log("running cron.............................................................");
         
         var currentTime = new Date();
-        var minutes = currentTime.getSeconds();
+        var seconds = currentTime.getSeconds();
         
-        if (minutes%2===0){
+        if (seconds%2===0){
         
             var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
             
@@ -194,7 +194,7 @@ app.get("/feed",function(req, res){
                 // search by hashtag
                 reqUrl = 'https://api.twitter.com/1.1/search/tweets.json?';
                 params.q = sources[i].twitter;
-                params.result_type="mixed";
+                params.result_type="recent";
             }
             else {
                 // get by screen_name
@@ -1130,13 +1130,13 @@ function favoriteTweetsByTag(tag,cb){
     var params = 
         {    
             /*include_entities:true,*/
-            count:5
+            count:20
         };
         
     // search by hashtag
     reqUrl = 'https://api.twitter.com/1.1/search/tweets.json?';
     params.q = tag;
-    params.result_type="mixed";
+    params.result_type="recent";
         
     reqUrl += require('querystring').stringify(params);
     
