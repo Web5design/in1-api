@@ -40,22 +40,42 @@ var job = new cronJob('*/6 * * * *', function(){
         
         var currentTime = new Date();
         var seconds = currentTime.getSeconds();
+        var tId;
+        var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
         
         if (seconds%2===0){
         
-            var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
-            
             console.log("favorited...."+hashTags[rnd]);
             
-            favoriteTweetsByTag(hashTags[rnd],function(e,b){
+            tweetsByTag(hashTags[rnd],function(e,b){
                
                var objs = JSON.parse(b);
                
-               var firstId = objs.statuses[rnd].id_str;
+               tId = objs.statuses[rnd].id_str;
                
-               doFavoriteTweet(firstId,function(e,b){
+               doFavoriteTweet(tId,function(e,b){
             
-                   console.log("favorited...."+firstId);
+                   console.log("favorited...."+tId);
+                   
+               });
+                
+            });
+        }
+        if (seconds%3===0){
+        
+            console.log("retweeting tag..."+hashTags[rnd]);
+            
+            tweetsByTag(hashTags[rnd],function(e,b){
+               
+               var objs = JSON.parse(b);
+               
+               if (objs.statuses[rnd].retweet_count>0 && objs.statuses[rnd].retweet_count<3)
+               
+               tId = objs.statuses[rnd].id_str;
+               
+               doReTweet(tId,function(e,b){
+            
+                   console.log("RT...."+tId);
                    
                });
                 
@@ -1119,7 +1139,7 @@ var saveImage = function(imgUrl,cb){
     });
 };
 
-function favoriteTweetsByTag(tag,cb){
+function tweetsByTag(tag,cb){
     var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
     var oauth = 
             { consumer_key: conf.twit.consumerKey
@@ -1155,7 +1175,7 @@ function favoriteTweetsByTag(tag,cb){
 
 function doFavoriteTweet(tweetId,cb){
     
-    if (1===1) {
+    //if (1===1) {
         
 		var oauth = 
 			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
@@ -1175,9 +1195,33 @@ function doFavoriteTweet(tweetId,cb){
 			console.log("twitter fav--------------"+JSON.stringify(body));
 			cb(e,body);
 		})
-	}
+	//}
     
 };
+
+function doReTweet(tweetId,cb){
+    
+    //if (1===1) {
+        
+		var oauth = 
+			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
+            , consumer_secret: 'WnkFtgCH5bBBVkqzLKycoRF4C2QQYgWGD1o8Fe3o0'
+            , token: '1731403982-fVgDAKshexoEUpJqDTOqjWyzrPMIIZ4kRIsGNbD'
+            , token_secret: '6DzLLA5P5St6jrkEn4mgEgkkIMVlNcu0vt1LXxIw0'
+            }
+        ,
+        url = 'https://api.twitter.com/1.1/statuses/retweet/'+tweetId+'.json?';
+
+		request.post({url:url, oauth:oauth, json:true}, function (e, r, body) {
+			console.log(e);
+			console.log("twitter RT--------------"+JSON.stringify(body));
+			cb(e,body);
+		})
+		
+	//}
+    
+};
+
 
 function doTweet(msg,screen_name,cb){
     
