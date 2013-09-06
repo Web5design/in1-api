@@ -50,8 +50,7 @@ var job = new cronJob('*/5 * * * *', function(){
                var firstId = b.statuses[0].id
                 
                doFavoriteTweet(firstId,function(e,b){
-                   
-                   
+            
                    console.log("favorited...."+firstId);
                    
                });
@@ -1147,15 +1146,6 @@ function doFavoriteTweet(tweetId,cb){
     
     if (1===1) {
         
-        /*
-        var oauth = 
-			{ consumer_key: conf.twit.consumerKey
-            , consumer_secret: conf.twit.consumerSecret
-            , token: '480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB'
-            , token_secret: 'D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc'
-            }
-	    */
-	
 		var oauth = 
 			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
             , consumer_secret: 'WnkFtgCH5bBBVkqzLKycoRF4C2QQYgWGD1o8Fe3o0'

@@ -30,4 +30,11 @@ module.exports = {
   , site: {
         baseUrl: 'http://in1-api.herokuapp.com'
   }
+  , twitter: {
+      consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
+    , consumer_secret: 'WnkFtgCH5bBBVkqzLKycoRF4C2QQYgWGD1o8Fe3o0'
+    , token: '1731403982-fVgDAKshexoEUpJqDTOqjWyzrPMIIZ4kRIsGNbD'
+    , token_secret: '6DzLLA5P5St6jrkEn4mgEgkkIMVlNcu0vt1LXxIw0'
+    }
+  
 };
