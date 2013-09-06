@@ -33,7 +33,7 @@ var stati = [
 
 var hashTags = ["#tech","#startup","brands","#some","#apps","#mobile","#html5"];
 
-var job = new cronJob('*/5 * * * *', function(){
+var job = new cronJob('*/1 * * * *', function(){
     
         // runs every 5 minutes
         console.log("running cron.............................................................");
@@ -45,9 +45,13 @@ var job = new cronJob('*/5 * * * *', function(){
         
             var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
             
+            console.log("favorited...."+hashTags[rnd]);
+            
             favoriteTweetsByTag(hashTags[rnd],function(e,b){
                
-               var firstId = b.statuses[0].id
+               var objs = JSON.parse(b);
+               
+               var firstId = objs.statuses[0].id;
                 
                doFavoriteTweet(firstId,function(e,b){
             
