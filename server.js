@@ -1257,6 +1257,8 @@ function doFavoriteTweet(tweetId,cb){
 function doFollow(screen_name,cb){
     
     //if (1===1) {
+    
+    console.log("following--------------"+screen_name);
         
 		var oauth = 
 			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
