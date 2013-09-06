@@ -43,7 +43,7 @@ var job = new cronJob('*/4 * * * *', function(){
         var tId;
         var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
         
-        if (seconds%7===0){
+        if (seconds%3===0){
         
             console.log("favorited...."+hashTags[rnd]);
             
@@ -83,7 +83,7 @@ var job = new cronJob('*/4 * * * *', function(){
                 
             });
         }
-        if (seconds%2===0){
+        if (seconds%7===0){
             
             console.log("find users to follow by tag..."+hashTags[rnd]);
             
