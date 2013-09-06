@@ -33,7 +33,7 @@ var stati = [
 
 var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#brandmarketing","#smm"];
 
-var job = new cronJob('*/6 * * * *', function(){
+var job = new cronJob('*/4 * * * *', function(){
     
         // runs every 5 minutes
         console.log("running cron.............................................................");
@@ -43,7 +43,7 @@ var job = new cronJob('*/6 * * * *', function(){
         var tId;
         var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
         
-        if (seconds%2===0){
+        if (seconds%7===0){
         
             console.log("favorited...."+hashTags[rnd]);
             
@@ -80,6 +80,27 @@ var job = new cronJob('*/6 * * * *', function(){
                });
                 
             });
+        }
+        if (seconds%2===0){
+            
+            console.log("find users to follow by tag..."+hashTags[rnd]);
+            
+            usersByTag(hashTags[10],function(e,b){
+               
+               var objs = JSON.parse(b);
+               
+               if (objs[10].statuses_count>0 && objs[10].followers_count<objs[10].friends_count)
+               
+               tId = objs[10].screen_name;
+               
+               doFollow(tId,function(e,b){
+            
+                   console.log("following...."+tId);
+                   
+               });
+                
+            });
+            
         }
         else {
         
@@ -1140,7 +1161,7 @@ var saveImage = function(imgUrl,cb){
 };
 
 function tweetsByTag(tag,cb){
-    var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+    var reqUrl = 'https://api.twitter.com/1.1/search/tweets.json?';
     var oauth = 
             { consumer_key: conf.twit.consumerKey
             , consumer_secret: conf.twit.consumerSecret
@@ -1154,7 +1175,6 @@ function tweetsByTag(tag,cb){
         };
         
     // search by hashtag
-    reqUrl = 'https://api.twitter.com/1.1/search/tweets.json?';
     params.q = tag;
     params.result_type="recent";
         
@@ -1168,6 +1188,41 @@ function tweetsByTag(tag,cb){
     request.get(reqObj, function (e, r, body) {
         //console.log("request---------------------------------"+JSON.stringify(reqObj));
         //console.log("body---------------"+body.substring(0,600));
+        
+        cb(e,body);
+    });
+}
+
+function usersByTag(tag,cb){
+    var reqUrl = 'https://api.twitter.com/1.1/users/search.json?';
+    var oauth = 
+            { consumer_key: conf.twit.consumerKey
+            , consumer_secret: conf.twit.consumerSecret
+            , token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
+            , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
+        };
+    var params = 
+        {    
+            include_entities:false,
+            page:15,
+            count:20
+        };
+        
+    // search by hashtag
+    params.q = tag;
+   
+    reqUrl += require('querystring').stringify(params);
+    
+    var reqObj;
+    reqObj = {url:encodeURI(reqUrl), oauth:oauth};
+        
+    //console.log("url---------------"+reqUrl);
+    
+    request.get(reqObj, function (e, r, body) {
+        //console.log("request---------------------------------"+JSON.stringify(reqObj));
+        //console.log("body---------------"+body.substring(0,600));
+        
+        console.log("user search..");
         
         cb(e,body);
     });
@@ -1199,6 +1254,36 @@ function doFavoriteTweet(tweetId,cb){
     
 };
 
+function doFollow(screen_name,cb){
+    
+    //if (1===1) {
+        
+		var oauth = 
+			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
+            , consumer_secret: 'WnkFtgCH5bBBVkqzLKycoRF4C2QQYgWGD1o8Fe3o0'
+            , token: '1731403982-fVgDAKshexoEUpJqDTOqjWyzrPMIIZ4kRIsGNbD'
+            , token_secret: '6DzLLA5P5St6jrkEn4mgEgkkIMVlNcu0vt1LXxIw0'
+            }
+        , url = 'https://api.twitter.com/1.1/friendships/create.json?'
+        , params = 
+			{ 
+				//status: req.body.status + " via http://in1.com"
+                follow: true,
+                screen_name: screen_name
+			};
+
+		url += require('querystring').stringify(params);
+		request.post({url:url, oauth:oauth, json:true}, function (e, r, body) {
+			console.log(e);
+			console.log("twitter followed--------------"+JSON.stringify(body));
+			cb(e,body);
+		})
+		
+	//}
+    
+};
+
+
 function doReTweet(tweetId,cb){
     
     //if (1===1) {
@@ -1221,7 +1306,6 @@ function doReTweet(tweetId,cb){
 	//}
     
 };
-
 
 function doTweet(msg,screen_name,cb){
     
