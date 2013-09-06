@@ -33,13 +33,13 @@ var stati = [
 
 var hashTags = ["#tech","#startup","brands","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#brandmarketing","#smm"];
 
-var job = new cronJob('*/1 * * * *', function(){
+var job = new cronJob('*/5 * * * *', function(){
     
         // runs every 5 minutes
         console.log("running cron.............................................................");
         
         var currentTime = new Date();
-        var minutes = currentTime.getMinutes();
+        var minutes = currentTime.getSeconds();
         
         if (minutes%2===0){
         
@@ -52,7 +52,7 @@ var job = new cronJob('*/1 * * * *', function(){
                var objs = JSON.parse(b);
                
                var firstId = objs.statuses[1].id_str;
-                
+               
                doFavoriteTweet(firstId,function(e,b){
             
                    console.log("favorited...."+firstId);
