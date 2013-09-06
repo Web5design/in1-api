@@ -31,7 +31,7 @@ var stati = [
         "Did a squatter get your brand name on Facebook, Twitter or YouTube? #in1 can help http://www.in1.com"
     ];
 
-var hashTags = ["#tech","#startup","brands","#vc","#facebook","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#brandmarketing","#smm"];
+var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#brandmarketing","#smm"];
 
 var job = new cronJob('*/6 * * * *', function(){
     
@@ -61,7 +61,7 @@ var job = new cronJob('*/6 * * * *', function(){
                 
             });
         }
-        if (seconds%3===0){
+        if (seconds%5===0){
         
             console.log("retweeting tag..."+hashTags[rnd]);
             
@@ -1192,7 +1192,7 @@ function doFavoriteTweet(tweetId,cb){
 		url += require('querystring').stringify(params)
 		request.post({url:url, oauth:oauth, json:true}, function (e, r, body) {
 			console.log(e);
-			console.log("twitter fav--------------"+JSON.stringify(body));
+			//console.log("twitter fav--------------"+JSON.stringify(body));
 			cb(e,body);
 		})
 	//}
@@ -1214,7 +1214,7 @@ function doReTweet(tweetId,cb){
 
 		request.post({url:url, oauth:oauth, json:true}, function (e, r, body) {
 			console.log(e);
-			console.log("twitter RT--------------"+JSON.stringify(body));
+			//console.log("twitter RT--------------"+JSON.stringify(body));
 			cb(e,body);
 		})
 		
