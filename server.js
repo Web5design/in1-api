@@ -1208,7 +1208,7 @@ function usersByTag(tag,cb){
     var params = 
         {    
             include_entities:false,
-            page:15,
+            page:30,
             count:20
         };
         
