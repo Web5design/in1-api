@@ -69,9 +69,9 @@ var job = new cronJob('*/4 * * * *', function(){
                
                var objs = JSON.parse(b);
                
-               if (objs.statuses[rnd].retweet_count>0 && objs.statuses[rnd].retweet_count<3) {
+               if (objs.statuses[2].retweet_count>0 && objs.statuses[2].retweet_count<3) {
                
-                   tId = objs.statuses[rnd].id_str;
+                   tId = objs.statuses[2].id_str;
                    
                    doReTweet(tId,function(e,b){
                 
