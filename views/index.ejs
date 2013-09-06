@@ -163,7 +163,7 @@ $(document).ready(function(){
         
     });
     
-     $('.editable').click(function(e){
+    $('.editable').click(function(e){
         
         var objId = $(this).data('uid');
         
@@ -181,6 +181,38 @@ $(document).ready(function(){
             
             $.ajax({
                 url: "/post/"+objId,
+                type: "put",
+                data: postObj,
+                success: function (data) {
+                    if (typeof data.error!="undefined") {
+                        alert(data.error);
+                    } else {
+                        console.log("edited");   
+                    }
+                },
+                error: function (e) {console.log('error:'+JSON.stringify(e));}
+            });
+        });
+        
+        return false;
+    });
+    
+    $('.editableQueue').click(function(e){
+        
+        var objId = $(this).data('uid');
+        
+        $(this).prop('contenteditable',true).focus();
+        $(this).blur(function(){
+            $(this).prop('contenteditable',false);
+            
+            var qObj = {
+                tweet:$("#"+objId+"_tweet").text()
+            };
+            
+            console.log(objId);  
+            
+            $.ajax({
+                url: "/q/"+objId,
                 type: "put",
                 data: postObj,
                 success: function (data) {
@@ -335,8 +367,8 @@ $(document).ready(function(){
                 <tbody id="queueContainer">
                 <%for (var i=0;i<queue.length;i++) {%>
                 <tr id="trFeed">
-                    <td><input type="hidden" name="queue<%=i%>" value="<%= queue[i].objectId %>" /><%=queue[i].tweet%></td>
-                    <td><input type="checkbox" id="" name="<%=queue[i].objectId%>_posted" value="true" <%if(queue[i].posted){%>checked<%}%> /></td>
+                    <td data-uid="<%=queue[i].objectId%>" class="editableQueue" name="<%=queue[i].objectId%>_tweet"><%=queue[i].tweet%></td>
+                    <td><input type="checkbox" name="<%=queue[i].objectId%>_posted" value="true" <%if(queue[i].posted){%>checked<%}%> /><input type="hidden" name="queue<%=i%>" value="<%= queue[i].objectId %>" /></td>
                 </tr>
                 <%}%>
                 </tbody>

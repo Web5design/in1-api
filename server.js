@@ -695,6 +695,29 @@ app.put("/post/:id",function(req, res){
     
 });
 
+app.put("/q/:id",function(req, res){
+    
+    console.log("put /q..");
+    
+    var q = req.body;
+    var id = req.params.id;
+    
+    request.put({url:'https://api.parse.com/1/classes/Queue/'+id,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+        body:q}, function (e,r,b){
+        console.log("wrote q to parse....."+e);
+        
+        if (e) {
+            res.json({error:"no write"});
+        }
+        else {
+            var objectId = b.objectId;
+            res.json(objectId);      
+        }
+        
+    });
+    
+});
+
 app.post("/source",function(req, res){
     
     console.log("post /source..");
