@@ -51,7 +51,7 @@ var job = new cronJob('*/1 * * * *', function(){
                
                var objs = JSON.parse(b);
                
-               var firstId = objs.statuses[1].id;
+               var firstId = objs.statuses[1].id_str;
                 
                doFavoriteTweet(firstId,function(e,b){
             
@@ -1156,13 +1156,13 @@ function doFavoriteTweet(tweetId,cb){
             , token: '1731403982-fVgDAKshexoEUpJqDTOqjWyzrPMIIZ4kRIsGNbD'
             , token_secret: '6DzLLA5P5St6jrkEn4mgEgkkIMVlNcu0vt1LXxIw0'
             }
-        , url = 'https://api.twitter.com/1.1/favorites/create/'+tweetId
+        , url = 'https://api.twitter.com/1.1/favorites/create.json?'
         , params = 
 			{ 
                 id: tweetId
 			};
 			
-		//url += require('querystring').stringify(params)
+		url += require('querystring').stringify(params)
 		request.post({url:url, oauth:oauth, json:true}, function (e, r, body) {
 			console.log(e);
 			console.log("twitter fav--------------"+JSON.stringify(body));
