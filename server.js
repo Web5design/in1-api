@@ -31,7 +31,7 @@ var stati = [
         "Did a squatter get your brand name on Facebook, Twitter or YouTube? #in1 can help http://www.in1.com"
     ];
 
-var hashTags = ["#tech","#startup","brands","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#brandmarketing","#smm"];
+var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#brandmarketing","#smm"];
 
 var job = new cronJob('*/5 * * * *', function(){
     
