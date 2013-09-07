@@ -154,7 +154,7 @@ var job = new cronJob('*/4 * * * *', function(){
 app.get('*', function(req,res,next){
     if (typeof app.locals.sources === "undefined"){
         site.sourcesMw(function(d){
-            app.locals.sources=d;
+            app.locals.sources=d.results;
         });
     }
 });
@@ -706,7 +706,7 @@ app.get('/posts', function(req,res){
 });
 
 app.get('/sources', function(req,res){
-    
+    /*
     request.get({url:'https://api.parse.com/1/classes/Source',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
         if (b.results) {
             res.json({results:b.results});
@@ -716,7 +716,8 @@ app.get('/sources', function(req,res){
             res.json({error:"no results"});
         }
     });
-    
+    */
+    res.json(app.locals.sources);
 });
 
 app.post("/post",function(req, res){
