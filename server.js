@@ -35,13 +35,12 @@ var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innova
 
 var job = new cronJob('*/4 * * * *', function(){
     
-        // runs every 5 minutes
-        console.log("running cron.............................................................");
-        
         var currentTime = new Date();
         var seconds = currentTime.getSeconds();
         var tId;
         var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
+    
+        console.log("running cron............................................................."+seconds);
         
         if (seconds%8===0){
         
