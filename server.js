@@ -155,7 +155,11 @@ app.get('*', function(req,res,next){
     if (typeof app.locals.sources === "undefined"){
         site.sourcesMw(function(d){
             app.locals.sources=d.results;
+            next();
         });
+    }
+    else {
+        next();
     }
 });
             
