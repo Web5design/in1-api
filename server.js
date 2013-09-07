@@ -51,13 +51,17 @@ var job = new cronJob('*/4 * * * *', function(){
                
                var objs = JSON.parse(b);
                
-               tId = objs.statuses[rnd].id_str;
+               if (typeof objs.statuses[rnd]!="undefined") {
                
-               doFavoriteTweet(tId,function(e,b){
-            
-                   console.log("favorited...."+tId);
+                   tId = objs.statuses[rnd].id_str;
                    
-               });
+                   doFavoriteTweet(tId,function(e,b){
+                
+                       console.log("favorited...."+tId);
+                       
+                   });
+               
+               }
                 
             });
         }
