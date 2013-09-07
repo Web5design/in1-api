@@ -154,7 +154,7 @@ var job = new cronJob('*/4 * * * *', function(){
 app.get('*', function(req,res,next){
     if (typeof app.locals.sources === "undefined"){
         site.sourcesMw(function(d){
-            app.locals.sources=d.results;
+            app.locals.sources=d;
             next();
         });
     }
