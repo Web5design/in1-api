@@ -2,6 +2,7 @@ var port = process.env.PORT || 4000,
     app = require('./app').init(port),
     utils = require('./utils'),
     conf = require('./conf'),
+    site = require('./site'),
     window = require('jsdom').jsdom().createWindow(),
     $ = require('jquery'),
     request = require('request'),
@@ -149,6 +150,15 @@ var job = new cronJob('*/4 * * * *', function(){
 
 
 /*---------------------- default route ----------------------*/
+
+app.get('*', function(req,res,next){
+    if (typeof app.locals.sources === "undefined"){
+        site.sourcesMw(function(d){
+            app.locals.sources=d;
+        });
+    }
+});
+            
 app.get('/hello', function(req,res){
    res.render("index");
 });
@@ -193,19 +203,19 @@ app.get("/feed",function(req, res){
             request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt",include:"sourceObj"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e2,r2,b2){
                 if (b2.results) {
                     
-                    request.get({url:'https://api.parse.com/1/classes/Source',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e3,r3,b3){
+                    //request.get({url:'https://api.parse.com/1/classes/Source',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e3,r3,b3){
                         
                         request.get({url:'https://api.parse.com/1/classes/Queue',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e4,r4,b4){
                         
                             if (f=="json") { 
-                                res.send({results:results,posts:b2.results,sources:b3.results,queue:b4.results});
+                                res.send({results:results,posts:b2.results,queue:b4.results});
                             } else {
-                                res.render("index",{results:results,posts:b2.results,sources:b3.results,queue:b4.results});
+                                res.render("index",{results:results,posts:b2.results,queue:b4.results});
                             }
                         
                         });
                         
-                    });
+                    //});
                 }
                 else {
                     
