@@ -31,7 +31,7 @@ var stati = [
         "Did a squatter get your brand name on Facebook, Twitter or YouTube? #in1 can help http://www.in1.com"
     ];
 
-var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#brandmarketing","#smm"];
+var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#smm"];
 
 var job = new cronJob('*/4 * * * *', function(){
     
@@ -571,7 +571,7 @@ app.post("/fetch",function(req, res){
                             res.json({error:"no write batch",status:-1});
                         }
                         else {
-                            res.json({status:1});      
+                            res.json({status:1}); 
                         }
                     });
             
@@ -596,17 +596,21 @@ app.post("/fetch",function(req, res){
                     
                     console.log("saving image-------------------"+postRequests[i].body.image);
                     postRequests[i].body.image = r.request.uri.href;
-                    generateSnap(i+1,cb);
+                    //generateSnap(i+1,cb);
                     
                 });
             
             }
+            /*
             else {
                 
                 console.log("no image save required..");
                 
                 generateSnap(i+1,cb);
             }
+            */
+            
+            generateSnap(i+1,cb);
                 
         }
         else {
@@ -1208,7 +1212,7 @@ function usersByTag(tag,cb){
     var params = 
         {    
             include_entities:false,
-            page:30,
+            page:40,
             count:20
         };
         
