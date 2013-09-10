@@ -742,6 +742,14 @@ app.post("/blog",function(req, res){
     
 });
 
+app.get("/b/:id",function(req, res){
+    
+    console.log("get /blog..");
+    
+    res.json({error:"no results"});
+    
+});
+
 
 app.get('/posts', function(req,res){
     
