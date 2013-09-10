@@ -698,6 +698,51 @@ app.post("/fetch",function(req, res){
     setTimeout(getUrls(0),3000); 
 });
 
+app.post("/blog",function(req, res){
+    
+    console.log("/blog................................");
+    
+    var URL = require('url');
+    var items = req.body;
+    
+    var p = {};
+    p.title = "5 Great Typography Resources";
+    p.desc = "Get in a little type in your life with these fives awesome tools and resources for typography.";
+    p.posts = ["o1cg8LBMtC","k3Qe6wVpkH"];
+    p.tags = ["typography","dev","web-design"];
+    
+    request.post({url:'https://api.parse.com/1/classes/Blog',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+        body:p}, function (e,r,b){
+        console.log("wrote blog to parse....."+JSON.stringify(b));
+        
+        if (e) {
+            res.json({error:"no write"});
+        }
+        else {
+            var objectId = b.objectId;
+            var q = {
+                posted:false,
+                tweet:p.title.substring(0,110) + " http://www.techvisually.com/b/ " + objectId + "#"+p.tags[0]
+            }
+
+            request.post({url:'https://api.parse.com/1/classes/Queue',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                body:q}, function (e,r,b){
+                console.log("wrote q to parse....."+JSON.stringify(b));
+                
+                if (e) {
+                    res.json({error:"no write"});
+                }
+                else {
+                    //var objectId = b.objectId;
+                    res.json({status:1});   
+                }
+            });
+        }
+    });
+    
+});
+
+
 app.get('/posts', function(req,res){
     
     //request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{where:JSON.stringify({url:url})},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){

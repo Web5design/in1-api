@@ -360,10 +360,13 @@ $(document).ready(function(){
                 <div class="col-md-2">
                     <a href="<%=posts[i].url%>"><img src="<%=posts[i].image%>" class="img-thumbnail img-responsive" width="170"></a>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-9">
                     <h4 id="<%=posts[i].objectId%>_title" class="editable" data-uid="<%=posts[i].objectId%>"><%=posts[i].title%></h4>
                     <div id="<%=posts[i].objectId%>_desc" class="editable" data-uid="<%=posts[i].objectId%>"><%=posts[i].desc%></div>
                     <div id="<%=posts[i].objectId%>_tags" class="well well-sm editable" data-uid="<%=posts[i].objectId%>"><%=posts[i].tags%></div>
+                </div>
+                <div class="col-md-1">
+                    <input type="checkbox" name="blog" id="<%=posts[i].objectId%>_blog" data-uid="<%=posts[i].objectId%>" value="true" /><input type="hidden" name="blog<%=i%>" value="<%= posts[i].objectId %>" />
                 </div>
             </div>
             <%}%>
