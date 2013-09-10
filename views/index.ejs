@@ -163,6 +163,28 @@ $(document).ready(function(){
         
     });
     
+    $('#btnBlog').click(function () {
+        var postObj = $('#formPost').serializeObject();
+        var tagsStr = (postObj.tags)||"web,tech,apps,social-media";
+        postObj.tags = tagsStr.split(",");
+        postObj.shares = 0;
+        
+        $.ajax({
+            url: "/blog",
+            type: "post",
+            data: {},
+            success: function (data) {
+                if (typeof data.error!="undefined") {
+                    alert(data.error);
+                } else {
+                    location.href="/"; // refresh    
+                }
+            },
+            error: function (e) {console.log('error:'+e);}
+        });
+        
+    });
+    
     $('.editable').click(function(e){
         
         var objId = $(this).data('uid');
@@ -376,7 +398,7 @@ $(document).ready(function(){
         
         <hr>
         
-        <a href="#modalPost" class="btn btn-primary" data-toggle="modal">Add Post..</a>
+        <a href="#modalPost" class="btn btn-primary" data-toggle="modal">Add Post..</a> <a id="btnBlog" class="btn btn-primary">Blog Selected</a>
         
       </div>
       <div class="tab-pane" id="sources">
