@@ -77,7 +77,7 @@ var job = new cronJob('*/2 * * * *', function(){
                
                var objs = JSON.parse(b);
                
-               if (objs.statuses[2].retweet_count>0 && objs.statuses[2].retweet_count<3) {
+               if (objs.statuses[2].retweet_count>0 && objs.statuses[2].retweet_count<2) {
                
                    tId = objs.statuses[2].id_str;
                    
