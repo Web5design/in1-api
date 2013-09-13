@@ -43,7 +43,7 @@ var job = new cronJob('*/2 * * * *', function(){
     
         console.log("running cron............................................................."+seconds);
         
-        if (seconds%8===0){
+        if (seconds%2===0){
         
             console.log("favorited...."+hashTags[rnd]);
             
@@ -52,6 +52,8 @@ var job = new cronJob('*/2 * * * *', function(){
                var objs = JSON.parse(b);
                
                if (typeof objs.statuses[rnd]!="undefined") {
+                   
+                   console.log(JSON.stringify(objs.statuses[rnd]));
                
                    tId = objs.statuses[rnd].id_str;
                    sn = objs.statuses[rnd].screen_name;
