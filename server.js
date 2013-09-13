@@ -56,7 +56,7 @@ var job = new cronJob('*/2 * * * *', function(){
                    console.log(JSON.stringify(objs.statuses[rnd]));
                
                    tId = objs.statuses[rnd].id_str;
-                   sn = objs.statuses[rnd].screen_name;
+                   sn = objs.statuses[rnd].user.screen_name;
                    
                    doFavoriteTweet(tId,function(e,b){
                 
