@@ -37,7 +37,7 @@ var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innova
 var job = new cronJob('*/4 * * * *', function(){
     
         var currentTime = new Date();
-        var seconds = currentTime.getSeconds();
+        var seconds = currentTime.getMinutes();
         var tId;
         var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
     
