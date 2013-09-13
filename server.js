@@ -34,7 +34,7 @@ var stati = [
 
 var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#smm"];
 
-var job = new cronJob('*/4 * * * *', function(){
+var job = new cronJob('*/2 * * * *', function(){
     
         var currentTime = new Date();
         var seconds = currentTime.getMinutes();
@@ -54,11 +54,15 @@ var job = new cronJob('*/4 * * * *', function(){
                if (typeof objs.statuses[rnd]!="undefined") {
                
                    tId = objs.statuses[rnd].id_str;
+                   sn = objs.statuses[rnd].screen_name;
                    
                    doFavoriteTweet(tId,function(e,b){
                 
                        console.log("favorited...."+tId);
                        
+                       doFollow(sn,function(e,b){
+                            console.log("following...."+sn);
+                        });
                    });
                
                }
