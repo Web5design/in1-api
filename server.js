@@ -34,7 +34,7 @@ var stati = [
 
 var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#smm"];
 
-var job = new cronJob('*/2 * * * *', function(){
+var job = new cronJob('*/4 * * * *', function(){
     
         var currentTime = new Date();
         var seconds = currentTime.getMinutes();
@@ -43,7 +43,7 @@ var job = new cronJob('*/2 * * * *', function(){
     
         console.log("running cron............................................................."+seconds);
         
-        if (seconds%2===0){
+        if (seconds%8===0){
         
             console.log("favorited...."+hashTags[rnd]);
             
