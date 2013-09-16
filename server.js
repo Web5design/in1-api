@@ -34,7 +34,7 @@ var stati = [
 
 var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#sv","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#smm"];
 
-var job = new cronJob('*/7 * * * *', function(){
+var job = new cronJob('*/6 * * * *', function(){
     
         var currentTime = new Date();
         var seconds = currentTime.getMinutes();
@@ -71,7 +71,7 @@ var job = new cronJob('*/7 * * * *', function(){
                 
             });
         }
-        else if (seconds%3===0){
+        else if (seconds%5===0){
         
             console.log("retweeting tag..."+hashTags[rnd]);
             
