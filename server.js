@@ -72,7 +72,7 @@ var job = new cronJob('*/6 * * * *', function(){
                 
             });
         }
-        else if (rnd2%4===0){
+        else if (rnd2%2===0){
         
             console.log("retweeting tag..."+hashTags[rnd]);
             
@@ -94,7 +94,7 @@ var job = new cronJob('*/6 * * * *', function(){
                 
             });
         }
-        else if (rnd2%5===0){
+        else if (rnd2%9===0){
             
             console.log("find users to follow by tag..."+hashTags[rnd]);
             
