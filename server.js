@@ -71,7 +71,7 @@ var job = new cronJob('*/6 * * * *', function(){
                 
             });
         }
-        else if (seconds%5===0){
+        else if (seconds%3===0){
         
             console.log("retweeting tag..."+hashTags[rnd]);
             
