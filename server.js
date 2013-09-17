@@ -40,10 +40,11 @@ var job = new cronJob('*/6 * * * *', function(){
         var seconds = currentTime.getMinutes();
         var tId;
         var rnd = Math.floor((Math.random()*(hashTags.length-1))); // get random index
+        var rnd2 = Math.floor((Math.random()*(11)));
     
         console.log("running cron............................................................."+seconds);
         
-        if (seconds%8===0){
+        if (rnd2%3===0){
         
             console.log("favorited...."+hashTags[rnd]);
             
@@ -71,7 +72,7 @@ var job = new cronJob('*/6 * * * *', function(){
                 
             });
         }
-        else if (seconds%3===0){
+        else if (rnd2%4===0){
         
             console.log("retweeting tag..."+hashTags[rnd]);
             
@@ -93,7 +94,7 @@ var job = new cronJob('*/6 * * * *', function(){
                 
             });
         }
-        else if (seconds%7===0){
+        else if (rnd2%5===0){
             
             console.log("find users to follow by tag..."+hashTags[rnd]);
             
