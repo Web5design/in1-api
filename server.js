@@ -862,6 +862,11 @@ app.put("/q/:id",function(req, res){
     var q = req.body;
     var id = req.params.id;
     
+    if (q.posted&&q.posted==="false"){
+        q.posted=false;
+    }
+    
+    
     console.log("putting .."+JSON.stringify(q));
     
     request.put({url:'https://api.parse.com/1/classes/Queue/'+id,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
