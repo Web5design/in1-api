@@ -271,13 +271,16 @@ $(document).ready(function(){
             qObj[name]=val;
             
             
-            console.log("q.."+val);  
+            console.log("q.."+val+"--"+objId);  
             
             $.ajax({
                 url: "/q/"+objId,
                 type: "put",
                 data: qObj,
                 success: function (data) {
+                    
+                    console.log(data); 
+                    
                     if (typeof data.error!="undefined") {
                         alert(data.error);
                     } else {
