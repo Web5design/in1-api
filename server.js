@@ -92,7 +92,11 @@ var checkSource = new cronJob('*/2 * * * *', function(){
     
     }
     
-});
+}, function () {
+        console.log("job completed.........");
+    }, 
+    true,
+    "America/Chicago");
 
 function checkUni(i,arr,cb){
                    
@@ -198,8 +202,9 @@ function goTweets(i,arr,cb){
 }
 
 
-var job = new cronJob('*/12 * * * *', function(){
+//var job = new cronJob('*/12 * * * *', function(){
     
+/*
         var currentTime = new Date();
         var seconds = currentTime.getMinutes();
         var tId;
@@ -322,6 +327,8 @@ var job = new cronJob('*/12 * * * *', function(){
     true,
     "America/Chicago"
 );
+
+*/
 
 
 
