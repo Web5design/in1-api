@@ -67,7 +67,7 @@ var checkSource = new cronJob('*/2 * * * *', function(){
             checkUni(0,arrOfNewResults,function(r){
                 var feedItems = [];
                 
-                for (i in r) {
+                for (var i in r) {
                 
                     feedItems.push({                 // create a post obj for each result
                         "method": "POST",
@@ -76,6 +76,8 @@ var checkSource = new cronJob('*/2 * * * *', function(){
                     });
                 
                 }
+                
+                console.log("feed items count..."+feedItems.length);
                 
                 request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
                     body:{requests:feedItems}}, function (e,r,b){
