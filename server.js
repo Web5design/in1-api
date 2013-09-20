@@ -34,6 +34,162 @@ var stati = [
 
 var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#branding","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#smm"];
 
+var oauth = 
+    { consumer_key: conf.twit.consumerKey
+    , consumer_secret: conf.twit.consumerSecret
+    , token: "480346094-HIZrfb9w9D48WGWK6Ib21MxdWzbduRrMWhAi5ZoB"
+    , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
+};
+
+var checkSource = new cronJob('*/2 * * * *', function(){
+    
+    var sources = app.locals.sources;
+    
+    if (sources.length>1) {
+    
+        var rnd = Math.floor((Math.random()*(sources.length-1))); // get random index
+        var rnd2 = Math.floor((Math.random()*(sources.length-1)));
+        var arrOfSources = [];
+        
+        arrOfSources.push(sources[rnd]);
+        arrOfSources.push(sources[rnd2]);
+        
+        goTweets(0,arrOfSources,function(r){
+            var arrOfNewResults = r;
+            checkUni(0,arrOfNewResults,function(r){
+                var feedItems = [];
+                
+                for (i in r) {
+                
+                    feedItems.push({                 // create a post obj for each result
+                        "method": "POST",
+                        "path": "/1/classes/Feed",
+                        "body": r[i]
+                    });
+                
+                }
+                
+                request.post({url:'https://api.parse.com/1/batch',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                    body:{requests:feedItems}}, function (e,r,b){
+                    console.log("added batch posts to parse api..."+JSON.stringify(b));
+                    
+                });
+                
+            })
+            
+        });
+        
+        // save to feed stream
+    
+    
+    }
+    
+});
+
+function checkUni(i,arr,cb){
+                   
+    var results = [];
+    if (i<arr.length) {
+    
+        // exists?
+        var whereClause = {"origUrl":arr[i].url};
+        request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,image",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+            
+            //console.log("does exist?.."+b.results.length);
+            
+            if (typeof b.results!="undefined" && b.results.length>0){
+                arr[i].exists="1";
+                arr[i].image=b.results[0].image;
+            }
+            
+            results.push(arr[i]);
+            
+            checkUni(i+1,arr,cb);
+        });
+    }
+    else {
+        // done! ---------------------------
+        cb(results);
+    }
+}
+
+function goTweets(i,arr,cb){
+    
+    var tweetsToFetch = 10;
+    var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
+    var sources=arr;
+    var results=[];
+    var params = 
+        {    
+            /*include_entities:true,*/
+            count:tweetsToFetch
+        };
+    
+    if (i<sources.length) {
+    
+        if (sources[i].type=="hashtag") {
+            // search by hashtag
+            reqUrl = 'https://api.twitter.com/1.1/search/tweets.json?';
+            params.q = sources[i].twitter;
+            params.result_type="recent";
+        }
+        else {
+            // get by screen_name
+            params.screen_name = sources[i].twitter;
+            params.trim_user = 1;
+        }
+                
+        reqUrl += require('querystring').stringify(params);
+            
+        var reqObj;
+        reqObj = {url:encodeURI(reqUrl), oauth:oauth};
+                
+        //console.log("url---------------"+reqUrl);
+                
+        request.get(reqObj, function (e, r, body) {
+            //console.log("request---------------------------------"+JSON.stringify(reqObj));
+            //console.log("body---------------"+body.substring(0,600));
+                    
+            var objs,url,mentioned;
+                    
+            if (!e || typeof e == "undefined") {
+                    
+                objs = JSON.parse(body);
+            
+                if (typeof objs.statuses!="undefined"){ // search API results contains the results array inside 'statuses' object
+                    objs = objs.statuses;
+                }
+                        
+                for (var j=0;j<objs.length;j++) {
+                    if (typeof objs[j].entities !="undefined" && objs[j].entities.urls.length>0){ // must have url
+                                
+                    url = objs[j].entities.urls[0].url;
+                    var txt = objs[j].text.replace(/ *\[[^)]*\] */g,"");
+                    if (typeof objs[j].entities !="undefined" && objs[j].entities.user_mentions.length>0){
+                        mentioned = objs[j].entities.user_mentions[0].screen_name;
+                    }
+                        
+                    results.push({account:sources[i].twitter,source:sources[i].name,sourceObj:sources[i].objectId,url:url,text:txt,mentioned:mentioned,rts:objs[j].retweet_count,id:objs[j].id});   
+                                
+                    }
+                }
+            }
+            
+            // next
+            goTweets(i+1,arr,cb);
+            
+        }); // end request
+        
+    }
+    else {
+        
+        // done!!
+        cb(results);
+        
+    }
+}
+
+
 var job = new cronJob('*/12 * * * *', function(){
     
         var currentTime = new Date();
@@ -58,6 +214,7 @@ var job = new cronJob('*/12 * * * *', function(){
                
                    tId = objs.statuses[rnd].id_str;
                    var sn = objs.statuses[rnd].user.screen_name;
+                   
                    
                    doFavoriteTweet(tId,function(e,b){
                 
