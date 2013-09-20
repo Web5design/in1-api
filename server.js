@@ -54,17 +54,19 @@ var checkSource = new cronJob('*/2 * * * *', function(){
         var rnd = Math.floor((Math.random()*(sources.length-1))); // get random index
         var rnd2 = Math.floor((Math.random()*(sources.length-1)));
         var arrOfSources = [];
+        var results = [];
+        var uniResults = [];
         
         arrOfSources.push(sources[rnd]);
         arrOfSources.push(sources[rnd2]);
         
-        goTweets(0,arrOfSources,function(r){
+        goTweets(0,arrOfSources,results,function(r){
             var arrOfNewResults = r;
             
             
                   console.log("go tweet"+arrOfNewResults.length);
     
-            checkUni(0,arrOfNewResults,function(r){
+            checkUni(0,arrOfNewResults,uniResults,function(r){
                 var feedItems = [];
                 
                 for (var i in r) {
@@ -100,9 +102,8 @@ var checkSource = new cronJob('*/2 * * * *', function(){
     true,
     "America/Chicago");
 
-function checkUni(i,arr,cb){
+function checkUni(i,arr,results,cb){
                    
-    var results = [];
     if (i<arr.length) {
     
         // exists?
@@ -118,7 +119,7 @@ function checkUni(i,arr,cb){
             
             results.push(arr[i]);
             
-            checkUni(i+1,arr,cb);
+            checkUni(i+1,arr,results,cb);
         });
     }
     else {
@@ -127,12 +128,12 @@ function checkUni(i,arr,cb){
     }
 }
 
-function goTweets(i,arr,cb){
+function goTweets(i,arr,results,cb){
     
     var tweetsToFetch = 10;
     var reqUrl = 'https://api.twitter.com/1.1/statuses/user_timeline.json?';
     var sources=arr;
-    var results=[];
+    //var results=[];
     var params = 
         {    
             /*include_entities:true,*/
