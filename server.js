@@ -62,7 +62,7 @@ var checkSource = new cronJob('*/2 * * * *', function(){
             var arrOfNewResults = r;
             
             
-                  console.log("go tweet");
+                  console.log("go tweet"+arrOfNewResults.length);
     
             checkUni(0,arrOfNewResults,function(r){
                 var feedItems = [];
