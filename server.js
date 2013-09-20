@@ -218,7 +218,7 @@ var job = new cronJob('*/12 * * * *', function(){
                
                if (typeof objs.statuses[rnd]!="undefined") {
                    
-                   console.log(JSON.stringify(objs.statuses[rnd]));
+                   //console.log(JSON.stringify(objs.statuses[rnd]));
                
                    tId = objs.statuses[rnd].id_str;
                    var sn = objs.statuses[rnd].user.screen_name;
