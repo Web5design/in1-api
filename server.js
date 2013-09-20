@@ -45,7 +45,11 @@ var checkSource = new cronJob('*/2 * * * *', function(){
     
     var sources = app.locals.sources;
     
+     console.log("checking....");
+    
     if (sources.length>1) {
+    
+        console.log("check....");
     
         var rnd = Math.floor((Math.random()*(sources.length-1))); // get random index
         var rnd2 = Math.floor((Math.random()*(sources.length-1)));
@@ -56,6 +60,10 @@ var checkSource = new cronJob('*/2 * * * *', function(){
         
         goTweets(0,arrOfSources,function(r){
             var arrOfNewResults = r;
+            
+            
+                  console.log("go tweet");
+    
             checkUni(0,arrOfNewResults,function(r){
                 var feedItems = [];
                 
