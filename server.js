@@ -34,7 +34,7 @@ var stati = [
 
 var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#branding","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#smm"];
 
-var job = new cronJob('*/7 * * * *', function(){
+var job = new cronJob('*/9 * * * *', function(){
     
         var currentTime = new Date();
         var seconds = currentTime.getMinutes();
