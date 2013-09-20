@@ -63,9 +63,9 @@ var job = new cronJob('*/9 * * * *', function(){
                 
                        console.log("favorited...."+tId);
                        
-                       doFollow(sn,function(e,b){
-                            console.log("following...."+sn);
-                        });
+                       //doFollow(sn,function(e,b){
+                    //        console.log("following...."+sn);
+                      //  });
                    });
                
                }
