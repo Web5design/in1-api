@@ -138,6 +138,7 @@ function goTweets(i,arr,results,cb){
     var params = 
         {    
             /*include_entities:true,*/
+            include_rts:false,
             count:tweetsToFetch
         };
     
