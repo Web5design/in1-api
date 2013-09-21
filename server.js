@@ -356,7 +356,29 @@ app.get('/hello', function(req,res){
 
 app.get("/",function(req, res){
    
-    res.send("hello");
+    request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt",include:"sourceObj"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        if (b.results) {
+            
+            request.get({url:'https://api.parse.com/1/classes/Feed',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e1,r1,b1){
+                
+                request.get({url:'https://api.parse.com/1/classes/Queue',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e2,r2,b2){
+                
+                    if (f=="json") { 
+                        res.send({results:b1.results,posts:b.results,queue:b2.results});
+                    } else {
+                        res.render("index",{results:b1.results,posts:b.results,queue:b2.results});
+                    }
+                
+                });
+                
+            });
+        }
+        else {
+            
+            res.render("500",{error:"no results.."});
+            
+        }
+    });
     
 });
 
