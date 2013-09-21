@@ -47,7 +47,7 @@ var checkSource = new cronJob('*/2 * * * *', function(){
     
      console.log("checking....");
     
-    if (sources.length>1) {
+    if (typeof sources!="undefined" && sources.length>1) {
     
         console.log("check....");
     
@@ -97,10 +97,10 @@ var checkSource = new cronJob('*/2 * * * *', function(){
     }
     
 }, function () {
-        console.log("job completed.........");
-    }, 
-    true,
-    "America/Chicago");
+    console.log("job completed.........");
+}, 
+true,
+"America/Chicago");
 
 function checkUni(i,arr,results,cb){
                    
