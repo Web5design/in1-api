@@ -116,7 +116,7 @@ function checkUni(i,arr,results,cb){
                 //arr[i].exists="1";
                 //arr[i].image=b.results[0].image;
             }
-            else {
+            else if (b.results.length==0) {
                 results.push(arr[i]); // it's new so add it
             }
             
