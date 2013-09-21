@@ -41,7 +41,7 @@ var oauth =
     , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
 };
 
-var checkSource = new cronJob('*/6 * * * *', function(){
+var checkSource = new cronJob('*/2 * * * *', function(){
     
     var sources = app.locals.sources;
     
@@ -107,17 +107,18 @@ function checkUni(i,arr,results,cb){
     if (i<arr.length) {
     
         // exists?
-        var whereClause = {"origUrl":arr[i].url};
-        request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{keys:"origUrl,image",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        var whereClause = {"url":arr[i].url};
+        request.get({url:'https://api.parse.com/1/classes/Feed',json:true,qs:{keys:"url",where:JSON.stringify(whereClause)},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
             
             //console.log("does exist?.."+b.results.length);
             
             if (typeof b.results!="undefined" && b.results.length>0){
-                arr[i].exists="1";
-                arr[i].image=b.results[0].image;
+                //arr[i].exists="1";
+                //arr[i].image=b.results[0].image;
             }
-            
-            results.push(arr[i]);
+            else {
+                results.push(arr[i]); // it's new so add it
+            }
             
             checkUni(i+1,arr,results,cb);
         });
