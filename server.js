@@ -363,11 +363,11 @@ app.get("/",function(req, res){
                 
                 request.get({url:'https://api.parse.com/1/classes/Queue',json:true,qs:{limit:200,order:"-createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e2,r2,b2){
                 
-                    if (f=="json") { 
-                        res.send({results:b1.results,posts:b.results,queue:b2.results});
-                    } else {
+                    //if (f=="json") { 
+                    //    res.send({results:b1.results,posts:b.results,queue:b2.results});
+                    //} else {
                         res.render("index",{results:b1.results,posts:b.results,queue:b2.results});
-                    }
+                    //}
                 
                 });
                 
