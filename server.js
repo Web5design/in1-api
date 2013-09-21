@@ -191,7 +191,7 @@ function goTweets(i,arr,results,cb){
             }
             
             // next
-            goTweets(i+1,arr,cb);
+            goTweets(i+1,arr,results,cb);
             
         }); // end request
         
