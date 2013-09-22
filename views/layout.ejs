@@ -162,7 +162,7 @@
 </head>
 <body>
     <form action="/login" method="post"><input type="text" name="username"/><input type="password" name="password"/></form>
-    <a href="/auth/twitter">twitter</a>
+    <%if (everyauth.twitter){%><a href="/auth/twitter">twitter</a><%}else{%><%=JSON.stringify(everyauth.twitter.user)%><%}%>
     <%-body%>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 </body>
