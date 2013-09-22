@@ -34,6 +34,7 @@ var stati = [
 
 var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#branding","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#smm"];
 
+//in1
 var oauth = 
     { consumer_key: conf.twit.consumerKey
     , consumer_secret: conf.twit.consumerSecret
@@ -207,7 +208,7 @@ function goTweets(i,arr,results,cb){
 }
 
 
-var job = new cronJob('*/9 * * * *', function(){
+var job = new cronJob('*/12 * * * *', function(){
     
         var currentTime = new Date();
         var seconds = currentTime.getMinutes();
@@ -1123,6 +1124,12 @@ app.get('/api', function(req, res){
     res.render('api');
 });
 
+app.get('/tt', function(req, res){
+    
+    
+    
+});
+
 app.get('/proxy', function(req, res){
     if (req.param("purl")) {
         request(unescape(req.param("purl")), function (error, response, body) {
@@ -1446,8 +1453,13 @@ var saveImage = function(imgUrl,cb){
     });
 };
 
+
+
+/* twitter api ---------------------------------------------------------------------------- */
+
 function tweetsByTag(tag,cb){
     var reqUrl = 'https://api.twitter.com/1.1/search/tweets.json?';
+    //@in1_
     var oauth = 
             { consumer_key: conf.twit.consumerKey
             , consumer_secret: conf.twit.consumerSecret
@@ -1482,6 +1494,7 @@ function tweetsByTag(tag,cb){
 
 function usersByTag(tag,cb){
     var reqUrl = 'https://api.twitter.com/1.1/users/search.json?';
+    //@in1_
     var oauth = 
             { consumer_key: conf.twit.consumerKey
             , consumer_secret: conf.twit.consumerSecret
@@ -1516,9 +1529,9 @@ function usersByTag(tag,cb){
 }
 
 function doFavoriteTweet(tweetId,cb){
-    
+
     //if (1===1) {
-        
+        //@TechVisually
 		var oauth = 
 			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
             , consumer_secret: 'WnkFtgCH5bBBVkqzLKycoRF4C2QQYgWGD1o8Fe3o0'
@@ -1546,7 +1559,7 @@ function doFollow(screen_name,cb){
     //if (1===1) {
     
     console.log("following--------------"+screen_name);
-        
+        //@TechVisually
 		var oauth = 
 			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
             , consumer_secret: 'WnkFtgCH5bBBVkqzLKycoRF4C2QQYgWGD1o8Fe3o0'
@@ -1576,7 +1589,7 @@ function doFollow(screen_name,cb){
 function doReTweet(tweetId,cb){
     
     //if (1===1) {
-        
+        //@TechVisually
 		var oauth = 
 			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
             , consumer_secret: 'WnkFtgCH5bBBVkqzLKycoRF4C2QQYgWGD1o8Fe3o0'
@@ -1610,6 +1623,7 @@ function doTweet(msg,screen_name,cb){
 	    */
 	
         var status = msg;
+        //@TechVisually
 		var oauth = 
 			{ consumer_key: 'm2o21P9EUIQS4Va0nzTFA'
             , consumer_secret: 'WnkFtgCH5bBBVkqzLKycoRF4C2QQYgWGD1o8Fe3o0'

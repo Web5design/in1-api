@@ -3,9 +3,9 @@ module.exports = {
         appId: '325618697471211'
       , appSecret: '62bc5803d16df903e6ad718abe75d314'
     }
-  , twit: {
+  , twit: { 
         consumerKey: 'cylTHpO0xaVeUj5EBg8RA'
-      , consumerSecret: 'K7f9TjQuttvQHJF8zMGkTX6YzzH0NyrofblkxBghupc'
+      , consumerSecret: 'K7f9TjQuttvQHJF8zMGkTX6YzzH0NyrofblkxBghupc' //in1_
     }
   , yahoo: {
         consumerKey: 'dj0yJmk9RVExRlhPRE9rV1hSJmQ9WVdrOWEyRTBVMUJoTm1zbWNHbzlNVE13TURFeU9UTTJNZy0tJnM9Y29uc3VtZXJzZWNyZXQmeD1iYg--'
