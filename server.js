@@ -820,21 +820,20 @@ app.post("/fetch",function(req, res){
                     
                     console.log("saving image-------------------"+postRequests[i].body.image);
                     postRequests[i].body.image = r.request.uri.href;
-                    //generateSnap(i+1,cb);
+                    generateSnap(i+1,cb);
                     
                 });
             
             }
-            /*
             else {
                 
                 console.log("no image save required..");
-                
                 generateSnap(i+1,cb);
+                
             }
-            */
             
-            generateSnap(i+1,cb);
+            
+            //generateSnap(i+1,cb);
                 
         }
         else {
