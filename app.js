@@ -25,9 +25,10 @@ exports.init = function(port) {
         app.use(express.methodOverride());
         app.use(express.cookieParser());
         app.use(express.cookieSession({cookie:{path:'/',httpOnly:true,maxAge:null},secret:'skeletor'}));
+        app.use(app.router);
         app.use(everyauth.middleware(app));
        
-        app.use(app.router);
+        
     });
 
     app.engine('ejs', engine);
