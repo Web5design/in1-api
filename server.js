@@ -207,9 +207,8 @@ function goTweets(i,arr,results,cb){
 }
 
 
-//var job = new cronJob('*/12 * * * *', function(){
+var job = new cronJob('*/12 * * * *', function(){
     
-/*
         var currentTime = new Date();
         var seconds = currentTime.getMinutes();
         var tId;
@@ -332,10 +331,6 @@ function goTweets(i,arr,results,cb){
     true,
     "America/Chicago"
 );
-
-*/
-
-
 
 /*---------------------- default route ----------------------*/
 
