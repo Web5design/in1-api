@@ -10,7 +10,8 @@
     "jsdom": ">=0.5.2",
     "cron": ">=0.3.x",
     "time": ">=0.8.3",
-    "request": ">=2.x"
+    "request": ">=2.x",
+    "everyauth": ">=0.4.x"
   },
    "engines": {
     "node": "0.8.x",

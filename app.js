@@ -1,5 +1,6 @@
 var express = require('express'),
     engine = require('ejs-locals'),
+    everyauth = require('everyauth'),
     app = express();
 
 exports.init = function(port) {
@@ -11,7 +12,7 @@ exports.init = function(port) {
         keywords:'content,feed,aggregator,api,stream,REST content api,social media api',
         throttle:{}
     });
-
+    
     app.configure(function(){
         app.set('views', __dirname + '/views');
         app.set('view engine', 'ejs');
@@ -24,6 +25,7 @@ exports.init = function(port) {
         app.use(express.methodOverride());
         app.use(express.cookieParser());
         app.use(express.cookieSession({cookie:{path:'/',httpOnly:true,maxAge:null},secret:'skeletor'}));
+        app.use(everyauth.middleware(app));
        
         app.use(app.router);
     });

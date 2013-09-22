@@ -6,32 +6,10 @@ var port = process.env.PORT || 4000,
     window = require('jsdom').jsdom().createWindow(),
     $ = require('jquery'),
     request = require('request'),
+    everyauth = require('everyauth'),
     cronJob = require('cron').CronJob;
 
 var ua = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36';
-var stati = [
-        "A new #jquery social plugin that combines your social feed: http://plugins.in1.com",
-        "@flowtown blog bookmarking this one: http://www.in1.com/resources/2313e2af898e8af94cd022588b4b5fb4 Love It.",
-        "Do your domain name, Facebook page and Twitter screen names match your brand? http://in1.com",
-        "Vigilance and consistency are essential for your social media strategy.",
-        "#google #apple and #sony todays tech stories from @thenextweb #in1 http://in1.com/soc?url=thenextweb.com",
-        "Calling all startups. Tell us about your brand and we may feature it @in1dotcom",
-        "Does your brand have too many social endpoints? Combine them http://in1.com #in1 #SoMe",
-        "#b2c vs #b2b: social sharing tips for linkedin vs. twitter #infographic http://t.co/Fv5tdy8z",
-        "Loving the newstyles @jcrew http://in1.com/soc?url=jcrew.com",
-        "75% of blog administrators are also managing their company's social media channels",
-		"Write great content, be honest and gain #SoMe influence.",
-        "@Toyoya - here is your social brand snapsnot #in1 http://in1.com/soc?url=toyota.com",
-        //"How are brands using #in1 for marketing?",
-        "Success stories for #entrepreneurs and #startups @YFSMagazine http://in1.com/soc?url=yfsentrepreneur.com",
-        "From #Gangnam Style to gaming @mashable covers it http://in1.com/soc?url=mashable.com",
-        "@ReadWriteWeb is still one of my best daily reads http://in1.com/soc?url=readwriteweb.com",
-        "Are all of those social sharing buttons on your blog are a good idea? http://in1blog.tumblr.com/post/31980230415/6-reasons-why-its-ridiculous-to-have-multiple-social",
-        "what is @VentureBeat saying on social media today http://in1.com/soc?url=venturebeat.com",
-		"Brands need to give customers a social snapshot, not 5 different social channels to follow them on http://www.in1.com",
-        "Did a squatter get your brand name on Facebook, Twitter or YouTube? #in1 can help http://www.in1.com"
-    ];
-
 var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#branding","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#smm"];
 
 //in1
@@ -332,6 +310,114 @@ var job = new cronJob('*/12 * * * *', function(){
     true,
     "America/Chicago"
 );
+
+var usersById = {};
+var nextUserId = 0;
+
+function addUser (source, sourceUser) {
+  var user;
+  if (arguments.length === 1) { // password-based
+    user = sourceUser = source;
+    user.id = ++nextUserId;
+    return usersById[nextUserId] = user;
+  } else { // non-password-based
+    user = usersById[++nextUserId] = {id: nextUserId};
+    user[source] = sourceUser;
+  }
+  return user;
+}
+
+var usersByFbId = {};
+var usersByTwitId = {};
+var usersByLogin = {};
+
+everyauth
+  .facebook
+    .appId(conf.fb.appId)
+    .appSecret(conf.fb.appSecret)
+    .findOrCreateUser( function (session, accessToken, accessTokenExtra, fbUserMetadata) {
+      return usersByFbId[fbUserMetadata.id] ||
+        (usersByFbId[fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
+    })
+    .redirectPath('/');
+
+everyauth
+  .twitter
+    .consumerKey(conf.twit.consumerKey)
+    .consumerSecret(conf.twit.consumerSecret)
+    .findOrCreateUser( function (sess, accessToken, accessSecret, twitUser) {
+      return usersByTwitId[twitUser.id] || (usersByTwitId[twitUser.id] = addUser('twitter', twitUser));
+    })
+    .redirectPath('/');
+
+everyauth
+  .password
+    .loginWith('email')
+    .getLoginPath('/login')
+    .postLoginPath('/login')
+    .loginView('login')
+//    .loginLocals({
+//      title: 'Login'
+//    })
+//    .loginLocals(function (req, res) {
+//      return {
+//        title: 'Login'
+//      }
+//    })
+    .loginLocals( function (req, res, done) {
+      setTimeout( function () {
+        done(null, {
+          title: 'Async login'
+        });
+      }, 200);
+    })
+    .authenticate( function (login, password) {
+      var errors = [];
+      if (!login) errors.push('Missing login');
+      if (!password) errors.push('Missing password');
+      if (errors.length) return errors;
+      var user = usersByLogin[login];
+      if (!user) return ['Login failed'];
+      if (user.password !== password) return ['Login failed'];
+      return user;
+    })
+
+    .getRegisterPath('/register')
+    .postRegisterPath('/register')
+    .registerView('register')
+//    .registerLocals({
+//      title: 'Register'
+//    })
+//    .registerLocals(function (req, res) {
+//      return {
+//        title: 'Sync Register'
+//      }
+//    })
+    .registerLocals( function (req, res, done) {
+      setTimeout( function () {
+        done(null, {
+          title: 'Async Register'
+        });
+      }, 200);
+    })
+    .validateRegistration( function (newUserAttrs, errors) {
+      var login = newUserAttrs.login;
+      if (usersByLogin[login]) errors.push('Login already taken');
+      return errors;
+    })
+    .registerUser( function (newUserAttrs) {
+      var login = newUserAttrs[this.loginKey()];
+      return usersByLogin[login] = addUser(newUserAttrs);
+    })
+
+    .loginSuccessRedirect('/')
+    .registerSuccessRedirect('/');
+
+
+
+
+
+
 
 /*---------------------- default route ----------------------*/
 
