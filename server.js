@@ -1246,6 +1246,9 @@ app.get('/testauth', function(req, res){
           }
         , url = 'https://api.twitter.com/oauth/access_token'
         ;
+        
+        res.json({user:access_token});
+        
       request.post({url:url, oauth:oauth}, function (e, r, body) {
         var perm_token = qs.parse(body)
           , oauth =
