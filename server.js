@@ -1227,8 +1227,8 @@ app.get('/testauth', function(req, res){
     var qs = require('querystring')
       , oauth =
         { callback: 'http://in1-api.herokuapp.com/'
-        , consumer_key: conf.twitter.consumerKey
-        , consumer_secret: conf.twitter.consumerSecret
+        , consumer_key: conf.twitter.consumer_key
+        , consumer_secret: conf.twitter.consumer_secret
         }
       , url = 'https://api.twitter.com/oauth/request_token'
       ;
@@ -1239,8 +1239,8 @@ app.get('/testauth', function(req, res){
       // verified with twitter that they are authorizing your app.
       var access_token = qs.parse(body)
         , oauth =
-          { consumer_key: conf.twitter.consumerKey
-          , consumer_secret: conf.twitter.consumerSecret
+          { consumer_key: conf.twitter.consumer_key
+          , consumer_secret: conf.twitter.consumer_secret
           , token: access_token.oauth_token
           , verifier: access_token.oauth_verifier
           }
