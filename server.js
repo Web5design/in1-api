@@ -331,6 +331,11 @@ var usersByFbId = {};
 var usersByTwitId = {};
 var usersByLogin = {};
 
+everyauth.everymodule
+  .findUserById( function (id, callback) {
+    callback(null, usersById[id]);
+  });
+
 everyauth
   .facebook
     .appId(conf.fb.appId)
