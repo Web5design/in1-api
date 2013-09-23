@@ -1226,7 +1226,7 @@ app.get('/testauth', function(req, res){
     // Twitter OAuth
     var qs = require('querystring')
       , oauth =
-        { callback: 'http://in1-api.herokuapp.com/login'
+        { callback: 'http://in1-api.herokuapp.com/'
         , consumer_key: conf.twitter.consumerKey
         , consumer_secret: conf.twitter.consumerSecret
         }
