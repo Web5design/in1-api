@@ -351,6 +351,7 @@ everyauth
     .consumerKey(conf.twit.consumerKey)
     .consumerSecret(conf.twit.consumerSecret)
     .findOrCreateUser( function (sess, accessToken, accessSecret, twitUser) {
+        console.log("tweiiiiiii");
       return usersByTwitId[twitUser.id] || (usersByTwitId[twitUser.id] = addUser('twitter', twitUser));
     })
     .redirectPath('/');
