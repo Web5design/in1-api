@@ -1241,14 +1241,14 @@ app.get('/testauth', function(req, res){
       // verified with twitter that they are authorizing your app.
       
       
-      res.json({foo:body});
+      //res.json({foo:body});
       
       var access_token = qs.parse(body)
         , oauth =
           { consumer_key: conf.twitter.consumer_key
           , consumer_secret: conf.twitter.consumer_secret
           , token: access_token.oauth_token
-          , verifier: access_token.oauth_verifier
+          , verifier: access_token.oauth_token_secret
           }
         , url = 'https://api.twitter.com/oauth/access_token'
         ;
