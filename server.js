@@ -1220,6 +1220,10 @@ app.get('/login', function(req, res){
     res.render('login');
 });
 
+app.post('/', function(req, res){
+    res.render('login');
+});
+
 app.get('/testauth', function(req, res){
     
     
