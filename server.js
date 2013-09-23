@@ -444,6 +444,8 @@ app.get('/hello', function(req,res){
 });
 
 app.get("/",function(req, res){
+    
+    console.log("called with "+JSON.stringify(req.query));
    
     request.get({url:'https://api.parse.com/1/classes/Post',json:true,qs:{limit:200,order:"-createdAt",include:"sourceObj"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
         if (b.results) {
