@@ -1246,14 +1246,12 @@ app.get('/testauth', function(req, res){
           }
         , url = 'https://api.twitter.com/oauth/access_token'
         ;
-        
-        res.json({user:access_token});
-        
+    
       request.post({url:url, oauth:oauth}, function (e, r, body) {
         var perm_token = qs.parse(body)
           , oauth =
-            { consumer_key: conf.twitter.consumerKey
-            , consumer_secret: conf.twitter.consumerSecret
+            { consumer_key: conf.twitter.consumer_key
+            , consumer_secret: conf.twitter.consumer_secret
             , token: perm_token.oauth_token
             , token_secret: perm_token.oauth_token_secret
             }
