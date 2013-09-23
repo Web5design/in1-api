@@ -1221,6 +1221,9 @@ app.get('/login', function(req, res){
 });
 
 app.post('/', function(req, res){
+    
+    console.log("posted back from twitter...")
+    
     res.render('login');
 });
 
@@ -1252,7 +1255,7 @@ app.get('/testauth', function(req, res){
           { consumer_key: conf.twitter.consumer_key
           , consumer_secret: conf.twitter.consumer_secret
           , token: access_token.oauth_token
-          , verifier: access_token.oauth_token_secret
+          /*, verifier: access_token.oauth_token_secret*/
           }
         , url = 'https://api.twitter.com/oauth/access_token'
         ;
