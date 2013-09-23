@@ -1232,6 +1232,22 @@ app.get('/testauth', function(req, res){
         }
       , url = 'https://api.twitter.com/oauth/request_token'
       ;
+      
+    request.post({url:url, oauth:oauth}, function (e, r, body) {
+      // Ideally, you would take the body in the response
+      // and construct a URL that a user clicks on (like a sign in button).
+      // The verifier is only available in the response after a user has
+      // verified with twitter that they are authorizing your app.
+      var access_token = qs.parse(body)
+        , oauth =
+          { consumer_key: conf.twitter.consumer_key
+          , consumer_secret: conf.twitter.consumer_secret
+          , token: access_token.oauth_token
+          /*, verifier: access_token.oauth_verifier*/
+          }
+        , url = 'https://api.twitter.com/oauth/authorize'
+        ;
+      
     request.post({url:url, oauth:oauth}, function (e, r, body) {
       // Ideally, you would take the body in the response
       // and construct a URL that a user clicks on (like a sign in button).
