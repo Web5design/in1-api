@@ -1216,7 +1216,56 @@ app.get('/api', function(req, res){
     res.render('api');
 });
 
-app.get('/tt', function(req, res){
+app.get('/login', function(req, res){
+    res.render('login');
+});
+
+app.get('/testauth', function(req, res){
+    
+    
+    // Twitter OAuth
+    var qs = require('querystring')
+      , oauth =
+        { callback: 'http://in1-api.herokuapp.com/login'
+        , consumer_key: conf.twitter.consumerKey
+        , consumer_secret: conf.twitter.consumerSecret
+        }
+      , url = 'https://api.twitter.com/1.1/oauth/request_token'
+      ;
+    request.post({url:url, oauth:oauth}, function (e, r, body) {
+      // Ideally, you would take the body in the response
+      // and construct a URL that a user clicks on (like a sign in button).
+      // The verifier is only available in the response after a user has
+      // verified with twitter that they are authorizing your app.
+      var access_token = qs.parse(body)
+        , oauth =
+          { consumer_key: conf.twitter.consumerKey
+          , consumer_secret: conf.twitter.consumerSecret
+          , token: access_token.oauth_token
+          , verifier: access_token.oauth_verifier
+          }
+        , url = 'https://api.twitter.com/1.1/oauth/access_token'
+        ;
+      request.post({url:url, oauth:oauth}, function (e, r, body) {
+        var perm_token = qs.parse(body)
+          , oauth =
+            { consumer_key: conf.twitter.consumerKey
+            , consumer_secret: conf.twitter.consumerSecret
+            , token: perm_token.oauth_token
+            , token_secret: perm_token.oauth_token_secret
+            }
+          , url = 'https://api.twitter.com/1.1/users/show.json?'
+          , params =
+            { screen_name: perm_token.screen_name
+            , user_id: perm_token.user_id
+            }
+          ;
+        url += qs.stringify(params)
+        request.get({url:url, oauth:oauth, json:true}, function (e, r, user) {
+          res.json({user:user});
+        })
+      })
+    })
     
     
     
