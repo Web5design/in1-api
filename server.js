@@ -1234,14 +1234,14 @@ app.get('/testauth', function(req, res){
       ;
       
     
-    request.post({url:url, oauth:oauth}, function (e, r, body) {
+    request.post({url:url, oauth:oauth, json:true}, function (e, r, body) {
       // Ideally, you would take the body in the response
       // and construct a URL that a user clicks on (like a sign in button).
       // The verifier is only available in the response after a user has
       // verified with twitter that they are authorizing your app.
       
       
-      res.json({foo:body,r:r});
+      res.json({foo:body});
       
       var access_token = qs.parse(body)
         , oauth =
