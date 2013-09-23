@@ -1230,7 +1230,7 @@ app.get('/testauth', function(req, res){
         , consumer_key: conf.twitter.consumerKey
         , consumer_secret: conf.twitter.consumerSecret
         }
-      , url = 'https://api.twitter.com/1.1/oauth/request_token'
+      , url = 'https://api.twitter.com/oauth/request_token'
       ;
     request.post({url:url, oauth:oauth}, function (e, r, body) {
       // Ideally, you would take the body in the response
@@ -1244,7 +1244,7 @@ app.get('/testauth', function(req, res){
           , token: access_token.oauth_token
           , verifier: access_token.oauth_verifier
           }
-        , url = 'https://api.twitter.com/1.1/oauth/access_token'
+        , url = 'https://api.twitter.com/oauth/access_token'
         ;
       request.post({url:url, oauth:oauth}, function (e, r, body) {
         var perm_token = qs.parse(body)
