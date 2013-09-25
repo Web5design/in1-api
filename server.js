@@ -20,7 +20,7 @@ var oauth =
     , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
 };
 
-var checkSource = new cronJob('*/5 * * * *', function(){
+var checkSource = new cronJob('*/7 * * * *', function(){
     
     var sources = app.locals.sources;
     
