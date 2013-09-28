@@ -186,7 +186,7 @@ function goTweets(i,arr,results,cb){
 }
 
 
-var job = new cronJob('*/12 * * * *', function(){
+var job = new cronJob('*/68 * * * *', function(){
     
         var currentTime = new Date();
         var seconds = currentTime.getMinutes();
