@@ -20,7 +20,7 @@ var oauth =
     , token_secret: "D8iqNaFMnKeXnLhhQ9POebtiKgGOAmHAZE9qToSRSc"
 };
 
-var checkSource = new cronJob('*/7 * * * *', function(){
+var checkSource = new cronJob('*/18 * * * *', function(){
     
     var sources = app.locals.sources;
     
@@ -186,7 +186,7 @@ function goTweets(i,arr,results,cb){
 }
 
 
-var job = new cronJob('*/68 * * * *', function(){
+var job = new cronJob('*/12 * * * *', function(){
     
         var currentTime = new Date();
         var seconds = currentTime.getMinutes();
