@@ -473,6 +473,95 @@ app.get("/",function(req, res){
     
 });
 
+app.get("/cleanup",function(req, res){
+    
+    var docList = [];
+    console.log("called with "+JSON.stringify(req.query));
+   
+
+    request.get({url:'https://api.parse.com/1/classes/Feed',json:true,qs:{limit:200,order:"createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        
+        docList.push(b.results);
+        setTimeout(delObj(0),10000);
+        
+    });
+       
+    function delObj(i){
+        
+        if (i<docList.length) {
+            request.delete({url:'https://api.parse.com/1/classes/Feed/'+docList[i].objectId,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                }, function (e,r,b){
+                console.log("obj..........."+docList[i].objectId);
+                delObj(i+1);
+            });    
+        }
+    }
+    
+});
+
+app.get('/bu', function(req,res){
+    
+    var offset = req.query.offset||"0";
+    
+    // get all and store in array
+    var allDocs = [];
+    var u1 = 'https://snipt.net/api/private/snipt/?format=json&order_by=-created&limit=100&offset='+offset;
+    
+     request({url:u1,headers:{Authorization:'ApiKey '+conf.snipt.apiKey}}, function (e, r, body){  
+        if (e || r.statusCode != 200 || !body){
+            res.render("500",{error:"Resources could not be loaded."});
+        }
+        else {
+            //console.log(body);
+            var items = JSON.parse(body).objects;
+            
+            for (var item in items) {
+                var o = {};
+                
+                try {
+                    var code=JSON.parse(items[item].code);
+                    items[item].opts=code.opts;
+                    
+                    if (typeof items[item].opts != "undefined") {
+                    
+                        o.code = code;
+                        o.title = items[item].title;
+                        o.tags = items[item].opts.tags;
+                        o.desc = items[item].opts.desc;
+                        o.created = items[item].created;
+                        o.updated = items[item].modified;
+                        o.username = items[item].opts.owner;
+                        o.sniptId = items[item].id;
+                        
+                        allDocs.push(o);
+                        console.log("push..");
+                    
+                    }
+                }
+                catch (e) {
+                    console.log("error with"+items[item].title);                
+                }
+                
+            }
+            setTimeout(writeObj(0),140000);
+        }
+    });
+     
+    function writeObj(i){
+        if (i<allDocs.length) {
+            request.post({url:'https://api.parse.com/1/classes/Ply',json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+                body:allDocs[i]}, function (e,r,b){
+                console.log("obj..........."+allDocs[i]);
+                writeObj(i+1);
+            });    
+        }
+    }
+    
+});
+
+
+
+
 app.get("/feed",function(req, res){
    
     var results = [];
