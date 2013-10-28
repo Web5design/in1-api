@@ -489,7 +489,7 @@ app.get("/cleanup",function(req, res){
     function delObj(i){
         
         if (i<docList.length) {
-            request.del({url:'https://api.parse.com/1/classes/Feed/'+docList[i].objectId,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey},
+            request.del({url:'https://api.parse.com/1/classes/Feed/'+docList[i].objectId,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}
                 }, function (e,r,b){
                 console.log("obj..........."+docList[i].objectId);
                 delObj(i+1);
