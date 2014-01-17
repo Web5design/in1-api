@@ -10,7 +10,7 @@ var port = process.env.PORT || 4000,
     cronJob = require('cron').CronJob;
 
 var ua = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36';
-var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#some","#apps","#mobile","#html5","#branding","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#smm"];
+var hashTags = ["#tech","#startup","brands","#vc","#facebook","#webdev","#innovation","#webdeveloper","#customers","#technology","#jquery","#apps","#mobile","#html5","#branding","#startups","#beta","#rwd","#socialmedia","#webdesign","#tools","#smm","#javascript"];
 
 //in1
 var oauth = 
@@ -860,7 +860,7 @@ app.post("/fetch",function(req, res){
                         "path": "/1/classes/Queue",
                         "body":{
                             posted:false,
-                            tweet:results[k].title.substring(0,110) + " " + results[k].requested + " #"+((results[k].tags[0])||"tech")
+                            tweet:results[k].title.substring(0,110) + " " + results[k].resolved + " #"+((results[k].tags[0])||"tech")
                             }
                         }
                     );
