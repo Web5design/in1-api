@@ -473,6 +473,34 @@ app.get("/",function(req, res){
     
 });
 
+app.get("/cleanup",function(req, res){
+    
+    var docList = [];
+    console.log("called with "+JSON.stringify(req.query));
+   
+
+    request.get({url:'https://api.parse.com/1/classes/Feed',json:true,qs:{limit:200,order:"createdAt"},headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}},function(e,r,b){
+        
+        docList = b.results;
+        setTimeout(delObj(0),10000);
+        
+    });
+       
+    function delObj(i){
+        
+        if (i<docList.length) {
+            request.del({url:'https://api.parse.com/1/classes/Feed/'+docList[i].objectId,json:true,headers:{'X-Parse-Application-Id':conf.parse.appKey,'X-Parse-REST-API-Key':conf.parse.restKey}
+                }, function (e,r,b){
+                console.log("obj..........."+docList[i].objectId);
+                delObj(i+1);
+            });    
+        }
+    }
+    
+});
+
+
+
 app.get("/feed",function(req, res){
    
     var results = [];
